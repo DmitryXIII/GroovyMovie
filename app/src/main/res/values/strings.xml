@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Groovy movie</string>
+    <string name="i_am_looking_for">Я ищу...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_header">Название:</string>
+    <string name="rating_header">Рейтинг:</string>
+    <string name="release_date_header">Дата релиза:</string>
+    <string name="some_movie_information">КАКАЯ-ТО ИНФОРМАЦИЯ О ФИЛЬМЕ</string>
+    <string name="some_genre">Какой-то жанр</string>
+    <string name="genre_header">Жанр:</string>
+    <string name="date_example">2020</string>
+    <string name="rating_example">4.5</string>
+    <string name="movie_title_example">MOVIE_TITLE</string>
 </resources>
