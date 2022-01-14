@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ineedyourcode.groovymovie.model.Movie
 
 class MovieListAdapter(private val moviesList: List<Movie>) :
     RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {

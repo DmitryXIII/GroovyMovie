@@ -1,5 +1,6 @@
-package com.ineedyourcode.groovymovie
+package com.ineedyourcode.groovymovie.model
 
+import com.ineedyourcode.groovymovie.R
 import kotlin.random.Random
 
 class RandomMoviesRepository : IMoviesRepository {

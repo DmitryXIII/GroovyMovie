@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie
+package com.ineedyourcode.groovymovie.model
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes

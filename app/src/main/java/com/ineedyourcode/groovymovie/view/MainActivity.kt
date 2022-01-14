@@ -1,11 +1,10 @@
-package com.ineedyourcode.groovymovie
+package com.ineedyourcode.groovymovie.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.ineedyourcode.groovymovie.R
 
 class MainActivity : AppCompatActivity() {
-    val arr = mutableListOf(1, 2)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -13,11 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, MainScreenFragment())
+            .replace(R.id.fragment_container, MainScreenFragment.newInstance())
             .commit()
-
-        arr.add(1)
     }
-
-
 }
