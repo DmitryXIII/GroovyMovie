@@ -21,6 +21,7 @@
         android:layout_marginBottom="@dimen/margin_8dp"
         android:hint="@string/i_am_looking_for"
         android:textColorHint="@color/main_background"
+        app:boxStrokeColor="@color/black"
         app:endIconCheckable="true"
         app:endIconDrawable="@drawable/ic_baseline_search_24"
         app:endIconMode="custom"
@@ -35,4 +36,13 @@
             android:textColor="@color/main_background" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

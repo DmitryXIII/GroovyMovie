@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie
+package com.ineedyourcode.groovymovie.view
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,12 +6,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.Movie
 
-class MovieListAdapter(private val moviesList: List<Movie>) :
+class MovieListAdapter :
     RecyclerView.Adapter<MovieListAdapter.MovieViewHolder>() {
 
+    private var moviesList: List<Movie> = listOf()
     private lateinit var mListener: OnItemClickListener
+
+    fun setAdapterData(moviesList: List<Movie>) {
+        notifyDataSetChanged()
+        this.moviesList = moviesList
+    }
 
     interface OnItemClickListener {
         fun onItemClickListener(position: Int)
