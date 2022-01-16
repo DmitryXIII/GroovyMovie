@@ -13,4 +13,9 @@
     <string name="movie_title_example">MOVIE_TITLE</string>
     <string name="empty_request">Пустой запрос</string>
     <string name="retry">Еще раз</string>
+    <string name="action">Боевики</string>
+    <string name="comedy">Комедии</string>
+    <string name="drama">Драмы</string>
+    <string name="triller">Триллеры</string>
+    <string name="family">Семейные</string>
 </resources>
