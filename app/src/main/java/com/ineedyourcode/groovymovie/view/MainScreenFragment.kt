@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.lifecycle.Observer
@@ -45,7 +46,7 @@ class MainScreenFragment : Fragment() {
     private lateinit var recyclerViewFamily: RecyclerView
 
     private lateinit var progressCircular: ProgressBar
-    private lateinit var scrollView: ScrollView
+    private lateinit var scrollView: NestedScrollView
     private var _binding: FragmentMainScreenBinding? = null
     private val binding get() = _binding!!
 
