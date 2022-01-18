@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
-import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
@@ -17,6 +16,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.google.android.material.snackbar.Snackbar
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
@@ -45,7 +45,7 @@ class MainScreenFragment : Fragment() {
     private lateinit var recyclerViewTriller: RecyclerView
     private lateinit var recyclerViewFamily: RecyclerView
 
-    private lateinit var progressCircular: ProgressBar
+    private lateinit var progressBar: ProgressBar
     private lateinit var scrollView: NestedScrollView
     private var _binding: FragmentMainScreenBinding? = null
     private val binding get() = _binding!!
@@ -76,7 +76,10 @@ class MainScreenFragment : Fragment() {
 
         val searchLayout = binding.tfInputSearch
         val searchValue = binding.tfEditSearch
-        progressCircular = binding.progressCircular
+
+        progressBar = binding.spinKit
+        progressBar.indeterminateDrawable = ThreeBounce()
+
         scrollView = binding.scroll
 
         recyclerViewAction = binding.moviesRecyclerviewAction
@@ -157,7 +160,7 @@ class MainScreenFragment : Fragment() {
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                progressCircular.isVisible = false
+                progressBar.isVisible = false
                 scrollView.visibility = View.VISIBLE
 
                 moviesList = appState.moviesData
@@ -165,11 +168,11 @@ class MainScreenFragment : Fragment() {
 
             }
             is AppState.Loading -> {
-                progressCircular.isVisible = true
+                progressBar.isVisible = true
                 scrollView.visibility = View.INVISIBLE
             }
             is AppState.Error -> {
-                progressCircular.isVisible = false
+                progressBar.isVisible = false
                 scrollView.visibility = View.INVISIBLE
                 Snackbar
                     .make(binding.tfInputSearch, appState.error, Snackbar.LENGTH_INDEFINITE)

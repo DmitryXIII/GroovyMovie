@@ -1,8 +1,8 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/main_background"
     android:orientation="vertical">
 
@@ -14,9 +14,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/main_background"
+            app:collapsedTitleTextAppearance="@style/expandedBarTextStyle"
             app:contentScrim="@android:color/holo_orange_dark"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:collapsedTitleTextAppearance="@style/expandedBarTextStyle">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -31,10 +31,10 @@
                     android:layout_height="@dimen/zero_value"
                     android:layout_margin="@dimen/margin_16dp"
                     android:src="@drawable/groovy_logo"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/tf_input_search"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/tf_input_search"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tf_input_search"
@@ -98,8 +98,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/movies_recyclerview_action"
                 android:layout_width="match_parent"
-                android:nestedScrollingEnabled="false"
-                android:layout_height="@dimen/recyclerview_height" />
+                android:layout_height="@dimen/recyclerview_height"
+                android:layoutAnimation="@anim/layout_animation"
+                android:nestedScrollingEnabled="false" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/header_genre_comedy"
@@ -113,8 +114,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/movies_recyclerview_comedy"
                 android:layout_width="match_parent"
-                android:nestedScrollingEnabled="false"
-                android:layout_height="@dimen/recyclerview_height" />
+                android:layout_height="@dimen/recyclerview_height"
+                android:layoutAnimation="@anim/layout_animation"
+                android:nestedScrollingEnabled="false" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/header_genre_drama"
@@ -128,8 +130,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/movies_recyclerview_drama"
                 android:layout_width="match_parent"
-                android:nestedScrollingEnabled="false"
-                android:layout_height="@dimen/recyclerview_height" />
+                android:layout_height="@dimen/recyclerview_height"
+                android:layoutAnimation="@anim/layout_animation"
+                android:nestedScrollingEnabled="false" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/header_genre_triller"
@@ -143,8 +146,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/movies_recyclerview_triller"
                 android:layout_width="match_parent"
-                android:nestedScrollingEnabled="false"
-                android:layout_height="@dimen/recyclerview_height" />
+                android:layout_height="@dimen/recyclerview_height"
+                android:layoutAnimation="@anim/layout_animation"
+                android:nestedScrollingEnabled="false" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/header_genre_family"
@@ -158,18 +162,18 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/movies_recyclerview_family"
                 android:layout_width="match_parent"
-                android:nestedScrollingEnabled="false"
-                android:layout_height="@dimen/recyclerview_height" />
+                android:layout_height="@dimen/recyclerview_height"
+                android:layoutAnimation="@anim/layout_animation"
+                android:nestedScrollingEnabled="false" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <ProgressBar
-        android:id="@+id/progress_circular"
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Large.ThreeBounce"
         android:layout_width="wrap_content"
-        android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/appbar_layuot"
         android:visibility="gone"
-        android:indeterminateTint="@android:color/holo_orange_dark"
-        tools:visibility="visible"/>
+        app:SpinKit_Color="@android:color/holo_orange_dark"
+        android:layout_gravity="center"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
