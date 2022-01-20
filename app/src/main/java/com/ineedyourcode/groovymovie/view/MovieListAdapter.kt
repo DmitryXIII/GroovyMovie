@@ -35,11 +35,13 @@ class MovieListAdapter :
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.movieTitle.text = moviesList[position].title
-        holder.movieRating.text = moviesList[position].rating
-        holder.movieReleaseDate.text = moviesList[position].releaseDate
-        holder.movieGenre.text = moviesList[position].genre
-        holder.moviePoster.setImageResource(moviesList[position].poster)
+        with(holder) {
+            movieTitle.text = moviesList[position].title
+            movieRating.text = moviesList[position].rating
+            movieReleaseDate.text = moviesList[position].releaseDate
+            movieGenre.text = moviesList[position].genre
+            moviePoster.setImageResource(moviesList[position].poster)
+        }
     }
 
     override fun getItemCount() = moviesList.size

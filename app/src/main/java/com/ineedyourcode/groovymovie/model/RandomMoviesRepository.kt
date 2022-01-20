@@ -6,11 +6,6 @@ import kotlin.random.Random
 class RandomMoviesRepository : IMoviesRepository {
 
     private val moviesList = mutableListOf<Movie>()
-    private val moviesComedyList = mutableListOf<Movie>()
-    private val moviesDramaList = mutableListOf<Movie>()
-    private val moviesActionList = mutableListOf<Movie>()
-    private val moviesFamilyList = mutableListOf<Movie>()
-    private val moviesTrillerList = mutableListOf<Movie>()
 
     init {
         (0..99).forEach { i ->
@@ -22,28 +17,19 @@ class RandomMoviesRepository : IMoviesRepository {
                     R.drawable.tmdb_logo
                 )
             )
-            when(moviesList[i].genre) {
-                "Комедия" -> moviesComedyList.add(moviesList[i])
-                "Боевик" -> moviesActionList.add(moviesList[i])
-                "Триллер" -> moviesTrillerList.add(moviesList[i])
-                "Драма" -> moviesDramaList.add(moviesList[i])
-                "Семейный" -> moviesFamilyList.add(moviesList[i])
-            }
         }
     }
 
     private fun randomGenre(): String {
-        when((1..5).random()) {
-            1 -> return "Комедия"
-            2 -> return "Боевик"
-            3 -> return "Триллер"
-            4 -> return "Драма"
-            5 -> return "Семейный"
+        return when((1..5).random()) {
+            1 -> "Комедия"
+            2 -> "Боевик"
+            3 -> "Триллер"
+            4 -> "Драма"
+            5 -> "Семейный"
+            else -> ""
         }
-        return ""
     }
 
-    override fun getMoviesList(): List<Movie> {
-        return this.moviesList
-    }
+    override fun getMoviesList(): List<Movie> = moviesList
 }

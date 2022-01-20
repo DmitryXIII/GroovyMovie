@@ -51,4 +51,9 @@ class MovieInfoFragment : Fragment() {
             imgPoster.setImageResource(movieFromArguments.poster)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
 import com.ineedyourcode.groovymovie.model.Movie
@@ -45,8 +47,11 @@ class MainScreenFragment : Fragment() {
     private lateinit var recyclerViewTriller: RecyclerView
     private lateinit var recyclerViewFamily: RecyclerView
 
+    private lateinit var searchLayout: TextInputLayout
+    private lateinit var searchValue: TextInputEditText
     private lateinit var progressBar: ProgressBar
     private lateinit var scrollView: NestedScrollView
+
     private var _binding: FragmentMainScreenBinding? = null
     private val binding get() = _binding!!
 
@@ -68,25 +73,25 @@ class MainScreenFragment : Fragment() {
             renderData(it as AppState)
         })
 
+        with(binding) {
+            searchLayout = tfInputSearch
+            searchValue = tfEditSearch
+            scrollView = scroll
+            progressBar = spinKit
+            recyclerViewAction = moviesRecyclerviewAction
+            recyclerViewComedy = moviesRecyclerviewComedy
+            recyclerViewDrama = moviesRecyclerviewDrama
+            recyclerViewTriller = moviesRecyclerviewTriller
+            recyclerViewFamily = moviesRecyclerviewFamily
+        }
+
         adapterComedy = MovieListAdapter()
         adapterDrama = MovieListAdapter()
         adapterTriller = MovieListAdapter()
         adapterFamily = MovieListAdapter()
         adapterAction = MovieListAdapter()
 
-        val searchLayout = binding.tfInputSearch
-        val searchValue = binding.tfEditSearch
-
-        progressBar = binding.spinKit
         progressBar.indeterminateDrawable = ThreeBounce()
-
-        scrollView = binding.scroll
-
-        recyclerViewAction = binding.moviesRecyclerviewAction
-        recyclerViewComedy = binding.moviesRecyclerviewComedy
-        recyclerViewDrama = binding.moviesRecyclerviewDrama
-        recyclerViewTriller = binding.moviesRecyclerviewTriller
-        recyclerViewFamily = binding.moviesRecyclerviewFamily
 
         recyclerViewAction.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -175,7 +180,7 @@ class MainScreenFragment : Fragment() {
                 progressBar.isVisible = false
                 scrollView.visibility = View.INVISIBLE
                 Snackbar
-                    .make(binding.tfInputSearch, appState.error, Snackbar.LENGTH_INDEFINITE)
+                    .make(searchValue, appState.error, Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.retry)) { viewModel.getData() }
                     .show()
             }
