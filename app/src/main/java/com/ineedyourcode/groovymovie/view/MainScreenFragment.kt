@@ -31,13 +31,13 @@ class MainScreenFragment : Fragment() {
     private var moviesMap: Map<String, Movie> = mapOf()
     private var genresList: List<String> = listOf()
 
-    private lateinit var mainRecyclerView: RecyclerView
-    private lateinit var mainAdapter: MainMoviesAdapter
+    private lateinit var mainRecyclerView: RecyclerView // главный (вертикальный) ресайклервью с вложенными горизонтальными ресайклервьюхами
+    private lateinit var mainAdapter: MainMoviesAdapter // адаптер для главного ресайклервью
 
     private lateinit var searchLayout: TextInputLayout
     private lateinit var searchValue: TextInputEditText
-    private lateinit var progressBar: ProgressBar
-    private lateinit var scrollView: NestedScrollView
+    private lateinit var progressBar: ProgressBar // кастомный прогрессбар
+//    private lateinit var scrollView: NestedScrollView
 
     private var _binding: FragmentMainScreenBinding? = null
     private val binding get() = _binding!!
@@ -63,7 +63,7 @@ class MainScreenFragment : Fragment() {
         with(binding) {
             searchLayout = tfInputSearch
             searchValue = tfEditSearch
-            scrollView = scroll
+//            scrollView = scroll
             progressBar = spinKit
             mainRecyclerView = binding.mainRecyclerview
         }
@@ -101,7 +101,8 @@ class MainScreenFragment : Fragment() {
         when (appState) {
             is AppState.Success -> {
                 progressBar.isVisible = false
-                scrollView.visibility = View.VISIBLE
+                mainRecyclerView.visibility = View.VISIBLE
+//                scrollView.visibility = View.VISIBLE
 
                 moviesMap = appState.moviesData
                 genresList = appState.genresData
@@ -111,12 +112,13 @@ class MainScreenFragment : Fragment() {
             }
             is AppState.Loading -> {
                 progressBar.isVisible = true
-                scrollView.visibility = View.INVISIBLE
+                mainRecyclerView.visibility = View.INVISIBLE
+//                scrollView.visibility = View.INVISIBLE
             }
             is AppState.Error -> {
                 progressBar.isVisible = false
-
-                scrollView.visibility = View.INVISIBLE
+                mainRecyclerView.visibility = View.INVISIBLE
+//                scrollView.visibility = View.INVISIBLE
                 Snackbar
                     .make(searchValue, appState.error, Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.retry)) { viewModel.getData() }
