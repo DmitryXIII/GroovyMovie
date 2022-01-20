@@ -70,7 +70,6 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
@@ -80,92 +79,12 @@
         app:layout_constraintBottom_toTopOf="@id/tf_input_search"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:id="@+id/linear_layout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/header_genre_action"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8dp"
-                android:text="@string/action"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/white" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movies_recyclerview_action"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/recyclerview_height"
-                android:layoutAnimation="@anim/layout_animation"
-                android:nestedScrollingEnabled="false" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/header_genre_comedy"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8dp"
-                android:text="@string/comedy"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/white" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movies_recyclerview_comedy"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/recyclerview_height"
-                android:layoutAnimation="@anim/layout_animation"
-                android:nestedScrollingEnabled="false" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/header_genre_drama"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8dp"
-                android:text="@string/drama"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/white" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movies_recyclerview_drama"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/recyclerview_height"
-                android:layoutAnimation="@anim/layout_animation"
-                android:nestedScrollingEnabled="false" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/header_genre_triller"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8dp"
-                android:text="@string/triller"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/white" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movies_recyclerview_triller"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/recyclerview_height"
-                android:layoutAnimation="@anim/layout_animation"
-                android:nestedScrollingEnabled="false" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/header_genre_family"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_8dp"
-                android:text="@string/family"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/white" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/movies_recyclerview_family"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/recyclerview_height"
-                android:layoutAnimation="@anim/layout_animation"
-                android:nestedScrollingEnabled="false" />
-        </LinearLayout>
+            android:layout_height="300dp"
+            android:layoutAnimation="@anim/layout_animation"
+            android:nestedScrollingEnabled="false" />
     </androidx.core.widget.NestedScrollView>
 
     <com.github.ybq.android.spinkit.SpinKitView

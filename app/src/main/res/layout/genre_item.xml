@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_8dp"
+    android:background="@color/main_background"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/main_recycler_view_genre_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_marginVertical="@dimen/margin_16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        tools:text="@string/genre_header"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/movies_by_genres_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recyclerview_height"
+        android:layoutAnimation="@anim/layout_animation"
+        android:nestedScrollingEnabled="false" />
+</LinearLayout>

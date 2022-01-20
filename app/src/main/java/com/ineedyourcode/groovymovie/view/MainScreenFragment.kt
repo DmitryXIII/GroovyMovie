@@ -28,24 +28,11 @@ import com.ineedyourcode.groovymovie.viewmodel.MainScreenViewModel
 
 class MainScreenFragment : Fragment() {
 
-    private lateinit var adapterComedy: MovieListAdapter
-    private lateinit var adapterDrama: MovieListAdapter
-    private lateinit var adapterTriller: MovieListAdapter
-    private lateinit var adapterFamily: MovieListAdapter
-    private lateinit var adapterAction: MovieListAdapter
+    private var moviesMap: Map<String, Movie> = mapOf()
+    private var genresList: List<String> = listOf()
 
-    private lateinit var moviesList: List<Movie>
-    private lateinit var moviesListComedy: List<Movie>
-    private lateinit var moviesListDrama: List<Movie>
-    private lateinit var moviesListTriller: List<Movie>
-    private lateinit var moviesListFamily: List<Movie>
-    private lateinit var moviesListAction: List<Movie>
-
-    private lateinit var recyclerViewAction: RecyclerView
-    private lateinit var recyclerViewComedy: RecyclerView
-    private lateinit var recyclerViewDrama: RecyclerView
-    private lateinit var recyclerViewTriller: RecyclerView
-    private lateinit var recyclerViewFamily: RecyclerView
+    private lateinit var mainRecyclerView: RecyclerView
+    private lateinit var mainAdapter: MainMoviesAdapter
 
     private lateinit var searchLayout: TextInputLayout
     private lateinit var searchValue: TextInputEditText
@@ -78,67 +65,15 @@ class MainScreenFragment : Fragment() {
             searchValue = tfEditSearch
             scrollView = scroll
             progressBar = spinKit
-            recyclerViewAction = moviesRecyclerviewAction
-            recyclerViewComedy = moviesRecyclerviewComedy
-            recyclerViewDrama = moviesRecyclerviewDrama
-            recyclerViewTriller = moviesRecyclerviewTriller
-            recyclerViewFamily = moviesRecyclerviewFamily
+            mainRecyclerView = binding.mainRecyclerview
         }
-
-        adapterComedy = MovieListAdapter()
-        adapterDrama = MovieListAdapter()
-        adapterTriller = MovieListAdapter()
-        adapterFamily = MovieListAdapter()
-        adapterAction = MovieListAdapter()
 
         progressBar.indeterminateDrawable = ThreeBounce()
 
-        recyclerViewAction.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        recyclerViewComedy.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        recyclerViewDrama.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        recyclerViewTriller.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        recyclerViewFamily.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-
-        recyclerViewAction.adapter = adapterAction
-        recyclerViewComedy.adapter = adapterComedy
-        recyclerViewDrama.adapter = adapterDrama
-        recyclerViewTriller.adapter = adapterTriller
-        recyclerViewFamily.adapter = adapterFamily
-
-        adapterAction.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
-            override fun onItemClickListener(position: Int) {
-                onMovieClick(moviesListAction, position)
-            }
-        })
-
-        adapterComedy.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
-            override fun onItemClickListener(position: Int) {
-                onMovieClick(moviesListComedy, position)
-            }
-        })
-
-        adapterDrama.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
-            override fun onItemClickListener(position: Int) {
-                onMovieClick(moviesListDrama, position)
-            }
-        })
-
-        adapterTriller.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
-            override fun onItemClickListener(position: Int) {
-                onMovieClick(moviesListTriller, position)
-            }
-        })
-
-        adapterFamily.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
-            override fun onItemClickListener(position: Int) {
-                onMovieClick(moviesListFamily, position)
-            }
-        })
+        mainAdapter = MainMoviesAdapter()
+        mainAdapter.setAdapterData(moviesMap, genresList, requireContext(), this)
+        mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        mainRecyclerView.adapter = mainAdapter
 
         searchLayout.setEndIconOnClickListener(View.OnClickListener {
             if ((searchValue.text.toString().isBlank())) {
@@ -168,8 +103,10 @@ class MainScreenFragment : Fragment() {
                 progressBar.isVisible = false
                 scrollView.visibility = View.VISIBLE
 
-                moviesList = appState.moviesData
-                filterByGenres(moviesList)
+                moviesMap = appState.moviesData
+                genresList = appState.genresData
+
+                mainAdapter.setAdapterData(moviesMap, genresList, requireContext(), this)
 
             }
             is AppState.Loading -> {
@@ -178,6 +115,7 @@ class MainScreenFragment : Fragment() {
             }
             is AppState.Error -> {
                 progressBar.isVisible = false
+
                 scrollView.visibility = View.INVISIBLE
                 Snackbar
                     .make(searchValue, appState.error, Snackbar.LENGTH_INDEFINITE)
@@ -185,20 +123,6 @@ class MainScreenFragment : Fragment() {
                     .show()
             }
         }
-    }
-
-    private fun filterByGenres(moviesList: List<Movie>) {
-        moviesListComedy = moviesList.filter { it.genre == "Комедия" }
-        moviesListAction = moviesList.filter { it.genre == "Боевик" }
-        moviesListTriller = moviesList.filter { it.genre == "Триллер" }
-        moviesListDrama = moviesList.filter { it.genre == "Драма" }
-        moviesListFamily = moviesList.filter { it.genre == "Семейный" }
-
-        adapterAction.setAdapterData(moviesListAction)
-        adapterComedy.setAdapterData(moviesListComedy)
-        adapterDrama.setAdapterData(moviesListDrama)
-        adapterTriller.setAdapterData(moviesListTriller)
-        adapterFamily.setAdapterData(moviesListFamily)
     }
 
     private fun onMovieClick(moviesList: List<Movie>, position: Int) {

@@ -21,7 +21,13 @@ class MainScreenViewModel(private val liveDataToObserve: MutableLiveData<AppStat
         Thread {
             sleep(1000)
             when (randomResult()) {
-                in 1..7 -> liveDataToObserve.postValue(AppState.Success(repository.getMoviesList()))
+                in 1..7 ->
+                    liveDataToObserve.postValue(
+                        AppState.Success(
+                            repository.getMoviesMap(),
+                            repository.getGenresList()
+                        )
+                    )
                 in 8..10 -> liveDataToObserve.postValue(AppState.Error("Data receiving error"))
             }
         }.start()
