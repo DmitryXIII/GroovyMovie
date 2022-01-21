@@ -11,4 +11,5 @@
     <color name="movie_background">#FFFFFF</color>
     <color name="content_scrim">#BF360C</color>
     <color name="appbar_layuot">#630C0C</color>
+    <color name="orange">#FFFF8800</color>
 </resources>

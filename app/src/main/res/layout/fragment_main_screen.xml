@@ -19,16 +19,16 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/top_logo_layout_height"
                 android:background="@drawable/appbar_background"
                 android:orientation="vertical"
-                android:layout_marginBottom="50dp"
-                android:paddingHorizontal="20dp">
+                android:layout_marginBottom="@dimen/margin_50dp"
+                android:paddingHorizontal="@dimen/margin_20dp">
 
                 <ImageView
                     android:id="@+id/groovy_logo"
                     android:layout_width="wrap_content"
-                    android:layout_height="100dp"
+                    android:layout_height="@dimen/logo_height"
                     android:layout_margin="@dimen/margin_16dp"
                     android:src="@drawable/groovy_logo"
                     app:layout_constraintBottom_toTopOf="@id/tf_input_search"
@@ -45,10 +45,10 @@
                     android:hint="@string/i_am_looking_for"
                     android:textColorHint="@color/white"
                     android:layout_marginTop="@dimen/margin_16dp"
-                    app:boxCornerRadiusBottomEnd="20dp"
-                    app:boxCornerRadiusBottomStart="20dp"
-                    app:boxCornerRadiusTopEnd="20dp"
-                    app:boxCornerRadiusTopStart="20dp"
+                    app:boxCornerRadiusBottomEnd="@dimen/text_input_layout_corner_radius"
+                    app:boxCornerRadiusBottomStart="@dimen/text_input_layout_corner_radius"
+                    app:boxCornerRadiusTopEnd="@dimen/text_input_layout_corner_radius"
+                    app:boxCornerRadiusTopStart="@dimen/text_input_layout_corner_radius"
                     app:boxStrokeColor="@color/text_input_box_stroke"
                     app:endIconCheckable="true"
                     app:endIconDrawable="@drawable/ic_baseline_search_24"
@@ -76,7 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        app:behavior_overlapTop="50dp"
+        app:behavior_overlapTop="@dimen/behavior_overlap"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.recyclerview.widget.RecyclerView

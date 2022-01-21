@@ -28,7 +28,7 @@ class MainScreenViewModel(private val liveDataToObserve: MutableLiveData<AppStat
                             repository.getGenresList()
                         )
                     )
-                in 8..10 -> liveDataToObserve.postValue(AppState.Error("Data receiving error"))
+                in 8..10 -> liveDataToObserve.postValue(AppState.Error(IllegalAccessException("Data receiving error")))
             }
         }.start()
     }

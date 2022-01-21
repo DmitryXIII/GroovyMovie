@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +23,11 @@ class MainMoviesAdapter : RecyclerView.Adapter<MainMoviesAdapter.MainMoviesViewH
         moviesMap: Map<String, Movie>,
         genresList: List<String>,
         context: Context,
+        // Получение экземпляра фрагмента необходимо для
+        // получения доступа из этого адаптера к parentFragmentManager,
+        // чтобы обработать клик по вложенным recyclerview
+        // и окрыть второй экран с описанием фильма.
+        // Другого решения по открытию второго экрана пока не найдено
         fragment: MainScreenFragment
     ) {
 
@@ -44,6 +48,7 @@ class MainMoviesAdapter : RecyclerView.Adapter<MainMoviesAdapter.MainMoviesViewH
     }
 
     override fun onBindViewHolder(holder: MainMoviesViewHolder, position: Int) {
+        // создание адаптера для каждого жанра из пришедшего списка фильмов
         val adapterByGenres = FilteredByGenresAdapter()
         val list = moviesMap.values.toList().filter { it.genre == genresList[position] }
         adapterByGenres.setAdapterData(list)
@@ -55,6 +60,7 @@ class MainMoviesAdapter : RecyclerView.Adapter<MainMoviesAdapter.MainMoviesViewH
             recyclerView.adapter = adapterByGenres
         }
 
+        // обработка клика по вложенным горизонтальным спискам фильмов
         adapterByGenres.setOnItemClickListener(object :
             FilteredByGenresAdapter.OnItemClickListener {
             override fun onItemClickListener(position: Int, filteredByGenresList: List<Movie>) {
