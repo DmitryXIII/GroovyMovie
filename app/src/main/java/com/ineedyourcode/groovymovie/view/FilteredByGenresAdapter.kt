@@ -12,8 +12,7 @@ import com.ineedyourcode.groovymovie.model.Movie
 class FilteredByGenresAdapter :
     RecyclerView.Adapter<FilteredByGenresAdapter.ByGenresViewHolder>() {
 
-    private var filteredByGenreList: List<Movie> =
-        listOf() //фильтрованный по жанру список из общего списка фильмов
+    private var filteredByGenreList: List<Movie> = listOf()
     private lateinit var mListener: OnItemClickListener
 
     fun setAdapterData(receivedGenresList: List<Movie>) {
@@ -51,8 +50,7 @@ class FilteredByGenresAdapter :
         itemView: View,
         listener: OnItemClickListener,
         filteredByGenreListFromAdapter: List<Movie>
-    ) :
-        RecyclerView.ViewHolder(itemView) {
+    ) : RecyclerView.ViewHolder(itemView) {
 
         init {
             itemView.setOnClickListener {

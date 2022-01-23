@@ -14,25 +14,27 @@ fun View.hideKeyboard(): Boolean {
 
 //снэкбар без action, принимает в параметрах строковый ресурс
 fun View.showSnackWithoutAction(@StringRes message: Int) {
-    val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
-    snackbar.setBackgroundTint(resources.getColor(R.color.orange, context.theme))
-    snackbar.setTextColor(resources.getColor(R.color.main_background, context.theme))
-    snackbar.show()
+    Snackbar.make(this, message, Snackbar.LENGTH_SHORT).apply {
+        setBackgroundTint(resources.getColor(R.color.appbar_layuot, context.theme))
+        setTextColor(resources.getColor(R.color.white, context.theme))
+        show()
+    }
 }
 
 //снэкбар без action, принимает в параметрах String
 fun View.showSnackWithoutAction(message: String) {
-    val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
-    snackbar.setBackgroundTint(resources.getColor(R.color.orange, context.theme))
-    snackbar.setTextColor(resources.getColor(R.color.main_background, context.theme))
-    snackbar.show()
+    Snackbar.make(this, message, Snackbar.LENGTH_SHORT).apply {
+        setBackgroundTint(resources.getColor(R.color.appbar_layuot, context.theme))
+        setTextColor(resources.getColor(R.color.white, context.theme))
+        show()
+    }
 }
 
 fun View.showSnackWithAction(message: String, actionText: String, action: (View) -> Unit) {
-    val snackbar =
-        Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE).setAction(actionText, action)
-    snackbar.setBackgroundTint(resources.getColor(R.color.orange, context.theme))
-    snackbar.setTextColor(resources.getColor(R.color.main_background, context.theme))
-    snackbar.setActionTextColor(resources.getColor(R.color.appbar_layuot, context.theme))
-    snackbar.show()
+    Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE).setAction(actionText, action).apply {
+        setBackgroundTint(resources.getColor(R.color.appbar_layuot, context.theme))
+        setTextColor(resources.getColor(R.color.white, context.theme))
+        setActionTextColor(resources.getColor(R.color.orange, context.theme))
+        show()
+    }
 }

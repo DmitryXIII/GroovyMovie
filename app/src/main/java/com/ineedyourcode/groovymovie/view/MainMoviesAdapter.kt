@@ -1,6 +1,5 @@
 package com.ineedyourcode.groovymovie.view
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,32 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.Movie
 
-class MainMoviesAdapter : RecyclerView.Adapter<MainMoviesAdapter.MainMoviesViewHolder>() {
-
-    private var genresList: List<String> = listOf()
-    private var moviesMap: Map<String, Movie> = mapOf()
-    private lateinit var context: Context
-    private lateinit var selectedMovie: Movie
-    private lateinit var fragment: MainScreenFragment
-
-    fun setAdapterData(
-        moviesMap: Map<String, Movie>,
-        genresList: List<String>,
-        context: Context,
-        // Получение экземпляра фрагмента необходимо для
-        // получения доступа из этого адаптера к parentFragmentManager,
-        // чтобы обработать клик по вложенным recyclerview
-        // и окрыть второй экран с описанием фильма.
-        // Другого решения по открытию второго экрана пока не найдено
-        fragment: MainScreenFragment
-    ) {
-
-        notifyDataSetChanged()
-        this.moviesMap = moviesMap
-        this.genresList = genresList
-        this.context = context
-        this.fragment = fragment
-    }
+class MainMoviesAdapter(
+    private var moviesMap: Map<String, Movie>,
+    private var genresList: List<String>,
+    private var fragment: MainScreenFragment
+) : RecyclerView.Adapter<MainMoviesAdapter.MainMoviesViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -49,29 +27,32 @@ class MainMoviesAdapter : RecyclerView.Adapter<MainMoviesAdapter.MainMoviesViewH
 
     override fun onBindViewHolder(holder: MainMoviesViewHolder, position: Int) {
         // создание адаптера для каждого жанра из пришедшего списка фильмов
-        val adapterByGenres = FilteredByGenresAdapter()
-        val list = moviesMap.values.toList().filter { it.genre == genresList[position] }
-        adapterByGenres.setAdapterData(list)
+        val adapterByGenres = FilteredByGenresAdapter().apply {
+            setAdapterData(moviesMap.values.toList().filter { it.genre == genresList[position] })
+
+            // обработка клика по вложенным горизонтальным спискам фильмов
+            setOnItemClickListener(object :
+                FilteredByGenresAdapter.OnItemClickListener {
+                override fun onItemClickListener(position: Int, filteredByGenresList: List<Movie>) {
+                    fragment.parentFragmentManager.beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .replace(
+                            R.id.fragment_container,
+                            MovieInfoFragment.newInstance(filteredByGenresList[position])
+                        )
+                        .addToBackStack("")
+                        .commit()
+                }
+            })
+        }
 
         with(holder) {
             genreHeader.text = genresList[position]
-            recyclerView.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            recyclerView.adapter = adapterByGenres
-        }
-
-        // обработка клика по вложенным горизонтальным спискам фильмов
-        adapterByGenres.setOnItemClickListener(object :
-            FilteredByGenresAdapter.OnItemClickListener {
-            override fun onItemClickListener(position: Int, filteredByGenresList: List<Movie>) {
-                selectedMovie = filteredByGenresList[position]
-                fragment.parentFragmentManager.beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .replace(R.id.fragment_container, MovieInfoFragment.newInstance(selectedMovie))
-                    .addToBackStack("")
-                    .commit()
+            recyclerView.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = adapterByGenres
             }
-        })
+        }
     }
 
     override fun getItemCount() = genresList.size

@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:background="@color/main_background"
             app:collapsedTitleTextAppearance="@style/expandedBarTextStyle"
-            app:contentScrim="@android:color/holo_orange_dark"
+            app:contentScrim="@color/orange"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -94,5 +94,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone"
-        app:SpinKit_Color="@android:color/holo_orange_dark" />
+        app:SpinKit_Color="@color/orange" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

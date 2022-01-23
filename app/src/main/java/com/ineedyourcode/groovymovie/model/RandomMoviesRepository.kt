@@ -6,13 +6,12 @@ import kotlin.random.Random
 
 class RandomMoviesRepository : IMoviesRepository {
 
-    private val moviesList = mutableListOf<Movie>()
     private val genresSet = mutableSetOf<String>()
     private val moviesMap = mutableMapOf<String, Movie>()
 
     init {
         (0..300).forEach { i ->
-            var movie = Movie(
+            val movie = Movie(
                 UUID.randomUUID().toString(),
                 "Movie_$i" + "_название фильма",
                 (1990..2022).random().toString(),
@@ -20,17 +19,9 @@ class RandomMoviesRepository : IMoviesRepository {
                 R.drawable.tmdb_logo
             )
 
-            moviesMap.put(movie.id.toString(), movie)
-
+            moviesMap[movie.id.toString()] = movie
             genresSet.add(movie.genre.toString())
         }
-        println("================================================================================================")
-        for (mutableEntry in moviesMap) {
-            println(mutableEntry.toString())
-        }
-        println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        println(moviesMap.values)
-        println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     }
 
     private fun randomGenre(): String {
@@ -45,7 +36,7 @@ class RandomMoviesRepository : IMoviesRepository {
             8 -> "Исторический"
             9 -> "Мюзикл"
             10 -> "Мелодрама"
-            else -> ""
+            else -> "Другой жанр"
         }
     }
 

@@ -34,7 +34,9 @@ class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: MainScreenViewModel
+    private val viewModel: MainScreenViewModel by lazy {
+        ViewModelProvider(this)[MainScreenViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +49,6 @@ class MainScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainScreenViewModel::class.java)
         viewModel.getData().observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })
@@ -60,12 +61,6 @@ class MainScreenFragment : Fragment() {
         }
 
         progressBar.indeterminateDrawable = ThreeBounce()
-
-        mainAdapter = MainMoviesAdapter()
-        val layoutManager = LinearLayoutManager(requireContext())
-        layoutManager.stackFromEnd = true
-        mainRecyclerView.layoutManager = layoutManager
-        mainRecyclerView.adapter = mainAdapter
 
         searchLayout.setEndIconOnClickListener(View.OnClickListener {
             if ((searchValue.text.toString().isBlank())) {
@@ -83,22 +78,24 @@ class MainScreenFragment : Fragment() {
                 progressBar.isVisible = false
                 mainRecyclerView.visibility = View.VISIBLE
 
-                mainAdapter.setAdapterData(
-                    appState.moviesData,
-                    appState.genresData,
-                    requireContext(),
-                    // Последним аргументом в адаптер передается ссылка на фрагмент,
-                    // чтобы можно было обработать клик по вложенным recyclerview,
-                    // и из главного recyclerview открыть второй экран с подробным описанием фильма.
-                    // Решение, как напрямую из этого фрагмента правильно обработать клик и открыть второй экран,
-                    // пока не найдено
-                    this
-                )
+                // Последним аргументом в адаптер передается ссылка на фрагмент,
+                // чтобы можно было обработать клик по вложенным recyclerview,
+                // и из главного recyclerview открыть второй экран с подробным описанием фильма.
+                // Решение, как напрямую из этого фрагмента правильно обработать клик и открыть второй экран,
+                // пока не найдено
+                mainAdapter = MainMoviesAdapter(appState.moviesData, appState.genresData, this)
+
+                mainRecyclerView.apply {
+                    layoutManager = LinearLayoutManager(requireContext())
+                    adapter = mainAdapter
+                }
             }
+
             is AppState.Loading -> {
                 progressBar.isVisible = true
                 mainRecyclerView.visibility = View.INVISIBLE
             }
+
             is AppState.Error -> {
                 progressBar.isVisible = false
                 mainRecyclerView.visibility = View.INVISIBLE
