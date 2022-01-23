@@ -9,12 +9,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.google.android.material.snackbar.Snackbar
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
@@ -24,10 +26,27 @@ import com.ineedyourcode.groovymovie.viewmodel.MainScreenViewModel
 
 class MainScreenFragment : Fragment() {
 
-    private lateinit var adapter: MovieListAdapter
+    private lateinit var adapterComedy: MovieListAdapter
+    private lateinit var adapterDrama: MovieListAdapter
+    private lateinit var adapterTriller: MovieListAdapter
+    private lateinit var adapterFamily: MovieListAdapter
+    private lateinit var adapterAction: MovieListAdapter
+
     private lateinit var moviesList: List<Movie>
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var progressCircular: ProgressBar
+    private lateinit var moviesListComedy: List<Movie>
+    private lateinit var moviesListDrama: List<Movie>
+    private lateinit var moviesListTriller: List<Movie>
+    private lateinit var moviesListFamily: List<Movie>
+    private lateinit var moviesListAction: List<Movie>
+
+    private lateinit var recyclerViewAction: RecyclerView
+    private lateinit var recyclerViewComedy: RecyclerView
+    private lateinit var recyclerViewDrama: RecyclerView
+    private lateinit var recyclerViewTriller: RecyclerView
+    private lateinit var recyclerViewFamily: RecyclerView
+
+    private lateinit var progressBar: ProgressBar
+    private lateinit var scrollView: NestedScrollView
     private var _binding: FragmentMainScreenBinding? = null
     private val binding get() = _binding!!
 
@@ -49,23 +68,70 @@ class MainScreenFragment : Fragment() {
             renderData(it as AppState)
         })
 
-        adapter = MovieListAdapter()
+        adapterComedy = MovieListAdapter()
+        adapterDrama = MovieListAdapter()
+        adapterTriller = MovieListAdapter()
+        adapterFamily = MovieListAdapter()
+        adapterAction = MovieListAdapter()
 
         val searchLayout = binding.tfInputSearch
         val searchValue = binding.tfEditSearch
-        progressCircular = binding.progressCircular
 
-        recyclerView = binding.moviesRecyclerview
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter = adapter
-        adapter.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
+        progressBar = binding.spinKit
+        progressBar.indeterminateDrawable = ThreeBounce()
+
+        scrollView = binding.scroll
+
+        recyclerViewAction = binding.moviesRecyclerviewAction
+        recyclerViewComedy = binding.moviesRecyclerviewComedy
+        recyclerViewDrama = binding.moviesRecyclerviewDrama
+        recyclerViewTriller = binding.moviesRecyclerviewTriller
+        recyclerViewFamily = binding.moviesRecyclerviewFamily
+
+        recyclerViewAction.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewComedy.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewDrama.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewTriller.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewFamily.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        recyclerViewAction.adapter = adapterAction
+        recyclerViewComedy.adapter = adapterComedy
+        recyclerViewDrama.adapter = adapterDrama
+        recyclerViewTriller.adapter = adapterTriller
+        recyclerViewFamily.adapter = adapterFamily
+
+        adapterAction.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
             override fun onItemClickListener(position: Int) {
-                val selectedMovie = moviesList[position]
-                parentFragmentManager.beginTransaction()
-                    .setTransition(TRANSIT_FRAGMENT_OPEN)
-                    .replace(R.id.fragment_container, MovieInfoFragment.newInstance(selectedMovie))
-                    .addToBackStack("")
-                    .commit()
+                onMovieClick(moviesListAction, position)
+            }
+        })
+
+        adapterComedy.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
+            override fun onItemClickListener(position: Int) {
+                onMovieClick(moviesListComedy, position)
+            }
+        })
+
+        adapterDrama.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
+            override fun onItemClickListener(position: Int) {
+                onMovieClick(moviesListDrama, position)
+            }
+        })
+
+        adapterTriller.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
+            override fun onItemClickListener(position: Int) {
+                onMovieClick(moviesListTriller, position)
+            }
+        })
+
+        adapterFamily.setOnItemClickListener(object : MovieListAdapter.OnItemClickListener {
+            override fun onItemClickListener(position: Int) {
+                onMovieClick(moviesListFamily, position)
             }
         })
 
@@ -94,24 +160,49 @@ class MainScreenFragment : Fragment() {
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                progressCircular.isVisible = false
-                recyclerView.isVisible = true
+                progressBar.isVisible = false
+                scrollView.visibility = View.VISIBLE
+
                 moviesList = appState.moviesData
-                adapter.setAdapterData(moviesList)
+                filterByGenres(moviesList)
+
             }
             is AppState.Loading -> {
-                progressCircular.isVisible = true
-                recyclerView.visibility = View.INVISIBLE
+                progressBar.isVisible = true
+                scrollView.visibility = View.INVISIBLE
             }
             is AppState.Error -> {
-                progressCircular.isVisible = false
-                recyclerView.visibility = View.INVISIBLE
+                progressBar.isVisible = false
+                scrollView.visibility = View.INVISIBLE
                 Snackbar
                     .make(binding.tfInputSearch, appState.error, Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.retry)) { viewModel.getData() }
                     .show()
             }
         }
+    }
+
+    private fun filterByGenres(moviesList: List<Movie>) {
+        moviesListComedy = moviesList.filter { it.genre == "Комедия" }
+        moviesListAction = moviesList.filter { it.genre == "Боевик" }
+        moviesListTriller = moviesList.filter { it.genre == "Триллер" }
+        moviesListDrama = moviesList.filter { it.genre == "Драма" }
+        moviesListFamily = moviesList.filter { it.genre == "Семейный" }
+
+        adapterAction.setAdapterData(moviesListAction)
+        adapterComedy.setAdapterData(moviesListComedy)
+        adapterDrama.setAdapterData(moviesListDrama)
+        adapterTriller.setAdapterData(moviesListTriller)
+        adapterFamily.setAdapterData(moviesListFamily)
+    }
+
+    private fun onMovieClick(moviesList: List<Movie>, position: Int) {
+        val selectedMovie = moviesList[position]
+        parentFragmentManager.beginTransaction()
+            .setTransition(TRANSIT_FRAGMENT_OPEN)
+            .replace(R.id.fragment_container, MovieInfoFragment.newInstance(selectedMovie))
+            .addToBackStack("")
+            .commit()
     }
 
     override fun onDestroy() {

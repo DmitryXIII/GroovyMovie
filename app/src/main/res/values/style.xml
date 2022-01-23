@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="expandedBarTextStyle">
+        <!-- Customize your theme here. -->
+        <item name="android:textSize">10sp</item>
+        <item name="android:text">@string/some_genre</item>
+        <item name="android:textColor">@color/main_background</item>
+    </style>
+</resources>

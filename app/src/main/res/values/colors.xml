@@ -7,6 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="main_background">#21005A</color>
-    <color name="movie_background">#E1F5FE</color>
+    <color name="main_background">#310000</color>
+    <color name="movie_background">#FFFFFF</color>
+    <color name="content_scrim">#BF360C</color>
+    <color name="appbar_layuot">#630C0C</color>
 </resources>
