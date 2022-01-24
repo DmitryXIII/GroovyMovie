@@ -5,20 +5,18 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ineedyourcode.groovymovie.model.RandomMoviesRepository
-import com.ineedyourcode.groovymovie.model.TMDBRepository
+import com.ineedyourcode.groovymovie.model.IMoviesRepository
+import com.ineedyourcode.groovymovie.model.tmdb.TMDBRepository
 import java.lang.Thread.sleep
 
+@RequiresApi(Build.VERSION_CODES.N)
 class MainScreenViewModel(private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()) :
     ViewModel() {
 
-    private val repository = RandomMoviesRepository()
-private val rep = TMDBRepository()
+    private val repository: IMoviesRepository = TMDBRepository()
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun getData(): LiveData<AppState> {
         getDataFromDb()
-        rep.loadWeather()
         return liveDataToObserve
     }
 

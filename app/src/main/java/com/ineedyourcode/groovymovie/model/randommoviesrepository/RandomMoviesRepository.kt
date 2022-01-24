@@ -1,6 +1,8 @@
-package com.ineedyourcode.groovymovie.model
+package com.ineedyourcode.groovymovie.model.randommoviesrepository
 
 import com.ineedyourcode.groovymovie.R
+import com.ineedyourcode.groovymovie.model.IMoviesRepository
+import com.ineedyourcode.groovymovie.model.Movie
 import java.util.*
 import kotlin.random.Random
 
@@ -41,5 +43,5 @@ class RandomMoviesRepository : IMoviesRepository {
     }
 
     override fun getMoviesMap(): Map<String, Movie> = moviesMap
-    override fun getGenresList(): List<String> = genresSet.toList()
+    override fun getGenresList(): Set<String> = genresSet
 }
