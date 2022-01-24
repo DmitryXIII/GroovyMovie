@@ -1,7 +1,6 @@
 package com.ineedyourcode.groovymovie.model.tmdb
 
 import android.os.Build
-import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.ineedyourcode.groovymovie.BuildConfig
@@ -25,53 +24,43 @@ class TMDBRepository : IMoviesRepository {
 
     init {
         try {
-            val uriGenres =
-                URL("https://api.themoviedb.org/3/genre/movie/list?api_key=${BuildConfig.TMDB_API_KEY}&language=ru-RU")
-            val uriTopRated =
-                URL("https://api.themoviedb.org/3/movie/top_rated?api_key=${BuildConfig.TMDB_API_KEY}&language=ru-RU&page=1")
-            val handler = Handler()
-
             Thread {
                 lateinit var urlTopRatedConnection: HttpsURLConnection
                 lateinit var urlGenresListConnection: HttpsURLConnection
                 try {
-                    urlTopRatedConnection = uriTopRated.openConnection() as HttpsURLConnection
-                    urlTopRatedConnection.requestMethod = "GET"
-                    urlTopRatedConnection.addRequestProperty("Content-Type", "application/json")
-                    urlTopRatedConnection.readTimeout = 10000
-                    val bufferedReaderTopRated =
-                        BufferedReader(InputStreamReader(urlTopRatedConnection.inputStream))
-
+                    val uriGenres =
+                        URL("https://api.themoviedb.org/3/genre/movie/list?api_key=${BuildConfig.TMDB_API_KEY}&language=ru-RU")
                     urlGenresListConnection = uriGenres.openConnection() as HttpsURLConnection
-                    urlGenresListConnection.requestMethod = "GET"
-                    urlGenresListConnection.addRequestProperty("Content-Type", "application/json")
-                    urlGenresListConnection.readTimeout = 10000
+                    urlGenresListConnection.apply {
+                        requestMethod = "GET"
+//                        addRequestProperty("Content-Type", "application/json")
+                        readTimeout = 10000
+                    }
 
                     val bufferedReaderGenresList =
                         BufferedReader(InputStreamReader(urlGenresListConnection.inputStream))
 
-                    // преобразование ответа от сервера (JSON) в модель данных (WeatherDTO)
-//                    var moviesDTOList: Array<MovieDTO>
+                    parseGenres(getLines(bufferedReaderGenresList))
+                    for (i in 1..15) {
+                        val uriTopRated =
+                            URL("https://api.themoviedb.org/3/movie/top_rated?api_key=${BuildConfig.TMDB_API_KEY}&language=ru-RU&page=$i")
+                        urlTopRatedConnection = uriTopRated.openConnection() as HttpsURLConnection
+                        urlTopRatedConnection.apply {
+                            requestMethod = "GET"
+//                            addRequestProperty("Content-Type", "application/json")
+                            readTimeout = 10000
+                        }
 
+                        val bufferedReaderTopRated =
+                            BufferedReader(InputStreamReader(urlTopRatedConnection.inputStream))
+
+                        parseTopRatedList(getLines(bufferedReaderTopRated))
+                    }
 
 //                    var moviesDTOList: Array<MovieDTO> = Gson().fromJson(getLines(bufferedReader), Array<MovieDTO>::class.java)
-
-                    println("===========================================================================================================")
-
-                    val genresMap = parseGenres(getLines(bufferedReaderGenresList))
-                    val movieList = parseTopRatedList(getLines(bufferedReaderTopRated))
-                    for (movieDTO in movieList) {
-                        println(movieDTO)
-                    }
-                    for (entry in genresMap) {
-                        println(entry)
-                    }
-
-//                    handler.post { listener.onLoaded(weatherDTO) }
                 } catch (e: Exception) {
                     Log.e("111", "Fail connection", e)
                     e.printStackTrace()
-//                    listener.onFailed(e)
                 } finally {
                     urlTopRatedConnection.disconnect()
                     urlGenresListConnection.disconnect()
@@ -80,16 +69,15 @@ class TMDBRepository : IMoviesRepository {
         } catch (e: MalformedURLException) {
             Log.e("", "Fail URI", e)
             e.printStackTrace()
-//            listener.onFailed(e)
         }
     }
 
-
-    private fun parseTopRatedList(result: String): List<MovieDTO> {
-        val moviesDTOList = mutableListOf<MovieDTO>()
+    private fun parseTopRatedList(result: String) {
+        val moviesDTOList = mutableListOf<TMDBMovieDTO>()
         try {
             val jsonObj = JSONObject(result)
             val array = jsonObj.getJSONArray("results")
+
             for (i in 0 until array.length()) {
                 val jsonMovie = array.getJSONObject(i)
                 var genreArr = IntArray(0)
@@ -101,7 +89,7 @@ class TMDBRepository : IMoviesRepository {
                     }
                 }
 
-                val movieDTO = MovieDTO(
+                val movieDTO = TMDBMovieDTO(
                     adult = jsonMovie.getBoolean("adult"),
                     backdropPath = jsonMovie.getString("backdrop_path"),
                     genreIds = genreArr,
@@ -127,6 +115,7 @@ class TMDBRepository : IMoviesRepository {
                     movieDTO.releaseDate,
                     movieDTO.voteAverage.toString(),
                     mapOfGenres[movieDTO.genreIds[0]],
+                    movieDTO.overview,
                     R.drawable.tmdb_logo
                 )
                 moviesMap[movie.id.toString()] = movie
@@ -134,10 +123,9 @@ class TMDBRepository : IMoviesRepository {
         } catch (e: JSONException) {
             Log.d("DEBUG_TAG", "Error parsing JSON. String was: $result")
         }
-        return moviesDTOList
     }
 
-    private fun parseGenres(result: String): Map<Int, String> {
+    private fun parseGenres(result: String) {
         try {
             val jsonObj = JSONObject(result)
             val array = jsonObj.getJSONArray("genres")
@@ -149,7 +137,6 @@ class TMDBRepository : IMoviesRepository {
         } catch (e: JSONException) {
             Log.d("DEBUG_TAG", "Error parsing JSON. String was: $result")
         }
-        return mapOfGenres
     }
 
     private fun getLines(reader: BufferedReader): String {

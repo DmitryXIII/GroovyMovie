@@ -1,6 +1,6 @@
 package com.ineedyourcode.groovymovie.model.tmdb
 
-data class MovieDTO(
+data class TMDBMovieDTO(
     val adult: Boolean,
     val backdropPath: String,
     val genreIds: IntArray,

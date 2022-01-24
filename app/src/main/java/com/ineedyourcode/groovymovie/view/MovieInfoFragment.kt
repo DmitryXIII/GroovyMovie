@@ -42,6 +42,7 @@ class MovieInfoFragment : Fragment() {
                 txtMovieInfoRating.text = movie.rating
                 txtMovieInfoGenre.text = movie.genre
                 drawMovieInfoPoster.setImageResource(movie.poster)
+                txtMovieInfo.text = movie.overview
             }
         }
     }

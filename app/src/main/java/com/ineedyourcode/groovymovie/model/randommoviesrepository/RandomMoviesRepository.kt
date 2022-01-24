@@ -18,6 +18,7 @@ class RandomMoviesRepository : IMoviesRepository {
                 "Movie_$i" + "_название фильма",
                 (1990..2022).random().toString(),
                 (Random.nextDouble(1.0, 5.0)).toString().substring(0, 3), randomGenre(),
+                "Описание...",
                 R.drawable.tmdb_logo
             )
 

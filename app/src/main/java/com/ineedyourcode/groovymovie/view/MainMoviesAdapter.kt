@@ -46,12 +46,11 @@ class MainMoviesAdapter(
                 }
             })
         }
-        // Заглавная буква в названии жанра
-        val header = genresList.toList()[position].substring(0, 1).uppercase() +
-                genresList.toList()[position].substring(1).lowercase()
 
         with(holder) {
-            genreHeader.text = header
+            // Заглавная буква в названии жанра
+            genreHeader.text =
+                genresList.toList()[position].lowercase().replaceFirstChar { it.uppercase() }
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = adapterByGenres
