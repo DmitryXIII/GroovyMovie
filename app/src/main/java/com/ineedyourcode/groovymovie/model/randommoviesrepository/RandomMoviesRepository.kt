@@ -1,6 +1,5 @@
 package com.ineedyourcode.groovymovie.model.randommoviesrepository
 
-import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.IMoviesRepository
 import com.ineedyourcode.groovymovie.model.Movie
 import java.util.*
@@ -11,15 +10,14 @@ class RandomMoviesRepository : IMoviesRepository {
     private val genresSet = mutableSetOf<String>()
     private val moviesMap = mutableMapOf<String, Movie>()
 
-    init {
+    override fun loadData() {
         (0..300).forEach { i ->
             val movie = Movie(
                 UUID.randomUUID().toString(),
                 "Movie_$i" + "_название фильма",
                 (1990..2022).random().toString(),
                 (Random.nextDouble(1.0, 5.0)).toString().substring(0, 3), randomGenre(),
-                "Описание...",
-                R.drawable.tmdb_logo
+                "Описание..."
             )
 
             moviesMap[movie.id.toString()] = movie

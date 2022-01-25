@@ -40,7 +40,7 @@ class FilteredByGenresAdapter :
             movieRating.text = filteredByGenreList[position].rating
             movieReleaseDate.text = filteredByGenreList[position].releaseDate
             movieGenre.text = filteredByGenreList[position].genre
-            moviePoster.setImageResource(filteredByGenreList[position].poster)
+            moviePoster.setImageResource(R.drawable.tmdb_logo)
         }
     }
 

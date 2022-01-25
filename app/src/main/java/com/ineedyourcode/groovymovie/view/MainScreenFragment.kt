@@ -1,10 +1,12 @@
 package com.ineedyourcode.groovymovie.view
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -47,6 +49,7 @@ class MainScreenFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getData().observe(viewLifecycleOwner, Observer<Any> {
@@ -72,6 +75,7 @@ class MainScreenFragment : Fragment() {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
@@ -101,7 +105,7 @@ class MainScreenFragment : Fragment() {
                 mainRecyclerView.visibility = View.INVISIBLE
 
                 searchValue.showSnackWithAction(
-                    appState.e.localizedMessage!!,
+                    appState.e,
                     getString(R.string.retry)
                 ) { viewModel.getData() }
             }
