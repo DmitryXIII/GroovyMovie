@@ -24,6 +24,7 @@ import com.ineedyourcode.groovymovie.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.MainScreenViewModel
 
+@RequiresApi(Build.VERSION_CODES.N)
 class MainScreenFragment : Fragment() {
 
     private lateinit var mainRecyclerView: RecyclerView // главный (вертикальный) ресайклервью с вложенными горизонтальными ресайклервьюхами
