@@ -23,4 +23,6 @@
     <string name="service_movie_overview_request_error_extra">Не удалось загрузить описание для этого фильма</string>
     <string name="snack_msg_overview_load_error">Ошибка загрузки описания</string>
     <string name="snack_msg_overview_load_success">Описание фильма успешно загружено через сервис</string>
+    <string name="msg_no_connection">NO INTERNET CONNECTION</string>
+    <string name="connection_icon">connection icon</string>
 </resources>
