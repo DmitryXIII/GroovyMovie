@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie.viewmodel
+package com.ineedyourcode.groovymovie.viewmodel.mainscreen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -14,6 +14,7 @@ class MainScreenViewModel(private val liveDataToObserve: MutableLiveData<AppStat
 
     private val repository: IMoviesRepository = TMDBRepository()
     private var requestsTriesCounter = 0
+
     fun getData(): LiveData<AppState> {
         getDataFromDb()
         return liveDataToObserve

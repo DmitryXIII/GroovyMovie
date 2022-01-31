@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie.model.tmdb
+package com.ineedyourcode.groovymovie.model.tmdb.service
 
 import android.app.IntentService
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ineedyourcode.groovymovie.BuildConfig
+import com.ineedyourcode.groovymovie.model.tmdb.TMDBJsonParser
 import com.ineedyourcode.groovymovie.view.*
 import java.io.BufferedReader
 import java.io.InputStreamReader

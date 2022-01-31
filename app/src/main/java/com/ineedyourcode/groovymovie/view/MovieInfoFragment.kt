@@ -14,8 +14,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieInfoBinding
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.model.tmdb.MOVIE_ID_EXTRA
-import com.ineedyourcode.groovymovie.model.tmdb.TMDBMovieOverviewService
+import com.ineedyourcode.groovymovie.model.tmdb.service.MOVIE_ID_EXTRA
+import com.ineedyourcode.groovymovie.model.tmdb.service.TMDBMovieOverviewService
 import com.ineedyourcode.groovymovie.showSnackWithAction
 import com.ineedyourcode.groovymovie.showSnackWithoutAction
 

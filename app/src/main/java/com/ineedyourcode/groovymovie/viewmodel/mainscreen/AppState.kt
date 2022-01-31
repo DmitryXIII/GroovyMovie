@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie.viewmodel
+package com.ineedyourcode.groovymovie.viewmodel.mainscreen
 
 import com.ineedyourcode.groovymovie.model.Movie
 

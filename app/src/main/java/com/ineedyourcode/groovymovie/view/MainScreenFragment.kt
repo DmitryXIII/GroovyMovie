@@ -21,8 +21,9 @@ import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
 import com.ineedyourcode.groovymovie.hideKeyboard
 import com.ineedyourcode.groovymovie.showSnackWithAction
 import com.ineedyourcode.groovymovie.showSnackWithoutAction
-import com.ineedyourcode.groovymovie.viewmodel.AppState
-import com.ineedyourcode.groovymovie.viewmodel.MainScreenViewModel
+import com.ineedyourcode.groovymovie.viewmodel.mainscreen.AppState
+import com.ineedyourcode.groovymovie.viewmodel.mainscreen.MainScreenViewModel
+import com.ineedyourcode.groovymovie.viewmodel.retrofit.ViewModelRetrofit
 
 @RequiresApi(Build.VERSION_CODES.N)
 class MainScreenFragment : Fragment() {
@@ -37,8 +38,12 @@ class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainScreenViewModel by lazy {
-        ViewModelProvider(this)[MainScreenViewModel::class.java]
+//    private val viewModel: MainScreenViewModel by lazy {
+//        ViewModelProvider(this)[MainScreenViewModel::class.java]
+//    }
+
+    private val viewModel: ViewModelRetrofit by lazy {
+        ViewModelProvider(this)[ViewModelRetrofit::class.java]
     }
 
     override fun onCreateView(
@@ -56,6 +61,8 @@ class MainScreenFragment : Fragment() {
         viewModel.getData().observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })
+
+        viewModel.getTopRatedFromRemoteSource("ru-RU", 1)
 
         with(binding) {
             searchLayout = tfInputSearch
@@ -108,7 +115,8 @@ class MainScreenFragment : Fragment() {
                 searchValue.showSnackWithAction(
                     appState.e,
                     getString(R.string.retry)
-                ) { viewModel.getData() }
+                ) { viewModel.getData()
+                    viewModel.getTopRatedFromRemoteSource("ru-RU", 1)}
             }
         }
     }
