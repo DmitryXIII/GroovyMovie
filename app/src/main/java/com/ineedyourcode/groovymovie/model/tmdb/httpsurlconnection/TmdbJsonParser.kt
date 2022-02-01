@@ -75,7 +75,8 @@ class TmdbJsonParser {
                     movieDTO.releaseDate,
                     movieDTO.voteAverage.toString(),
                     mapOfGenres[movieDTO.genreIds[0]],
-                    movieDTO.overview
+                    movieDTO.overview,
+                    movieDTO.posterPath
                 )
 
                 topRatedMoviesMap[movie.id.toString()] = movie

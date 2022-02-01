@@ -21,6 +21,10 @@ private const val RESPONSE_MOVIES_LIST_ERROR = "Failed to get response movies li
 private const val RESPONSE_MOVIE_BY_ID_ERROR = "Response movie by id failed"
 private const val TAG = "RETROFIT_VIEW_MODEL"
 
+
+/**
+ * ViewModelRetrofit используется для получения данных через Retrofit
+ */
 class ViewModelRetrofit(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
     private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource())
@@ -28,7 +32,7 @@ class ViewModelRetrofit(
 
     private val genresMap = mutableMapOf<Int, String>()
     private val genresSet = mutableSetOf<String>()
-
+    private val moviesMap = mutableMapOf<String, Movie>()
     // возвращает liveData для подписки на нее
     // инициирует запросы на сервер
     fun getData(id: Int, lang: String, page: Int): MutableLiveData<AppState> {
@@ -50,8 +54,8 @@ class ViewModelRetrofit(
             call: Call<TmdbResponse.ResponseGenres>,
             responseGenresList: Response<TmdbResponse.ResponseGenres>
         ) {
+            val responseBody = responseGenresList.body()
             if (responseGenresList.isSuccessful) {
-                val responseBody = responseGenresList.body()
                 responseBody?.genres?.forEach { tmdbGenreDTO ->
                     genresMap[tmdbGenreDTO.id] = tmdbGenreDTO.name
                 }
@@ -108,17 +112,17 @@ class ViewModelRetrofit(
     }
 
     private fun checkResponse(serverResponse: List<TmdbMovieFromListDTO>): AppState {
-        getGenresForAdapter(serverResponse)
-
-        return if (serverResponse.isNullOrEmpty() || genresSet.isNullOrEmpty()) {
+        convertDtoToModel(serverResponse)
+        Log.d(TAG, "GenSet -- ${genresSet}")
+        return if (serverResponse.isNullOrEmpty() || genresSet.isNullOrEmpty() || moviesMap.isNullOrEmpty()) {
             AppState.Error(CORRUPTED_DATA)
         } else {
-            AppState.Success(convertDtoToModel(serverResponse), genresSet)
+            AppState.Success(moviesMap, genresSet)
+
         }
     }
 
-    private fun convertDtoToModel(serverResponse: List<TmdbMovieFromListDTO>): Map<String, Movie> {
-        val moviesMap = mutableMapOf<String, Movie>()
+    private fun convertDtoToModel(serverResponse: List<TmdbMovieFromListDTO>) {
         serverResponse.forEach { movieDTO ->
             val movie = Movie(
                 movieDTO.id.toString(),
@@ -126,20 +130,20 @@ class ViewModelRetrofit(
                 movieDTO.releaseDate,
                 movieDTO.voteAverage.toString(),
                 genresMap[movieDTO.genreIds[0]], // фильм может иметь несколько категорий жанров, отображается первый в списке жанр
-                movieDTO.overview
+                movieDTO.overview,
+                movieDTO.posterPath
             )
-            moviesMap[movieDTO.id.toString()] = movie
-        }
-        return moviesMap
-    }
-
-    // Список жанров формируется в виде Set и берется из приодящего списка фильмов.
-    // Таким образом в адаптер для фильтрации по жанрам передаются только те жанры, которые
-    // имеются в полученном списке фильмов.
-    // Это исключает появление в адаптере пустых отфильстрованных по жанрам списков
-    private fun getGenresForAdapter(serverResponse: List<TmdbMovieFromListDTO>) {
-        serverResponse.forEach { movieDTO ->
+            // Список жанров формируется в виде genresSet и берется из приодящего списка фильмов.
+            // Таким образом в адаптер для фильтрации по жанрам передаются только те жанры, которые
+            // имеются в полученном списке фильмов.
+            // Это исключает появление в адаптере пустых отфильстрованных по жанрам списков
             genresSet.add(genresMap[movieDTO.genreIds[0]].toString())
+            moviesMap[movie.id.toString()] = movie
         }
     }
+//    private fun getGenresForAdapter(serverResponse: List<TmdbMovieFromListDTO>) {
+//        serverResponse.forEach { movieDTO ->
+//            genresSet.add(genresMap[movieDTO.genreIds[0]].toString())
+//        }
+//    }
 }

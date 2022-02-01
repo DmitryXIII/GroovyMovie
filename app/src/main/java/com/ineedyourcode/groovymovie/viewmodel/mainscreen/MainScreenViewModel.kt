@@ -8,6 +8,11 @@ import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.model.IMoviesRepository
 import com.ineedyourcode.groovymovie.model.tmdb.httpsurlconnection.TmdbRepository
 
+/**
+ * MainScreenViewModel используется для получения данных
+ * через HttpsURLConnection или из репозитория с списком сгенерированных
+ * случайным образом фильмов
+ */
 @RequiresApi(Build.VERSION_CODES.N)
 class MainScreenViewModel(private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()) :
     ViewModel() {

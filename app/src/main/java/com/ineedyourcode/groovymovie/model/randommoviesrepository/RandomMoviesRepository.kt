@@ -17,7 +17,8 @@ class RandomMoviesRepository : IMoviesRepository {
                 "Movie_$i" + "_название фильма",
                 (1990..2022).random().toString(),
                 (Random.nextDouble(1.0, 5.0)).toString().substring(0, 3), randomGenre(),
-                "Описание..."
+                "Описание...",
+                "1qp6p7IXXYQ6vTiQ3Fd5GMpD4mK.jpg"
             )
 
             moviesMap[movie.id.toString()] = movie
