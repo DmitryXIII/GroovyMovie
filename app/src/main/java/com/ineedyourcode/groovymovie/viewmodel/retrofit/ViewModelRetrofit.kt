@@ -28,6 +28,7 @@ class ViewModelRetrofit(
         return liveData
     }
 
+    private val genresMap = mutableMapOf<Int, String>()
     private val genresSet = mutableSetOf<String>()
     fun getTopRatedFromRemoteSource(id: Int, lang: String, page: Int) {
         liveData.value = AppState.Loading
@@ -45,7 +46,9 @@ class ViewModelRetrofit(
 
                 responseBody?.genres?.forEach { tmdbGenreDTO ->
                     genresSet.add(tmdbGenreDTO.name)
+                    genresMap[tmdbGenreDTO.id] = tmdbGenreDTO.name
                 }
+                Log.d("RepositoryLIVEDATA_MAP", "Genres: $genresMap")
 
                 if (responseBody != null) {
                     Log.d("RepositoryLIVEDATA", "Genres: $genresSet")
@@ -99,11 +102,11 @@ class ViewModelRetrofit(
                 movieDTO.title,
                 movieDTO.releaseDate,
                 movieDTO.voteAverage.toString(),
-                movieDTO.genreIds[0].toString(),
+                genresMap[movieDTO.genreIds[0]],
                 movieDTO.overview
             )
             moviesMap[movieDTO.id.toString()] = movie
-
+            Log.d("RepositoryLIVEDATA_MMAP", "Movies: $moviesMap")
         }
         return moviesMap
     }

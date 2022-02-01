@@ -62,8 +62,6 @@ class MainScreenFragment : Fragment() {
         viewModel.getData().observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })
-//        viewModel.getTopRatedFromRemoteSource(553,"ru-RU", 1)
-
 
         with(binding) {
             searchLayout = tfInputSearch
@@ -119,8 +117,9 @@ class MainScreenFragment : Fragment() {
                 searchValue.showSnackWithAction(
                     appState.e,
                     getString(R.string.retry)
-                ) { viewModel.getData()
-                    viewModel.getTopRatedFromRemoteSource(52,"ru-RU", 1)}
+                ) {
+                    viewModel.getData()
+                }
             }
         }
     }

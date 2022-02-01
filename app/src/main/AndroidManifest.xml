@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".model.tmdb.TMDBMovieOverviewService"/>
+        <service android:name=".model.tmdb.service.TMDBMovieOverviewService"/>
 
     </application>
 
