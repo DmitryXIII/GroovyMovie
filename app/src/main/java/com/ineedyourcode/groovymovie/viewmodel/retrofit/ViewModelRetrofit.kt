@@ -23,14 +23,14 @@ class ViewModelRetrofit(
     private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource())
 ) : ViewModel() {
 
-    fun getData(): MutableLiveData<AppState> {
-        getTopRatedFromRemoteSource(65, "ru-RU", 1)
+    fun getData(id: Int, lang: String, page: Int): MutableLiveData<AppState> {
+        getTopRatedFromRemoteSource(id, lang, page)
         return liveData
     }
 
     private val genresMap = mutableMapOf<Int, String>()
     private val genresSet = mutableSetOf<String>()
-    fun getTopRatedFromRemoteSource(id: Int, lang: String, page: Int) {
+    private fun getTopRatedFromRemoteSource(id: Int, lang: String, page: Int) {
         liveData.value = AppState.Loading
         retrofitRepository.getGenresList(lang, callbackGenres)
         retrofitRepository.getTopRatedMovies(lang, page, callbackMoviesList)
@@ -43,23 +43,14 @@ class ViewModelRetrofit(
         ) {
             if (responseGenresList.isSuccessful) {
                 val responseBody = responseGenresList.body()
-
                 responseBody?.genres?.forEach { tmdbGenreDTO ->
-                    genresSet.add(tmdbGenreDTO.name)
                     genresMap[tmdbGenreDTO.id] = tmdbGenreDTO.name
-                }
-                Log.d("RepositoryLIVEDATA_MAP", "Genres: $genresMap")
-
-                if (responseBody != null) {
-                    Log.d("RepositoryLIVEDATA", "Genres: $genresSet")
-                } else {
-                    Log.d("Repository", "Failed to get response")
                 }
             }
         }
 
         override fun onFailure(call: Call<TmdbResponse.ResponseGenres>, t: Throwable) {
-            Log.e("Repository", "onFailure", t)
+            Log.e("Repository", "Response genres failed ", t)
         }
     }
 
@@ -106,6 +97,9 @@ class ViewModelRetrofit(
                 movieDTO.overview
             )
             moviesMap[movieDTO.id.toString()] = movie
+            moviesMap.values.forEach { movie ->
+                genresSet.add(movie.genre.toString())
+            }
             Log.d("RepositoryLIVEDATA_MMAP", "Movies: $moviesMap")
         }
         return moviesMap

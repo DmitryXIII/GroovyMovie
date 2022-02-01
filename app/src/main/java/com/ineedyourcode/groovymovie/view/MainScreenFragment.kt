@@ -23,7 +23,6 @@ import com.ineedyourcode.groovymovie.hideKeyboard
 import com.ineedyourcode.groovymovie.showSnackWithAction
 import com.ineedyourcode.groovymovie.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.viewmodel.mainscreen.AppState
-import com.ineedyourcode.groovymovie.viewmodel.mainscreen.MainScreenViewModel
 import com.ineedyourcode.groovymovie.viewmodel.retrofit.ViewModelRetrofit
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -59,7 +58,7 @@ class MainScreenFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getData().observe(viewLifecycleOwner, Observer<Any> {
+        viewModel.getData(0, "ru-RU", 1).observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })
 
@@ -118,7 +117,7 @@ class MainScreenFragment : Fragment() {
                     appState.e,
                     getString(R.string.retry)
                 ) {
-                    viewModel.getData()
+                    viewModel.getData(0, "ru-RU", 1)
                 }
             }
         }
