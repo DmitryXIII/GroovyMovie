@@ -1,17 +1,18 @@
 package com.ineedyourcode.groovymovie.viewmodel.retrofit
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.model.tmdb.TMDBMovieDTO
+import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieDTO
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.IRetrofitRepository
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.RemoteDataSource
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.RetrofitRepository
+import com.ineedyourcode.groovymovie.model.tmdb.retrofit.TmdbResponse
 import com.ineedyourcode.groovymovie.viewmodel.mainscreen.AppState
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.IOException
 
 private const val SERVER_ERROR = "Ошибка сервера"
 private const val REQUEST_ERROR = "Ошибка запроса на сервер"
@@ -22,44 +23,75 @@ class ViewModelRetrofit(
     private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource())
 ) : ViewModel() {
 
-    fun getData() = liveData
+    fun getData(): MutableLiveData<AppState> {
+        getTopRatedFromRemoteSource(65, "ru-RU", 1)
+        return liveData
+    }
 
-    fun getTopRatedFromRemoteSource(lang: String, page: Int) {
+    private val genresSet = mutableSetOf<String>()
+    fun getTopRatedFromRemoteSource(id: Int, lang: String, page: Int) {
         liveData.value = AppState.Loading
-        retrofitRepository.getTopRatedMovies(lang, page)
+        retrofitRepository.getGenresList(lang, callbackGenres)
+        retrofitRepository.getTopRatedMovies(lang, page, callbackMoviesList)
     }
 
-    private val callback = object : Callback<List<TMDBMovieDTO>> {
-        @Throws(IOException::class)
+    private val callbackGenres = object : Callback<TmdbResponse.ResponseGenres> {
         override fun onResponse(
-            call: Call<List<TMDBMovieDTO>>,
-            response: Response<List<TMDBMovieDTO>>
+            call: Call<TmdbResponse.ResponseGenres>,
+            responseGenresList: Response<TmdbResponse.ResponseGenres>
         ) {
-            val serverResponse: List<TMDBMovieDTO>? = response.body()
-            liveData.postValue(
-                if (response.isSuccessful && serverResponse != null) {
-                    checkResponse(serverResponse)
-                } else {
-                    AppState.Error(SERVER_ERROR)
+            if (responseGenresList.isSuccessful) {
+                val responseBody = responseGenresList.body()
+
+                responseBody?.genres?.forEach { tmdbGenreDTO ->
+                    genresSet.add(tmdbGenreDTO.name)
                 }
-            )
+
+                if (responseBody != null) {
+                    Log.d("RepositoryLIVEDATA", "Genres: $genresSet")
+                } else {
+                    Log.d("Repository", "Failed to get response")
+                }
+            }
         }
 
-        override fun onFailure(call: Call<List<TMDBMovieDTO>>, t: Throwable) {
-            liveData.postValue(AppState.Error(REQUEST_ERROR))
+        override fun onFailure(call: Call<TmdbResponse.ResponseGenres>, t: Throwable) {
+            Log.e("Repository", "onFailure", t)
         }
     }
 
-    private fun checkResponse(serverResponse: List<TMDBMovieDTO>): AppState {
-        val topRatedList = serverResponse
-        return if (topRatedList.isNullOrEmpty()) {
+    private val callbackMoviesList = object : Callback<TmdbResponse.ResponseMoviesList> {
+        override fun onResponse(
+            call: Call<TmdbResponse.ResponseMoviesList>,
+            responseMoviesList: Response<TmdbResponse.ResponseMoviesList>
+        ) {
+            val responseBody = responseMoviesList.body()
+                if (responseMoviesList.isSuccessful) {
+                    if (responseBody != null) {
+                     liveData.postValue(checkResponse(responseBody.movies))
+                        Log.d("Repository", "Movies: ${responseBody.movies}")
+                    } else {
+                     liveData.postValue(AppState.Error("Failed to get response"))
+                        Log.d("Repository", "Failed to get response")
+                    }
+                }
+        }
+
+        override fun onFailure(call: Call<TmdbResponse.ResponseMoviesList>, t: Throwable) {
+            liveData.postValue(AppState.Error("onFailure"))
+            Log.e("Repository", "onFailure", t)
+        }
+    }
+
+    private fun checkResponse(serverResponse: List<TmdbMovieDTO>): AppState {
+        return if (serverResponse.isNullOrEmpty()) {
             AppState.Error(CORRUPTED_DATA)
         } else {
-            AppState.Success(convertDtoToModel(serverResponse), setOf())
+            AppState.Success(convertDtoToModel(serverResponse), genresSet)
         }
     }
 
-    private fun convertDtoToModel(serverResponse: List<TMDBMovieDTO>): Map<String, Movie> {
+    private fun convertDtoToModel(serverResponse: List<TmdbMovieDTO>): Map<String, Movie> {
         val moviesMap = mutableMapOf<String, Movie>()
         serverResponse.forEach { movieDTO ->
             val movie = Movie(

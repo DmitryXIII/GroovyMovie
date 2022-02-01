@@ -2,10 +2,10 @@ package com.ineedyourcode.groovymovie.model.tmdb
 
 import com.google.gson.annotations.SerializedName
 
-data class TMDBMovieDTO(
-    @SerializedName("adult") val adult: Boolean,
+data class TmdbMovieDTO(
+    @SerializedName ("adult") val adult: Boolean,
     @SerializedName ("backdrop_path") val backdropPath: String,
-    @SerializedName ("genre_ids") val genreIds: IntArray,
+    @SerializedName ("genre_ids") val genreIds: ArrayList<Int>,
     @SerializedName ("id") val id: Int,
     @SerializedName ("original_language") val originalLanguage: String,
     @SerializedName ("original_title") val originalTitle: String,

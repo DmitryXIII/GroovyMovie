@@ -2,6 +2,7 @@ package com.ineedyourcode.groovymovie.view
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,8 +62,8 @@ class MainScreenFragment : Fragment() {
         viewModel.getData().observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })
+//        viewModel.getTopRatedFromRemoteSource(553,"ru-RU", 1)
 
-        viewModel.getTopRatedFromRemoteSource("ru-RU", 1)
 
         with(binding) {
             searchLayout = tfInputSearch
@@ -97,6 +98,9 @@ class MainScreenFragment : Fragment() {
                 // пока не найдено
                 mainAdapter = MainMoviesAdapter(appState.moviesData, appState.genresData, this)
 
+                Log.d("MainScreen", "Movies: ${appState.moviesData}")
+                Log.d("MainScreen", "Genres: ${appState.genresData}")
+
                 mainRecyclerView.apply {
                     layoutManager = LinearLayoutManager(requireContext())
                     adapter = mainAdapter
@@ -116,7 +120,7 @@ class MainScreenFragment : Fragment() {
                     appState.e,
                     getString(R.string.retry)
                 ) { viewModel.getData()
-                    viewModel.getTopRatedFromRemoteSource("ru-RU", 1)}
+                    viewModel.getTopRatedFromRemoteSource(52,"ru-RU", 1)}
             }
         }
     }
