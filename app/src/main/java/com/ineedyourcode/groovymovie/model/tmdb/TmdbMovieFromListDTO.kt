@@ -2,10 +2,14 @@ package com.ineedyourcode.groovymovie.model.tmdb
 
 import com.google.gson.annotations.SerializedName
 
-data class TmdbMovieDTO(
+/**
+ * Модель фильма, получаемая из списка фильмов TMDB
+ * (отличается от модели фильма, полуаемого напрямую по id)
+ */
+data class TmdbMovieFromListDTO(
     @SerializedName ("adult") val adult: Boolean,
     @SerializedName ("backdrop_path") val backdropPath: String,
-    @SerializedName ("genre_ids") val genreIds: ArrayList<Int>,
+    @SerializedName ("genre_ids") val genreIds: IntArray,
     @SerializedName ("id") val id: Int,
     @SerializedName ("original_language") val originalLanguage: String,
     @SerializedName ("original_title") val originalTitle: String,
@@ -17,4 +21,19 @@ data class TmdbMovieDTO(
     @SerializedName ("video") val video: Boolean,
     @SerializedName ("vote_average") val voteAverage: Double,
     @SerializedName ("vote_count") val voteCount: Int
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as TmdbMovieFromListDTO
+
+        if (!genreIds.contentEquals(other.genreIds)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return genreIds.contentHashCode()
+    }
+}

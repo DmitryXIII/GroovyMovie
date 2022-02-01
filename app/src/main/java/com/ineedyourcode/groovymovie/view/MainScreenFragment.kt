@@ -58,7 +58,7 @@ class MainScreenFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getData(0, "ru-RU", 1).observe(viewLifecycleOwner, Observer<Any> {
+        viewModel.getData(14, "ru-RU", 1).observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })
 
@@ -117,7 +117,7 @@ class MainScreenFragment : Fragment() {
                     appState.e,
                     getString(R.string.retry)
                 ) {
-                    viewModel.getData(0, "ru-RU", 1)
+                    viewModel.getData(14, "ru-RU", 1)
                 }
             }
         }

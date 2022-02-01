@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ineedyourcode.groovymovie.BuildConfig
-import com.ineedyourcode.groovymovie.model.tmdb.TMDBJsonParser
+import com.ineedyourcode.groovymovie.model.tmdb.httpsurlconnection.TmdbJsonParser
 import com.ineedyourcode.groovymovie.view.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -19,9 +19,9 @@ import javax.net.ssl.HttpsURLConnection
 const val MOVIE_ID_EXTRA = "MOVIE ID"
 private const val TMDB_MOVIE_OVERVIEW_SERVICE_TAG = "TMDB_MOVIE_OVERVIEW_SERVICE_TAG"
 
-class TMDBMovieOverviewService(name: String = "TMDBMovieOverviewService") : IntentService(name) {
+class TmdbMovieOverviewService(name: String = "TMDBMovieOverviewService") : IntentService(name) {
     private val broadcastIntent = Intent(TMDB_SERVICE_INTENT_FILTER)
-    private val parser = TMDBJsonParser()
+    private val parser = TmdbJsonParser()
     private lateinit var movieOverview: String
 
     @RequiresApi(Build.VERSION_CODES.N)

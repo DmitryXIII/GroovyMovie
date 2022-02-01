@@ -41,7 +41,7 @@ class MainMoviesAdapter(
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .replace(
                             R.id.fragment_container,
-                            MovieInfoFragment.newInstance(filteredByGenresList[position])
+                            MovieDetailsFragment.newInstance(filteredByGenresList[position])
                         )
                         .addToBackStack("")
                         .commit()

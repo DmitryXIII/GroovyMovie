@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie.model.tmdb
+package com.ineedyourcode.groovymovie.model.tmdb.httpsurlconnection
 
 import android.os.Build
 import android.util.Log
@@ -15,11 +15,11 @@ import javax.net.ssl.HttpsURLConnection
 private const val TMDB_REPOSITORY_TAG = "TMDB_REPOSITORY_TAG"
 
 @RequiresApi(Build.VERSION_CODES.N)
-class TMDBRepository : IMoviesRepository {
+class TmdbRepository : IMoviesRepository {
 
     private lateinit var mapOfGenres: Map<Int, String>
     private val topRatedMoviesMap = mutableMapOf<String, Movie>()
-    private val parser = TMDBJsonParser()
+    private val parser = TmdbJsonParser()
 
     override fun loadData() {
         try {
@@ -69,6 +69,10 @@ class TMDBRepository : IMoviesRepository {
     override fun getMoviesMap(): Map<String, Movie> = topRatedMoviesMap
 
     override fun getGenresList(): Set<String> {
+        // Список жанров формируется в виде Set и берется из приодящего списка фильмов.
+        // Таким образом в адаптер для фильтрации по жанрам передаются только те жанры, которые
+        // имеются в полученном списке фильмов.
+        // Это исключает появление в адаптере пустых отфильстрованных по жанрам списков
         val setOfGenres = mutableSetOf<String>()
         topRatedMoviesMap.values.forEach { movie ->
             setOfGenres.add(movie.genre.toString())

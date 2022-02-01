@@ -1,5 +1,6 @@
 package com.ineedyourcode.groovymovie.model.tmdb.retrofit
 
+import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieByIdDTO
 import retrofit2.Callback
 
 class RetrofitRepository(private val remoteDataSource: RemoteDataSource) : IRetrofitRepository {
@@ -12,7 +13,7 @@ class RetrofitRepository(private val remoteDataSource: RemoteDataSource) : IRetr
         remoteDataSource.getGenresList(lang, callback)
     }
 
-    override fun getMovie(id: Int, lang: String) {
-        remoteDataSource.getMovie(id, lang)
+    override fun getMovieById(id: Int, lang: String, callback: Callback<TmdbMovieByIdDTO>) {
+        remoteDataSource.getMovieById(id, lang, callback)
     }
 }

@@ -6,13 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.model.IMoviesRepository
-import com.ineedyourcode.groovymovie.model.tmdb.TMDBRepository
+import com.ineedyourcode.groovymovie.model.tmdb.httpsurlconnection.TmdbRepository
 
 @RequiresApi(Build.VERSION_CODES.N)
 class MainScreenViewModel(private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()) :
     ViewModel() {
 
-    private val repository: IMoviesRepository = TMDBRepository()
+    private val repository: IMoviesRepository = TmdbRepository()
     private var requestsTriesCounter = 0
 
     fun getData(): LiveData<AppState> {

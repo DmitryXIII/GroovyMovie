@@ -15,7 +15,7 @@ import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieInfoBinding
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.tmdb.service.MOVIE_ID_EXTRA
-import com.ineedyourcode.groovymovie.model.tmdb.service.TMDBMovieOverviewService
+import com.ineedyourcode.groovymovie.model.tmdb.service.TmdbMovieOverviewService
 import com.ineedyourcode.groovymovie.showSnackWithAction
 import com.ineedyourcode.groovymovie.showSnackWithoutAction
 
@@ -28,7 +28,7 @@ const val TMDB_SERVICE_URL_MALFORMED_EXTRA = "URL MALFORMED"
 const val TMDB_SERVICE_RESPONSE_SUCCESS_EXTRA = "RESPONSE SUCCESS"
 const val TMDB_SERVICE_MOVIE_OVERVIEW_EXTRA = "MOVIE OVERVIEW"
 
-class MovieInfoFragment : Fragment() {
+class MovieDetailsFragment : Fragment() {
 
     private var _binding: FragmentMovieInfoBinding? = null
     private val binding get() = _binding!!
@@ -61,7 +61,7 @@ class MovieInfoFragment : Fragment() {
 
     companion object {
         private const val ARG_MOVIE = "ARG_MOVIE"
-        fun newInstance(movie: Movie) = MovieInfoFragment().apply {
+        fun newInstance(movie: Movie) = MovieDetailsFragment().apply {
             arguments = bundleOf(
                 ARG_MOVIE to movie
             )
@@ -108,7 +108,7 @@ class MovieInfoFragment : Fragment() {
 
     private fun getMovieOverview(movie: Movie) {
         context?.let {
-            it.startService(Intent(it, TMDBMovieOverviewService::class.java).apply {
+            it.startService(Intent(it, TmdbMovieOverviewService::class.java).apply {
                 putExtra(
                     MOVIE_ID_EXTRA,
                     movie.id
