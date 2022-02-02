@@ -21,7 +21,6 @@ private const val RESPONSE_MOVIES_LIST_ERROR = "Failed to get response movies li
 private const val RESPONSE_MOVIE_BY_ID_ERROR = "Response movie by id failed"
 private const val TAG = "RETROFIT_VIEW_MODEL"
 
-
 /**
  * ViewModelRetrofit используется для получения данных через Retrofit
  */
@@ -33,6 +32,7 @@ class ViewModelRetrofit(
     private val genresMap = mutableMapOf<Int, String>()
     private val genresSet = mutableSetOf<String>()
     private val moviesMap = mutableMapOf<String, Movie>()
+
     // возвращает liveData для подписки на нее
     // инициирует запросы на сервер
     fun getData(id: Int, lang: String, page: Int): MutableLiveData<AppState> {
@@ -44,7 +44,10 @@ class ViewModelRetrofit(
     private fun getTopRatedFromRemoteSource(id: Int, lang: String, page: Int) {
         liveData.value = AppState.Loading
         retrofitRepository.getGenresList(lang, callbackGenres)
-        retrofitRepository.getTopRatedMovies(lang, page, callbackMoviesList)
+        for (i in page .. 10) {
+            retrofitRepository.getTopRatedMovies(lang, i, callbackMoviesList)
+        }
+
         retrofitRepository.getMovieById(id, lang, callbackMovieById)
     }
 
@@ -141,9 +144,4 @@ class ViewModelRetrofit(
             moviesMap[movie.id.toString()] = movie
         }
     }
-//    private fun getGenresForAdapter(serverResponse: List<TmdbMovieFromListDTO>) {
-//        serverResponse.forEach { movieDTO ->
-//            genresSet.add(genresMap[movieDTO.genreIds[0]].toString())
-//        }
-//    }
 }
