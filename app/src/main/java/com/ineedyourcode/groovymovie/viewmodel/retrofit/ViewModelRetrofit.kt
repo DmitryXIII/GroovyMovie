@@ -30,23 +30,22 @@ class ViewModelRetrofit(
 ) : ViewModel() {
 
     private val genresMap = mutableMapOf<Int, String>()
-    private val genresSet = mutableSetOf<String>()
     private val moviesMap = mutableMapOf<String, Movie>()
 
     // возвращает liveData для подписки на нее
     // инициирует запросы на сервер
-    fun getData(id: Int, lang: String, page: Int): MutableLiveData<AppState> {
-        getTopRatedFromRemoteSource(id, lang, page)
+    fun getData(moviesListType: String): MutableLiveData<AppState> {
+        getMoviesListFromRemoteSource(moviesListType)
         return liveData
     }
 
     // запросы на сервер
-    private fun getTopRatedFromRemoteSource(id: Int, lang: String, page: Int) {
+    private fun getMoviesListFromRemoteSource(moviesListType: String) {
         liveData.value = AppState.Loading
         retrofitRepository.apply {
-            getGenresList(lang, callbackGenres)
-            getTopRatedMovies(lang, page, callbackMoviesList)
-            getMovieById(id, lang, callbackMovieById)
+            getGenresList(callbackGenres)
+            getMoviesList(moviesListType, callbackMoviesList)
+            getMovieById(callbackMovieById)
         }
     }
 
@@ -115,11 +114,10 @@ class ViewModelRetrofit(
 
     private fun checkResponse(serverResponse: List<TmdbMovieFromListDTO>): AppState {
         convertDtoToModel(serverResponse)
-        Log.d(TAG, "GenSet -- ${genresSet}")
-        return if (serverResponse.isNullOrEmpty() || genresSet.isNullOrEmpty() || moviesMap.isNullOrEmpty()) {
+        return if (serverResponse.isNullOrEmpty()) {
             AppState.Error(CORRUPTED_DATA)
         } else {
-            AppState.Success(moviesMap, genresSet)
+            AppState.Success(moviesMap)
 
         }
     }
@@ -139,7 +137,6 @@ class ViewModelRetrofit(
             // Таким образом в адаптер для фильтрации по жанрам передаются только те жанры, которые
             // имеются в полученном списке фильмов.
             // Это исключает появление в адаптере пустых отфильстрованных по жанрам списков
-            genresSet.add(genresMap[movieDTO.genreIds[0]].toString())
             moviesMap[movie.id.toString()] = movie
         }
     }

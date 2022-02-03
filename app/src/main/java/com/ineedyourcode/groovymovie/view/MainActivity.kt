@@ -8,6 +8,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ineedyourcode.groovymovie.R
+import com.ineedyourcode.groovymovie.utils.*
 import com.ineedyourcode.groovymovie.view.tabs.PagerAdapter
 
 class MainActivity : AppCompatActivity() {
@@ -21,14 +22,14 @@ class MainActivity : AppCompatActivity() {
         val viewPager2 = findViewById<ViewPager2>(R.id.view_pager_2)
         val viewPagerAdapter = PagerAdapter(supportFragmentManager, lifecycle)
         viewPager2.adapter = viewPagerAdapter
-        TabLayoutMediator(tabLayout, viewPager2){ tab, position ->
-            when(position){
+        TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
+            when (position) {
                 0 -> tab.text = "Top rated"
-                1 -> tab.text = "Most popular"
-                2 -> tab.text = "Now playing"
+                1 -> tab.text = "Popular"
+                2 -> tab.text = "Upcoming"
                 3 -> tab.text = "Now playing"
-                4 -> tab.text = "Now playing"
-                5 -> tab.text = "Now playing"
+                4 -> tab.text = "Upcoming"
+                5 -> tab.text = "Top rated"
             }
         }.attach()
     }

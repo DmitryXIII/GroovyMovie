@@ -13,19 +13,18 @@ class RemoteDataSource {
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
         .build().create(MovieAPI::class.java)
 
-    fun getTopRatedList(
-        lang: String,
-        page: Int,
+    fun getMoviesList(
+        moviesListType: String,
         callback: Callback<TmdbResponse.ResponseMoviesList>
     ) {
-        tmdbAPI.getTopRated(lang = lang, page = page).enqueue(callback)
+        tmdbAPI.getMoviesList(moviesListType).enqueue(callback)
     }
 
-    fun getGenresList(lang: String, callback: Callback<TmdbResponse.ResponseGenres>) {
-        tmdbAPI.getGenres(lang = lang).enqueue(callback)
+    fun getGenresList(callback: Callback<TmdbResponse.ResponseGenres>) {
+        tmdbAPI.getGenres().enqueue(callback)
     }
 
-    fun getMovieById(id: Int, lang: String, callback: Callback<TmdbMovieByIdDTO>) {
-        tmdbAPI.getMovieByID(id = id, lang = lang).enqueue(callback)
+    fun getMovieById(callback: Callback<TmdbMovieByIdDTO>) {
+        tmdbAPI.getMovieByID().enqueue(callback)
     }
 }
