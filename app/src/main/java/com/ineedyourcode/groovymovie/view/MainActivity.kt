@@ -4,50 +4,32 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
-import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
-import androidx.lifecycle.Observer
-import com.ineedyourcode.groovymovie.utils.ConnectivityLiveData
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.ineedyourcode.groovymovie.R
+import com.ineedyourcode.groovymovie.view.tabs.PagerAdapter
 
 class MainActivity : AppCompatActivity() {
-
-    private var isConnected = true
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportFragmentManager
-            .beginTransaction()
-            .setTransition(TRANSIT_FRAGMENT_OPEN)
-            .replace(R.id.fragment_container, MainScreenFragment())
-            .commit()
-
-        ConnectivityLiveData(this)
-            .observe(this, Observer { isConnectFromReceiver ->
-                if (!isConnectFromReceiver && isConnected) {
-                    isConnected = false
-                    supportFragmentManager
-                        .beginTransaction()
-                        .setTransition(TRANSIT_FRAGMENT_FADE)
-                        .replace(
-                            R.id.fragment_no_connection_container,
-                            ConnectivityFragment(),
-                            "NO_CONNECTION_FRAGMENT"
-                        )
-                        .commit()
-                } else if (isConnectFromReceiver && isConnected == false) {
-                    isConnected = true
-                    supportFragmentManager
-                        .findFragmentByTag("NO_CONNECTION_FRAGMENT")?.let { fragment ->
-                            supportFragmentManager
-                                .beginTransaction()
-                                .remove(fragment)
-                                .commit()
-                        }
-                }
-            })
+        val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
+        val viewPager2 = findViewById<ViewPager2>(R.id.view_pager_2)
+        val viewPagerAdapter = PagerAdapter(supportFragmentManager, lifecycle)
+        viewPager2.adapter = viewPagerAdapter
+        TabLayoutMediator(tabLayout, viewPager2){ tab, position ->
+            when(position){
+                0 -> tab.text = "Top rated"
+                1 -> tab.text = "Most popular"
+                2 -> tab.text = "Now playing"
+                3 -> tab.text = "Now playing"
+                4 -> tab.text = "Now playing"
+                5 -> tab.text = "Now playing"
+            }
+        }.attach()
     }
 }

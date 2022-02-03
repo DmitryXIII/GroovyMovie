@@ -28,6 +28,7 @@ class MainMoviesAdapter(
 
     override fun onBindViewHolder(holder: MainMoviesViewHolder, position: Int) {
         // создание адаптера для каждого жанра из пришедшего списка фильмов
+
         val adapterByGenres = FilteredByGenresAdapter().apply {
             setAdapterData(
                 moviesMap.values.toList().filter { it.genre == genresList.toList()[position] })
@@ -49,7 +50,8 @@ class MainMoviesAdapter(
             })
         }
 
-        with(holder) {
+        with(holder)
+        {
             // Заглавная буква в названии жанра
             genreHeader.text =
                 genresList.toList()[position].lowercase().replaceFirstChar { it.uppercase() }

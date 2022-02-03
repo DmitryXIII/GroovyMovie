@@ -5,6 +5,29 @@
     android:layout_height="match_parent"
     tools:context=".view.MainActivity">
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        tools:context=".view.MainActivity">
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            app:tabTextColor="@color/content_scrim"
+            app:tabSelectedTextColor="@color/main_background"
+            app:tabIndicatorColor="@color/content_scrim"
+            app:tabMode="scrollable"
+            android:layout_height="wrap_content"
+            android:id="@+id/tab_layout"/>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/view_pager_2"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

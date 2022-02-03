@@ -142,6 +142,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_movie_info_genre_header"
             tools:text="@string/some_movie_information" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

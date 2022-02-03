@@ -1,33 +1,15 @@
 package com.ineedyourcode.groovymovie.view
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.model.tmdb.service.MOVIE_ID_EXTRA
-import com.ineedyourcode.groovymovie.model.tmdb.service.TmdbMovieOverviewService
-import com.ineedyourcode.groovymovie.showSnackWithAction
-import com.ineedyourcode.groovymovie.showSnackWithoutAction
 import com.squareup.picasso.Picasso
 
-const val TMDB_SERVICE_INTENT_FILTER = "TMDB SERVICE INTENT FILTER"
-const val TMDB_SERVICE_LOAD_RESULT_EXTRA = "LOAD RESULT"
-const val TMDB_SERVICE_RESPONSE_EMPTY_EXTRA = "RESPONSE IS EMPTY"
-const val TMDB_SERVICE_REQUEST_ERROR_EXTRA = "REQUEST ERROR"
-const val TMDB_SERVICE_REQUEST_ERROR_MESSAGE_EXTRA = "REQUEST ERROR MESSAGE"
-const val TMDB_SERVICE_URL_MALFORMED_EXTRA = "URL MALFORMED"
-const val TMDB_SERVICE_RESPONSE_SUCCESS_EXTRA = "RESPONSE SUCCESS"
-const val TMDB_SERVICE_MOVIE_OVERVIEW_EXTRA = "MOVIE OVERVIEW"
 private const val MAIN_POSTER_PATH = "https://image.tmdb.org/t/p/"
 private const val POSTER_SIZE = "w500/"
 
@@ -37,31 +19,6 @@ class MovieDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var selectedMovie: Movie
 
-    private val loadMovieOverviewReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            when (intent.getStringExtra(TMDB_SERVICE_LOAD_RESULT_EXTRA)) {
-                TMDB_SERVICE_RESPONSE_EMPTY_EXTRA -> {
-                    view?.showSnackWithoutAction(getString(R.string.service_movie_overview_response_emty_extra))
-                    setMovieOverview(getString(R.string.service_movie_overview_response_emty_extra))
-                }
-                TMDB_SERVICE_RESPONSE_SUCCESS_EXTRA -> {
-                    intent.getStringExtra(TMDB_SERVICE_MOVIE_OVERVIEW_EXTRA)?.let { movieOverview ->
-                        setMovieOverview(movieOverview)
-                    }
-                    view?.showSnackWithoutAction(getString(R.string.snack_msg_overview_load_success))
-                }
-                else -> {
-                    setMovieOverview(getString(R.string.service_movie_overview_request_error_extra))
-                    view?.showSnackWithAction(
-                        getString(R.string.snack_msg_overview_load_error), getString(R.string.retry)
-                    ) {
-                        getMovieOverview(selectedMovie)
-                    }
-                }
-            }
-        }
-    }
-
     companion object {
         private const val ARG_MOVIE = "ARG_MOVIE"
         fun newInstance(movie: Movie) = MovieDetailsFragment().apply {
@@ -69,17 +26,6 @@ class MovieDetailsFragment : Fragment() {
                 ARG_MOVIE to movie
             )
             selectedMovie = movie
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        context?.let {
-            LocalBroadcastManager.getInstance(it)
-                .registerReceiver(
-                    loadMovieOverviewReceiver,
-                    IntentFilter(TMDB_SERVICE_INTENT_FILTER)
-                )
         }
     }
 
@@ -100,40 +46,15 @@ class MovieDetailsFragment : Fragment() {
             txtMovieInfoReleaseDate.text = selectedMovie.releaseDate
             txtMovieInfoRating.text = selectedMovie.rating
             txtMovieInfoGenre.text = selectedMovie.genre
-
+            txtMovieInfo.text = selectedMovie.overview
             Picasso.get()
                 .load("${MAIN_POSTER_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
                 .into(drawMovieInfoPoster)
-
-            // для задания № 6 способ получения описания фильма временно изменен
-            // на "сервис <-> бродкастресивер"
-            // txtMovieInfo.text = movie.overview
-            getMovieOverview(selectedMovie) // -> это метод получения описания фильма через "сервис <-> бродкастресивер"
         }
-
-    }
-
-    private fun getMovieOverview(movie: Movie) {
-        context?.let {
-            it.startService(Intent(it, TmdbMovieOverviewService::class.java).apply {
-                putExtra(
-                    MOVIE_ID_EXTRA,
-                    movie.id
-                )
-            })
-        }
-    }
-
-    private fun setMovieOverview(movieOverview: String) {
-        binding.txtMovieInfo.text = movieOverview
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        context?.let {
-            LocalBroadcastManager.getInstance(it).unregisterReceiver(loadMovieOverviewReceiver)
-        }
-
         _binding = null
     }
 }
