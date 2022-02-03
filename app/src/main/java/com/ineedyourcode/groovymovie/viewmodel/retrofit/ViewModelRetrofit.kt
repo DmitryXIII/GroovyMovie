@@ -43,12 +43,11 @@ class ViewModelRetrofit(
     // запросы на сервер
     private fun getTopRatedFromRemoteSource(id: Int, lang: String, page: Int) {
         liveData.value = AppState.Loading
-        retrofitRepository.getGenresList(lang, callbackGenres)
-        for (i in page .. 10) {
-            retrofitRepository.getTopRatedMovies(lang, i, callbackMoviesList)
+        retrofitRepository.apply {
+            getGenresList(lang, callbackGenres)
+            getTopRatedMovies(lang, page, callbackMoviesList)
+            getMovieById(id, lang, callbackMovieById)
         }
-
-        retrofitRepository.getMovieById(id, lang, callbackMovieById)
     }
 
     // обработка ответа с сервера на запрос списка жанров, имеющихся в TMDB

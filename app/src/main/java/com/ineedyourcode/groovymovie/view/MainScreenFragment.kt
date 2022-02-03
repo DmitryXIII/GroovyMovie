@@ -10,9 +10,10 @@ import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.google.android.material.textfield.TextInputEditText
@@ -20,8 +21,10 @@ import com.google.android.material.textfield.TextInputLayout
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
 import com.ineedyourcode.groovymovie.hideKeyboard
+import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.showSnackWithAction
 import com.ineedyourcode.groovymovie.showSnackWithoutAction
+import com.ineedyourcode.groovymovie.utils.GridSpacingItemDecoration
 import com.ineedyourcode.groovymovie.viewmodel.mainscreen.AppState
 import com.ineedyourcode.groovymovie.viewmodel.retrofit.ViewModelRetrofit
 
@@ -29,7 +32,7 @@ import com.ineedyourcode.groovymovie.viewmodel.retrofit.ViewModelRetrofit
 class MainScreenFragment : Fragment() {
 
     private lateinit var mainRecyclerView: RecyclerView // главный (вертикальный) ресайклервью с вложенными горизонтальными ресайклервьюхами
-    private lateinit var mainAdapter: MainMoviesAdapter // адаптер для главного ресайклервью
+    private lateinit var mainAdapter: MoviesListAdapter // адаптер для главного ресайклервью
 
     private lateinit var searchLayout: TextInputLayout
     private lateinit var searchValue: TextInputEditText
@@ -37,10 +40,6 @@ class MainScreenFragment : Fragment() {
 
     private var _binding: FragmentMainScreenBinding? = null
     private val binding get() = _binding!!
-
-//    private val viewModel: MainScreenViewModel by lazy {
-//        ViewModelProvider(this)[MainScreenViewModel::class.java]
-//    }
 
     private val viewModel: ViewModelRetrofit by lazy {
         ViewModelProvider(this)[ViewModelRetrofit::class.java]
@@ -93,13 +92,29 @@ class MainScreenFragment : Fragment() {
                 // и из главного recyclerview открыть второй экран с подробным описанием фильма.
                 // Решение, как напрямую из этого фрагмента правильно обработать клик и открыть второй экран,
                 // пока не найдено
-                mainAdapter = MainMoviesAdapter(appState.moviesData, appState.genresData, this)
-
+                mainAdapter = MoviesListAdapter()
+                mainAdapter.setAdapterData(appState.moviesData)
+                mainAdapter.setOnItemClickListener(object :
+                    MoviesListAdapter.OnItemClickListener {
+                    override fun onItemClickListener(
+                        position: Int,
+                        moviesList: List<Movie>
+                    ) {
+                        parentFragmentManager.beginTransaction()
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .replace(
+                                R.id.fragment_container,
+                                MovieDetailsFragment.newInstance(moviesList[position])
+                            )
+                            .addToBackStack("")
+                            .commit()
+                    }
+                })
                 Log.d("MainScreen", "Movies: ${appState.moviesData}")
-                Log.d("MainScreen", "Genres: ${appState.genresData}")
 
                 mainRecyclerView.apply {
-                    layoutManager = LinearLayoutManager(requireContext())
+                    layoutManager = GridLayoutManager(requireContext(), 2)
+                    addItemDecoration(GridSpacingItemDecoration(2, 50, true))
                     adapter = mainAdapter
                 }
             }

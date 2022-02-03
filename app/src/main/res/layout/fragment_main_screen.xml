@@ -20,9 +20,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/top_logo_layout_height"
+                android:layout_marginBottom="@dimen/margin_50dp"
                 android:background="@drawable/appbar_background"
                 android:orientation="vertical"
-                android:layout_marginBottom="@dimen/margin_50dp"
                 android:paddingHorizontal="@dimen/margin_20dp">
 
                 <ImageView
@@ -41,10 +41,10 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_16dp"
                     android:layout_marginBottom="@dimen/margin_8dp"
                     android:hint="@string/i_am_looking_for"
                     android:textColorHint="@color/white"
-                    android:layout_marginTop="@dimen/margin_16dp"
                     app:boxCornerRadiusBottomEnd="@dimen/text_input_layout_corner_radius"
                     app:boxCornerRadiusBottomStart="@dimen/text_input_layout_corner_radius"
                     app:boxCornerRadiusTopEnd="@dimen/text_input_layout_corner_radius"
@@ -82,9 +82,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutAnimation="@anim/layout_animation"
+            android:layout_height="match_parent"
             android:nestedScrollingEnabled="false" />
+        <!--            android:layoutAnimation="@anim/layout_animation"-->
     </androidx.core.widget.NestedScrollView>
 
     <com.github.ybq.android.spinkit.SpinKitView

@@ -1,4 +1,5 @@
 package com.ineedyourcode.groovymovie.view
+/*
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,8 +14,7 @@ import com.ineedyourcode.groovymovie.model.Movie
 
 class MainMoviesAdapter(
     private var moviesMap: Map<String, Movie>,
-    private var genresList: Set<String>,
-    private var fragment: MainScreenFragment
+    private var genresList: Set<String>
 ) : RecyclerView.Adapter<MainMoviesAdapter.MainMoviesViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -29,14 +29,14 @@ class MainMoviesAdapter(
     override fun onBindViewHolder(holder: MainMoviesViewHolder, position: Int) {
         // создание адаптера для каждого жанра из пришедшего списка фильмов
 
-        val adapterByGenres = FilteredByGenresAdapter().apply {
+        val adapterByGenres = MoviesListAdapter().apply {
             setAdapterData(
                 moviesMap.values.toList().filter { it.genre == genresList.toList()[position] })
             Log.d("Adapter", "Movies: ${moviesMap}")
             Log.d("Adapter", "Genres: ${genresList}")
             // обработка клика по вложенным горизонтальным спискам фильмов
             setOnItemClickListener(object :
-                FilteredByGenresAdapter.OnItemClickListener {
+                MoviesListAdapter.OnItemClickListener {
                 override fun onItemClickListener(position: Int, filteredByGenresList: List<Movie>) {
                     fragment.parentFragmentManager.beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -69,4 +69,4 @@ class MainMoviesAdapter(
         val genreHeader: TextView = itemView.findViewById(R.id.main_recycler_view_genre_header)
         val recyclerView: RecyclerView = itemView.findViewById(R.id.movies_by_genres_recyclerview)
     }
-}
+}*/
