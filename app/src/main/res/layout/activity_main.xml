@@ -15,8 +15,8 @@
         <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
             app:tabTextColor="@color/content_scrim"
-            app:tabSelectedTextColor="@color/main_background"
-            app:tabIndicatorColor="@color/content_scrim"
+            app:tabSelectedTextColor="@color/white"
+            app:tabIndicatorColor="@color/white"
             app:tabMode="scrollable"
             android:layout_height="wrap_content"
             android:id="@+id/tab_layout"/>

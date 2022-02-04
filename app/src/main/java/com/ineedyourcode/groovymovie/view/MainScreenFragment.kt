@@ -17,13 +17,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
-import com.ineedyourcode.groovymovie.hideKeyboard
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.showSnackWithAction
-import com.ineedyourcode.groovymovie.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.utils.GridSpacingItemDecoration
 import com.ineedyourcode.groovymovie.viewmodel.mainscreen.AppState
 import com.ineedyourcode.groovymovie.viewmodel.retrofit.ViewModelRetrofit
@@ -31,10 +28,9 @@ import com.ineedyourcode.groovymovie.viewmodel.retrofit.ViewModelRetrofit
 @RequiresApi(Build.VERSION_CODES.N)
 class MainScreenFragment(private val moviesListType: String) : Fragment() {
 
-    private lateinit var mainRecyclerView: RecyclerView // главный (вертикальный) ресайклервью с вложенными горизонтальными ресайклервьюхами
-    private lateinit var mainAdapter: MoviesListAdapter // адаптер для главного ресайклервью
+    private lateinit var mainRecyclerView: RecyclerView
+    private lateinit var mainAdapter: MoviesListAdapter
 
-    private lateinit var searchLayout: TextInputLayout
     private lateinit var searchValue: TextInputEditText
     private lateinit var progressBar: ProgressBar // кастомный прогрессбар
 
@@ -62,22 +58,11 @@ class MainScreenFragment(private val moviesListType: String) : Fragment() {
         })
 
         with(binding) {
-            searchLayout = tfInputSearch
-            searchValue = tfEditSearch
             progressBar = spinKit
             mainRecyclerView = binding.mainRecyclerview
         }
 
         progressBar.indeterminateDrawable = ThreeBounce()
-
-        searchLayout.setEndIconOnClickListener(View.OnClickListener {
-            if ((searchValue.text.toString().isBlank())) {
-                searchLayout.showSnackWithoutAction(R.string.empty_request)
-            } else {
-                searchLayout.showSnackWithoutAction("Поиск \"${searchValue.text}\"")
-            }
-            searchLayout.hideKeyboard()
-        })
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -87,11 +72,6 @@ class MainScreenFragment(private val moviesListType: String) : Fragment() {
                 progressBar.isVisible = false
                 mainRecyclerView.visibility = View.VISIBLE
 
-                // Последним аргументом в адаптер передается ссылка на фрагмент,
-                // чтобы можно было обработать клик по вложенным recyclerview,
-                // и из главного recyclerview открыть второй экран с подробным описанием фильма.
-                // Решение, как напрямую из этого фрагмента правильно обработать клик и открыть второй экран,
-                // пока не найдено
                 mainAdapter = MoviesListAdapter()
                 mainAdapter.setAdapterData(appState.moviesData)
                 mainAdapter.setOnItemClickListener(object :

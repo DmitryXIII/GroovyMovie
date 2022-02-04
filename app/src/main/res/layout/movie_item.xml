@@ -5,8 +5,8 @@
     android:id="@+id/card_movie"
     android:layout_width="@dimen/cardview_width"
     android:layout_height="@dimen/cardview_height"
-    app:cardCornerRadius="@dimen/zero_value"
     android:backgroundTint="@color/movie_background"
+    app:cardCornerRadius="@dimen/zero_value"
     app:cardElevation="@dimen/cardview_elevation"
     app:rippleColor="@color/main_background">
 
@@ -55,28 +55,27 @@
             android:src="@drawable/ic_baseline_star_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/txt_movie_rating"
-            app:layout_constraintStart_toStartOf="@id/draw_movie_poster" />
+            app:layout_constraintStart_toStartOf="@id/draw_movie_poster"
+            app:tint="@color/orange" />
 
-<!--        <TextView-->
-<!--            android:id="@+id/txt_movie_genre"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/main_background"-->
-<!--            android:textSize="@dimen/cardview_text_size"-->
-<!--            android:textStyle="italic"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/txt_movie_release_date"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            tools:text="@string/some_genre" />-->
+        <CheckBox
+            android:id="@+id/checkbox_favorite"
+            android:layout_width="@dimen/checkbox_size"
+            android:layout_height="@dimen/checkbox_size"
+            android:background="@color/transparent"
+            android:button="@drawable/favorite_checkbox"
+            android:buttonTint="@color/orange"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_movie_release_date"
+        <ImageView
+            android:id="@+id/icon_movie_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/main_background"
-            android:textSize="@dimen/cardview_text_size"
-            android:textStyle="italic"
+            android:layout_marginEnd="@dimen/margin_16dp"
+            android:src="@drawable/ic_baseline_sticky_note_2_24"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="@string/date_example" />
+            app:layout_constraintEnd_toStartOf="@id/checkbox_favorite"
+            app:tint="@color/orange" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

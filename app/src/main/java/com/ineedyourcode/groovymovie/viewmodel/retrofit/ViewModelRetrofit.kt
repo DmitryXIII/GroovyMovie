@@ -32,6 +32,28 @@ class ViewModelRetrofit(
     private val genresMap = mutableMapOf<Int, String>()
     private val moviesMap = mutableMapOf<String, Movie>()
 
+    init {
+        // обработка ответа с сервера на запрос списка жанров, имеющихся в TMDB
+        val callbackGenres = object : Callback<TmdbResponse.ResponseGenres> {
+            override fun onResponse(
+                call: Call<TmdbResponse.ResponseGenres>,
+                responseGenresList: Response<TmdbResponse.ResponseGenres>
+            ) {
+                val responseBody = responseGenresList.body()
+                if (responseGenresList.isSuccessful) {
+                    responseBody?.genres?.forEach { tmdbGenreDTO ->
+                        genresMap[tmdbGenreDTO.id] = tmdbGenreDTO.name
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<TmdbResponse.ResponseGenres>, t: Throwable) {
+                Log.e(TAG, RESPONSE_GENRES_ERROR, t)
+            }
+        }
+        retrofitRepository.getGenresList(callbackGenres)
+    }
+
     // возвращает liveData для подписки на нее
     // инициирует запросы на сервер
     fun getData(moviesListType: String): MutableLiveData<AppState> {
@@ -43,28 +65,7 @@ class ViewModelRetrofit(
     private fun getMoviesListFromRemoteSource(moviesListType: String) {
         liveData.value = AppState.Loading
         retrofitRepository.apply {
-            getGenresList(callbackGenres)
             getMoviesList(moviesListType, callbackMoviesList)
-            getMovieById(callbackMovieById)
-        }
-    }
-
-    // обработка ответа с сервера на запрос списка жанров, имеющихся в TMDB
-    private val callbackGenres = object : Callback<TmdbResponse.ResponseGenres> {
-        override fun onResponse(
-            call: Call<TmdbResponse.ResponseGenres>,
-            responseGenresList: Response<TmdbResponse.ResponseGenres>
-        ) {
-            val responseBody = responseGenresList.body()
-            if (responseGenresList.isSuccessful) {
-                responseBody?.genres?.forEach { tmdbGenreDTO ->
-                    genresMap[tmdbGenreDTO.id] = tmdbGenreDTO.name
-                }
-            }
-        }
-
-        override fun onFailure(call: Call<TmdbResponse.ResponseGenres>, t: Throwable) {
-            Log.e(TAG, RESPONSE_GENRES_ERROR, t)
         }
     }
 
@@ -131,7 +132,8 @@ class ViewModelRetrofit(
                 movieDTO.voteAverage.toString(),
                 genresMap[movieDTO.genreIds[0]], // фильм может иметь несколько категорий жанров, отображается первый в списке жанр
                 movieDTO.overview,
-                movieDTO.posterPath
+                movieDTO.posterPath,
+                movieDTO.backdropPath
             )
             // Список жанров формируется в виде genresSet и берется из приодящего списка фильмов.
             // Таким образом в адаптер для фильтрации по жанрам передаются только те жанры, которые

@@ -1,5 +1,6 @@
 package com.ineedyourcode.groovymovie.view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
 import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.utils.favoriteMap
 import com.squareup.picasso.Picasso
 
-private const val MAIN_POSTER_PATH = "https://image.tmdb.org/t/p/"
-private const val POSTER_SIZE = "w500/"
+private const val MAIN_IMAGE_PATH = "https://image.tmdb.org/t/p/"
+private const val POSTER_SIZE = "w342/"
+private const val BACKDROP_SIZE = "w1280/"
 
 class MovieDetailsFragment : Fragment() {
 
@@ -38,18 +41,26 @@ class MovieDetailsFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            txtMovieInfoTitle.text = selectedMovie.title
-            txtMovieInfoReleaseDate.text = selectedMovie.releaseDate
-            txtMovieInfoRating.text = selectedMovie.rating
-            txtMovieInfoGenre.text = selectedMovie.genre
-            txtMovieInfo.text = selectedMovie.overview
+            txtMovieDetailsTitle.text = "\"${selectedMovie.title}\""
+            txtMovieDetailsReleaseDate.text = selectedMovie.releaseDate
+            txtMovieDetailsRating.text = selectedMovie.rating
+            txtMovieDetailsGenre.text = selectedMovie.genre
+            txtMovieOverview.text = selectedMovie.overview
+
             Picasso.get()
-                .load("${MAIN_POSTER_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
-                .into(drawMovieInfoPoster)
+                .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
+                .into(drawMovieBackdrop)
+
+            Picasso.get()
+                .load("${MAIN_IMAGE_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
+                .into(drawMovieDetailsPoster)
+
+            checkboxFavorite.isChecked = favoriteMap[selectedMovie.id] == true
         }
     }
 
