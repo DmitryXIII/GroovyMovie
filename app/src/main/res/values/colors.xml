@@ -9,6 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="main_background">#310000</color>
     <color name="movie_background">#FFFFFF</color>
-    <color name="content_scrim">#BF360C</color>
-    <color name="appbar_layuot">#630C0C</color>
+    <color name="content_scrim">#FF440B</color>
+    <color name="appbar_layuot">#C30606</color>
+    <color name="orange">#FFFF8800</color>
+    <color name="yellow">#FFE500</color>
 </resources>

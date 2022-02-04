@@ -18,4 +18,5 @@
     <string name="drama">Драмы</string>
     <string name="triller">Триллеры</string>
     <string name="family">Семейные</string>
+    <string name="data_receiving_error">Data receiving error</string>
 </resources>

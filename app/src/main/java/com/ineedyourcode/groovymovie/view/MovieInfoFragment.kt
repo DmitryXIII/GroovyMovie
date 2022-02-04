@@ -11,12 +11,11 @@ import com.ineedyourcode.groovymovie.model.Movie
 
 class MovieInfoFragment : Fragment() {
 
+    private var _binding: FragmentMovieInfoBinding? = null
+    private val binding get() = _binding!!
+
     companion object {
-        private const val ARG_MOVIE = "ARG_MOVIE"
-
-        private var _binding: FragmentMovieInfoBinding? = null
-        private val binding get() = _binding!!
-
+        const val ARG_MOVIE = "ARG_MOVIE"
         fun newInstance(movie: Movie) = MovieInfoFragment().apply {
             arguments = bundleOf(
                 ARG_MOVIE to movie
@@ -36,19 +35,19 @@ class MovieInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val movieFromArguments: Movie? = arguments?.getParcelable(ARG_MOVIE)
-        if (movieFromArguments != null) {
-            val txtMovieTitle = binding.txtMovieInfoTitle
-            val txtMovieReleaseDate = binding.txtMovieInfoReleaseDate
-            val txtMovieGenre = binding.txtMovieInfoGenre
-            val txtMovieRating = binding.txtMovieInfoRating
-            val imgPoster = binding.drawMovieInfoPoster
-
-            txtMovieTitle.text = movieFromArguments.title
-            txtMovieReleaseDate.text = movieFromArguments.releaseDate
-            txtMovieRating.text = movieFromArguments.rating
-            txtMovieGenre.text = movieFromArguments.genre
-            imgPoster.setImageResource(movieFromArguments.poster)
+        arguments?.getParcelable<Movie>(ARG_MOVIE)?.let { movie ->
+            with(binding) {
+                txtMovieInfoTitle.text = movie.title
+                txtMovieInfoReleaseDate.text = movie.releaseDate
+                txtMovieInfoRating.text = movie.rating
+                txtMovieInfoGenre.text = movie.genre
+                drawMovieInfoPoster.setImageResource(movie.poster)
+            }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
