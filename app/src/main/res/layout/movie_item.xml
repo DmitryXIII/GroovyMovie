@@ -19,7 +19,7 @@
             android:id="@+id/draw_movie_poster"
             android:layout_width="162dp"
             android:layout_height="@dimen/cardview_poster_height"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -60,10 +60,10 @@
 
         <CheckBox
             android:id="@+id/checkbox_favorite"
-            android:layout_width="@dimen/checkbox_size"
-            android:layout_height="@dimen/checkbox_size"
+            android:layout_width="@dimen/checkbox_size_24"
+            android:layout_height="@dimen/checkbox_size_24"
             android:background="@color/transparent"
-            android:button="@drawable/favorite_checkbox"
+            android:button="@drawable/favorite_checkbox_24"
             android:buttonTint="@color/orange"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

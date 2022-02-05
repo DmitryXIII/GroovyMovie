@@ -119,7 +119,6 @@ class ViewModelRetrofit(
             AppState.Error(CORRUPTED_DATA)
         } else {
             AppState.Success(moviesMap)
-
         }
     }
 

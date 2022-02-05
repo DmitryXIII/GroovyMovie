@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.showSnackWithoutAction
+import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.utils.favoriteMap
 import com.squareup.picasso.Picasso
 

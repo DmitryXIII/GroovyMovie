@@ -6,4 +6,14 @@
     <size
         android:width="40dp"
         android:height="40dp" />
+
+    <stroke
+        android:width="2dp"
+        android:color="@color/main_background" />
+
+    <padding
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp" />
 </shape>

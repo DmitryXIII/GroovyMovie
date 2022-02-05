@@ -20,7 +20,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.showSnackWithAction
+import com.ineedyourcode.groovymovie.utils.showSnackWithAction
 import com.ineedyourcode.groovymovie.utils.GridSpacingItemDecoration
 import com.ineedyourcode.groovymovie.viewmodel.mainscreen.AppState
 import com.ineedyourcode.groovymovie.viewmodel.retrofit.ViewModelRetrofit

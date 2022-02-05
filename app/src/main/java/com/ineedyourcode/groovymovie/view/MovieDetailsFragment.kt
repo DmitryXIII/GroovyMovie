@@ -7,7 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
+import com.ineedyourcode.groovymovie.utils.getImageHeight
+import com.ineedyourcode.groovymovie.utils.getImageWidth
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.utils.favoriteMap
 import com.squareup.picasso.Picasso
@@ -44,16 +47,23 @@ class MovieDetailsFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+//        val displayMetrics = DisplayMetrics()
+//        activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
         with(binding) {
             txtMovieDetailsTitle.text = "\"${selectedMovie.title}\""
             txtMovieDetailsReleaseDate.text = selectedMovie.releaseDate
             txtMovieDetailsRating.text = selectedMovie.rating
             txtMovieDetailsGenre.text = selectedMovie.genre
-            txtMovieOverview.text = selectedMovie.overview
+
+            if (selectedMovie.overview.isNullOrBlank()){
+                txtMovieOverview.text = getString(R.string.service_movie_overview_request_error_extra)
+            } else {
+                txtMovieOverview.text = selectedMovie.overview
+            }
 
             Picasso.get()
                 .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
+                .resize(getImageWidth(), getImageHeight(1.77777))
                 .into(drawMovieBackdrop)
 
             Picasso.get()
