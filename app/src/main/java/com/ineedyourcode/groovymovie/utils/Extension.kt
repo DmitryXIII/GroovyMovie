@@ -38,7 +38,7 @@ fun View.showSnackWithAction(message: String, actionText: String, action: (View)
     Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE).setAction(actionText, action).apply {
         setBackgroundTint(resources.getColor(R.color.appbar_layout, context.theme))
         setTextColor(resources.getColor(R.color.white, context.theme))
-        setActionTextColor(resources.getColor(R.color.orange, context.theme))
+        setActionTextColor(resources.getColor(R.color.secondary_background, context.theme))
         show()
     }
 }

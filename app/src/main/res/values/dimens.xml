@@ -20,5 +20,5 @@
     <dimen name="margin_4dp">4dp</dimen>
     <dimen name="margin_2dp">2dp</dimen>
     <dimen name="checkbox_size_24">24dp</dimen>
-    <dimen name="checkbox_size_40">40dp</dimen>
+    <dimen name="checkbox_size_35">35dp</dimen>
 </resources>

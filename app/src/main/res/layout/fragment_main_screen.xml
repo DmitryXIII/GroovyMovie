@@ -20,5 +20,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone"
-        app:SpinKit_Color="@color/orange" />
+        app:SpinKit_Color="@color/secondary_background" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

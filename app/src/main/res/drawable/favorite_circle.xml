@@ -9,7 +9,7 @@
 
     <stroke
         android:width="2dp"
-        android:color="@color/main_background" />
+        android:color="@color/secondary_background" />
 
     <padding
         android:bottom="2dp"

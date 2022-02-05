@@ -5,7 +5,7 @@
     android:id="@+id/card_movie"
     android:layout_width="@dimen/cardview_width"
     android:layout_height="@dimen/cardview_height"
-    android:backgroundTint="@color/movie_background"
+    android:backgroundTint="@color/material_dynamic_neutral90"
     app:cardCornerRadius="@dimen/zero_value"
     app:cardElevation="@dimen/cardview_elevation"
     app:rippleColor="@color/main_background">
@@ -56,7 +56,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/txt_movie_rating"
             app:layout_constraintStart_toStartOf="@id/draw_movie_poster"
-            app:tint="@color/orange" />
+            app:tint="@color/secondary_background" />
 
         <CheckBox
             android:id="@+id/checkbox_favorite"
@@ -64,7 +64,7 @@
             android:layout_height="@dimen/checkbox_size_24"
             android:background="@color/transparent"
             android:button="@drawable/favorite_checkbox_24"
-            android:buttonTint="@color/orange"
+            android:buttonTint="@color/secondary_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -76,6 +76,6 @@
             android:src="@drawable/ic_baseline_sticky_note_2_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/checkbox_favorite"
-            app:tint="@color/orange" />
+            app:tint="@color/secondary_background" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
