@@ -3,7 +3,10 @@ package com.ineedyourcode.groovymovie.viewmodel.retrofit
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.model.db.IRoomHistoryRepository
+import com.ineedyourcode.groovymovie.model.db.RoomHistoryRepository
 import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieFromListDTO
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.IRetrofitRepository
@@ -29,6 +32,7 @@ class ViewModelRetrofit(
     private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource())
 ) : ViewModel() {
 
+    private val roomHistoryRepository: IRoomHistoryRepository = RoomHistoryRepository(App.getHistoryDao())
     private val genresMap = mutableMapOf<Int, String>()
     private val moviesMap = mutableMapOf<String, Movie>()
 
@@ -52,6 +56,11 @@ class ViewModelRetrofit(
             }
         }
         retrofitRepository.getGenresList(callbackGenres)
+    }
+
+
+    fun saveHistory(movie: Movie){
+        roomHistoryRepository.saveEntity(movie)
     }
 
     // возвращает liveData для подписки на нее
@@ -125,7 +134,7 @@ class ViewModelRetrofit(
     private fun convertDtoToModel(serverResponse: List<TmdbMovieFromListDTO>) {
         serverResponse.forEach { movieDTO ->
             val movie = Movie(
-                movieDTO.id.toString(),
+                movieDTO.id,
                 movieDTO.title,
                 movieDTO.releaseDate,
                 movieDTO.voteAverage.toString(),

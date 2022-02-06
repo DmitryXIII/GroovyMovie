@@ -13,7 +13,7 @@ class RandomMoviesRepository : IMoviesRepository {
     override fun loadData() {
         (0..300).forEach { i ->
             val movie = Movie(
-                UUID.randomUUID().toString(),
+                i,
                 "Movie_$i" + "_название фильма",
                 (1990..2022).random().toString(),
                 (Random.nextDouble(1.0, 5.0)).toString().substring(0, 3), randomGenre(),

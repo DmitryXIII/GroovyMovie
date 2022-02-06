@@ -48,10 +48,10 @@ class MoviesListAdapter :
             isFavorite.setOnClickListener(View.OnClickListener {
                 if (isFavorite.isChecked) {
                     isFavorite.showSnackWithoutAction("${movieTitle.text} добавлен в ИЗБРАННЫЕ")
-                    favoriteMap[moviesList[position].id.toString()] = true
+                    favoriteMap[moviesList[position].id] = true
                 } else {
                     isFavorite.showSnackWithoutAction("${movieTitle.text} удален из ИЗБРАННЫХ")
-                    favoriteMap[moviesList[position].id.toString()] = false
+                    favoriteMap[moviesList[position].id] = false
                 }
             })
 

@@ -7,9 +7,9 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="tab_background">#131635</color>
-    <color name="main_background">#1A1C30</color>
-    <color name="secondary_background">#007BFF</color>
+    <color name="tab_background">#272A51</color>
+    <color name="main_background">#1E1F2B</color>
+    <color name="secondary_background">#77B3F3</color>
     <color name="content_scrim">#4D5CF7</color>
     <color name="movie_background">#FFFFFF</color>
     <color name="appbar_layout">#C30606</color>

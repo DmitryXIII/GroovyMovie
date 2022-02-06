@@ -38,7 +38,7 @@
             android:layout_height="@dimen/checkbox_size_35"
             android:background="@color/transparent"
             android:button="@drawable/favorite_checkbox_40"
-            android:buttonTint="@color/secondary_background"
+            android:buttonTint="@color/tab_background"
             app:layout_constraintBottom_toBottomOf="@id/circle_favorite"
             app:layout_constraintEnd_toEndOf="@id/circle_favorite"
             app:layout_constraintStart_toStartOf="@id/circle_favorite"
@@ -63,7 +63,7 @@
             app:layout_constraintBottom_toBottomOf="@id/circle_note"
             app:layout_constraintStart_toStartOf="@id/circle_note"
             app:layout_constraintEnd_toEndOf="@id/circle_note"
-            app:tint="@color/secondary_background" />
+            app:tint="@color/tab_background" />
 
         <ImageView
             android:id="@+id/draw_movie_details_poster"

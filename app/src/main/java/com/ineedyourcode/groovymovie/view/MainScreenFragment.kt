@@ -88,6 +88,8 @@ class MainScreenFragment(private val moviesListType: String) : Fragment() {
                             )
                             .addToBackStack("")
                             .commit()
+
+                        viewModel.saveHistory(moviesList[position])
                     }
                 })
                 Log.d("MainScreen", "Movies: ${appState.moviesData}")
