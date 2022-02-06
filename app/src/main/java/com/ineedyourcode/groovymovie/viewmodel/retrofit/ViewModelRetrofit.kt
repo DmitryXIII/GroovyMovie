@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.IRoomHistoryRepository
+import com.ineedyourcode.groovymovie.model.db.ItemHistory
 import com.ineedyourcode.groovymovie.model.db.RoomHistoryRepository
 import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieFromListDTO
@@ -29,6 +30,7 @@ private const val TAG = "RETROFIT_VIEW_MODEL"
  */
 class ViewModelRetrofit(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
+    private val liveDataHistory: MutableLiveData<AppState> = MutableLiveData(),
     private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource())
 ) : ViewModel() {
 
@@ -149,5 +151,11 @@ class ViewModelRetrofit(
             // Это исключает появление в адаптере пустых отфильстрованных по жанрам списков
             moviesMap[movie.id.toString()] = movie
         }
+    }
+
+    fun getHistory(): MutableLiveData<AppState> {
+        val historyList: List<ItemHistory> = roomHistoryRepository.getAllHistory()
+
+        return liveDataHistory
     }
 }

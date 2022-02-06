@@ -5,9 +5,10 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class HistoryEntity(
-    @PrimaryKey
-    val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long,
+    val movieId: Int,
     val movieTitle: String,
+    val date: String,
     val time: String
-) {
-}
+)
