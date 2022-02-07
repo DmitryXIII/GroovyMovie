@@ -61,7 +61,6 @@ class ViewModelRetrofit(
         retrofitRepository.getGenresList(callbackGenres)
     }
 
-
     fun saveHistory(movie: Movie) {
         roomHistoryRepository.saveEntity(movie)
     }
@@ -72,6 +71,8 @@ class ViewModelRetrofit(
         getMoviesListFromRemoteSource(moviesListType)
         return liveData
     }
+
+    fun getHistory(): List<ItemHistory> = roomHistoryRepository.getAllHistory()
 
     // запросы на сервер
     private fun getMoviesListFromRemoteSource(moviesListType: String) {
@@ -152,11 +153,5 @@ class ViewModelRetrofit(
             // Это исключает появление в адаптере пустых отфильстрованных по жанрам списков
             moviesMap[movie.id.toString()] = movie
         }
-    }
-
-    fun getHistory(): List<ItemHistory> {
-        val historyList: List<ItemHistory> = roomHistoryRepository.getAllHistory()
-        Log.d("VMR", historyList.toString())
-        return historyList
     }
 }

@@ -3,15 +3,11 @@ package com.ineedyourcode.groovymovie.view.history
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.ItemHistory
-import com.ineedyourcode.groovymovie.utils.favoriteMap
-import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.squareup.picasso.Picasso
 
 class HistoryAdapter :
@@ -29,7 +25,7 @@ class HistoryAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryListViewHolder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.item_history, parent, false)
-        return HistoryListViewHolder(itemView, historyList)
+        return HistoryListViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: HistoryListViewHolder, position: Int) {
@@ -47,7 +43,6 @@ class HistoryAdapter :
 
     class HistoryListViewHolder(
         itemView: View,
-        historyList: List<ItemHistory>
     ) : RecyclerView.ViewHolder(itemView) {
 
         val movieTitle: TextView = itemView.findViewById(R.id.txt_history_movie_title)
