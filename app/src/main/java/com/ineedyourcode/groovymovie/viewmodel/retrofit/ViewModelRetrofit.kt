@@ -34,7 +34,8 @@ class ViewModelRetrofit(
     private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource())
 ) : ViewModel() {
 
-    private val roomHistoryRepository: IRoomHistoryRepository = RoomHistoryRepository(App.getHistoryDao())
+    private val roomHistoryRepository: IRoomHistoryRepository =
+        RoomHistoryRepository(App.getHistoryDao())
     private val genresMap = mutableMapOf<Int, String>()
     private val moviesMap = mutableMapOf<String, Movie>()
 
@@ -61,7 +62,7 @@ class ViewModelRetrofit(
     }
 
 
-    fun saveHistory(movie: Movie){
+    fun saveHistory(movie: Movie) {
         roomHistoryRepository.saveEntity(movie)
     }
 
@@ -153,9 +154,9 @@ class ViewModelRetrofit(
         }
     }
 
-    fun getHistory(): MutableLiveData<AppState> {
+    fun getHistory(): List<ItemHistory> {
         val historyList: List<ItemHistory> = roomHistoryRepository.getAllHistory()
-
-        return liveDataHistory
+        Log.d("VMR", historyList.toString())
+        return historyList
     }
 }

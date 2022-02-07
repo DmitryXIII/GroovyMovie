@@ -15,4 +15,5 @@
     <color name="appbar_layout">#C30606</color>
     <color name="yellow">#FFE500</color>
     <color name="transparent">#00FF0000</color>
+    <color name="neutral_white">#EDEFF1</color>
 </resources>

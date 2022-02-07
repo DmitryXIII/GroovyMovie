@@ -22,6 +22,7 @@ import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.utils.showSnackWithAction
 import com.ineedyourcode.groovymovie.utils.GridSpacingItemDecoration
+import com.ineedyourcode.groovymovie.view.history.HistoryFragment
 import com.ineedyourcode.groovymovie.viewmodel.mainscreen.AppState
 import com.ineedyourcode.groovymovie.viewmodel.retrofit.ViewModelRetrofit
 
@@ -64,7 +65,14 @@ class MainScreenFragment(private val moviesListType: String) : Fragment() {
         progressBar.indeterminateDrawable = ThreeBounce()
 
         binding.fab.setOnClickListener {
-
+            parentFragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(
+                    R.id.fragment_container,
+                    HistoryFragment()
+                )
+                .addToBackStack("")
+                .commit()
         }
     }
 

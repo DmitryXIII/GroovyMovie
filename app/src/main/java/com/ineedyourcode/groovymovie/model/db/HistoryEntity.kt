@@ -9,6 +9,7 @@ data class HistoryEntity(
     val id: Long,
     val movieId: Int,
     val movieTitle: String,
+    val posterPath: String,
     val date: String,
     val time: String
 )

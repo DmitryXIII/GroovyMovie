@@ -8,11 +8,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun convertHistoryEntityToMovie(entityList: List<HistoryEntity>): List<ItemHistory> {
-    return entityList.map { ItemHistory(it.movieId, it.movieTitle, it.date, it.time) }
+    return entityList.map { ItemHistory(it.movieId, it.movieTitle, it.posterPath, it.date, it.time) }
 }
 
 fun convertMovieToHistoryEntity(movie: Movie): HistoryEntity =
-    HistoryEntity(0, movie.id, movie.title.toString(), getCurrentDate(), getCurrentTime())
+    HistoryEntity(0, movie.id, movie.title.toString(), movie.posterPath.toString(), getCurrentDate(), getCurrentTime())
 
 @SuppressLint("SimpleDateFormat")
 fun getCurrentTime(): String {

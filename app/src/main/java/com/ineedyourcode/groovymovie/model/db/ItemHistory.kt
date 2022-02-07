@@ -1,5 +1,9 @@
 package com.ineedyourcode.groovymovie.model.db
 
-data class ItemHistory(private val movieId: Int, private val movieTitle: String, private val date: String, private val time: String) {
-
-}
+data class ItemHistory(
+    val movieId: Int,
+    val movieTitle: String,
+    val posterPath: String,
+    val date: String,
+    val time: String
+)
