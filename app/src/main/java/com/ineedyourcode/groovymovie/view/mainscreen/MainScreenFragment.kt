@@ -2,7 +2,6 @@ package com.ineedyourcode.groovymovie.view.mainscreen
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +23,7 @@ import com.ineedyourcode.groovymovie.utils.GridSpacingItemDecoration
 import com.ineedyourcode.groovymovie.view.details.MovieDetailsFragment
 import com.ineedyourcode.groovymovie.view.history.HistoryFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
-import com.ineedyourcode.groovymovie.viewmodel.ViewModelRetrofit
+import com.ineedyourcode.groovymovie.viewmodel.RetrofitViewModel
 
 @RequiresApi(Build.VERSION_CODES.N)
 class MainScreenFragment : Fragment() {
@@ -34,11 +33,12 @@ class MainScreenFragment : Fragment() {
     private lateinit var moviesListType: String
     private lateinit var progressBar: ProgressBar // кастомный прогрессбар
 
+    private val filterAdult = true
     private var _binding: FragmentMainScreenBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: ViewModelRetrofit by lazy {
-        ViewModelProvider(this)[ViewModelRetrofit::class.java]
+    private val viewModel: RetrofitViewModel by lazy {
+        ViewModelProvider(this)[RetrofitViewModel::class.java]
     }
 
     companion object {
@@ -65,7 +65,7 @@ class MainScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let{
+        arguments?.let {
             moviesListType = it.getString(ARG_MOVIE_TYPE)!!
         }
 
@@ -100,7 +100,13 @@ class MainScreenFragment : Fragment() {
                 mainRecyclerView.visibility = View.VISIBLE
 
                 mainAdapter = MoviesListAdapter()
-                mainAdapter.setAdapterData(appState.moviesData)
+
+                if (filterAdult){
+                    mainAdapter.setAdapterData(appState.moviesData.filter { (_, v) -> !v.isAdult })
+                } else {
+                    mainAdapter.setAdapterData(appState.moviesData)
+                }
+
                 mainAdapter.setOnItemClickListener(object :
                     MoviesListAdapter.OnItemClickListener {
                     override fun onItemClickListener(
@@ -119,7 +125,6 @@ class MainScreenFragment : Fragment() {
                         viewModel.saveHistory(moviesList[position])
                     }
                 })
-                Log.d("MainScreen", "Movies: ${appState.moviesData}")
 
                 mainRecyclerView.apply {
                     layoutManager = GridLayoutManager(requireContext(), 2)

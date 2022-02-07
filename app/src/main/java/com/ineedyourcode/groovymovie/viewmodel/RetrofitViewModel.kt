@@ -7,7 +7,6 @@ import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
-import com.ineedyourcode.groovymovie.model.db.entities.HistoryEntity
 import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieFromListDTO
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.IRetrofitRepository
@@ -24,18 +23,16 @@ private const val RESPONSE_MOVIES_LIST_ERROR = "Failed to get response movies li
 private const val RESPONSE_MOVIE_BY_ID_ERROR = "Response movie by id failed"
 private const val TAG = "RETROFIT_VIEW_MODEL"
 
-/**
- * ViewModelRetrofit используется для получения данных через Retrofit
- */
-class ViewModelRetrofit(
+class RetrofitViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
     private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource())
 ) : ViewModel() {
 
     private val roomHistoryRepository: IRoomRepository =
         RoomRepository(App.getMovieDao())
+
     private val genresMap = mutableMapOf<Int, String>()
-    private val moviesMap = mutableMapOf<String, Movie>()
+    private val moviesMap = mutableMapOf<Int, Movie>()
 
     init {
         // обработка ответа с сервера на запрос списка жанров, имеющихся в TMDB
@@ -69,10 +66,6 @@ class ViewModelRetrofit(
         getMoviesListFromRemoteSource(moviesListType)
         return liveData
     }
-
-    fun getHistory(): List<HistoryEntity> = roomHistoryRepository.getAllHistory()
-
-    fun clearHistory() = roomHistoryRepository.clearAllHistory()
 
     // запросы на сервер
     private fun getMoviesListFromRemoteSource(moviesListType: String) {
@@ -142,16 +135,17 @@ class ViewModelRetrofit(
                 movieDTO.title,
                 movieDTO.releaseDate,
                 movieDTO.voteAverage.toString(),
-                genresMap[movieDTO.genreIds[0]], // фильм может иметь несколько категорий жанров, отображается первый в списке жанр
+                genresMap[movieDTO.genreIds[0]].toString(), // фильм может иметь несколько категорий жанров, отображается первый в списке жанр
                 movieDTO.overview,
                 movieDTO.posterPath,
-                movieDTO.backdropPath
+                movieDTO.backdropPath,
+                movieDTO.adult
             )
             // Список жанров формируется в виде genresSet и берется из приодящего списка фильмов.
             // Таким образом в адаптер для фильтрации по жанрам передаются только те жанры, которые
             // имеются в полученном списке фильмов.
             // Это исключает появление в адаптере пустых отфильстрованных по жанрам списков
-            moviesMap[movie.id.toString()] = movie
+            moviesMap[movie.id] = movie
         }
     }
 }

@@ -1,22 +1,18 @@
 package com.ineedyourcode.groovymovie.view.note
 
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
 import com.ineedyourcode.groovymovie.databinding.FragmentNoteBinding
 import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.utils.hideKeyboard
+import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.viewmodel.NoteViewModel
-import com.ineedyourcode.groovymovie.viewmodel.ViewModelRetrofit
-import java.lang.Exception
 
 class NoteFragment : Fragment() {
 
@@ -50,18 +46,33 @@ class NoteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.noteMovieTitle.text = selectedMovie.title
+        binding.noteMovieTitle.text = getString(R.string.note_content_title, selectedMovie.title)
 
-        try{
+        // если заметка еще не была создана, то создаем в БД заметку с пустым содержанием,
+        // иначе NullPointerException
+        try {
             binding.noteContent.setText(noteViewModel.getNote(selectedMovie).noteContent)
-        } catch (e: Exception) {
+        } catch (e: NullPointerException) {
             noteViewModel.saveNote(selectedMovie, "")
             binding.noteContent.setText("")
         }
 
         binding.fabSaveNote.setOnClickListener {
+            view.hideKeyboard()
             noteViewModel.saveNote(selectedMovie, binding.noteContent.text.toString())
             binding.noteContent.setText(noteViewModel.getNote(selectedMovie).noteContent)
+            view.showSnackWithoutAction("Заметка сохранена")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // если содержание заметки при выходе пустое, то заметка удаляется из БД
+        if (binding.noteContent.text.isNullOrBlank()) {
+            noteViewModel.deleteNote(selectedMovie)
+        }
+
+        _binding = null
     }
 }

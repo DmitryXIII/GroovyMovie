@@ -67,15 +67,5 @@
             android:buttonTint="@color/tab_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
-
-        <ImageView
-            android:id="@+id/icon_movie_note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_16dp"
-            android:src="@drawable/ic_baseline_sticky_note_2_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/checkbox_favorite"
-            app:tint="@color/tab_background" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -1,26 +1,24 @@
 package com.ineedyourcode.groovymovie.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
 import com.ineedyourcode.groovymovie.model.db.entities.NotesEntity
-import com.ineedyourcode.groovymovie.model.tmdb.retrofit.IRetrofitRepository
-import com.ineedyourcode.groovymovie.model.tmdb.retrofit.RemoteDataSource
-import com.ineedyourcode.groovymovie.model.tmdb.retrofit.RetrofitRepository
 
-class NoteViewModel(
+class NoteViewModel: ViewModel() {
 
-): ViewModel() {
-
-    private val roomRepository: IRoomRepository =
+    private val roomNoteRepository: IRoomRepository =
         RoomRepository(App.getMovieDao())
 
     fun saveNote(movie: Movie, noteContent: String) {
-        roomRepository.saveNote(movie, noteContent)
+        roomNoteRepository.saveNote(movie, noteContent)
     }
 
-    fun getNote(movie: Movie): NotesEntity = roomRepository.getNote(movie.id)
+    fun getNote(movie: Movie): NotesEntity = roomNoteRepository.getNote(movie.id)
+
+    fun deleteNote(movie: Movie){
+        roomNoteRepository.deleteNote(movie.id)
+    }
 }

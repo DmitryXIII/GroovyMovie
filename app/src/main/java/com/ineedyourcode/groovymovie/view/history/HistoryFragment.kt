@@ -6,13 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.ImageViewCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentHistoryBinding
-import com.ineedyourcode.groovymovie.viewmodel.ViewModelRetrofit
+import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
+import com.ineedyourcode.groovymovie.viewmodel.HistoryViewModel
 
 class HistoryFragment : Fragment() {
 
@@ -21,8 +21,8 @@ class HistoryFragment : Fragment() {
     private var _binding: FragmentHistoryBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModelHistory: ViewModelRetrofit by lazy {
-        ViewModelProvider(this)[ViewModelRetrofit::class.java]
+    private val viewModelHistory: HistoryViewModel by lazy {
+        ViewModelProvider(this)[HistoryViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -54,7 +54,7 @@ class HistoryFragment : Fragment() {
         binding.fabClearHistory.setOnClickListener {
             viewModelHistory.clearHistory()
             historyAdapter.clearData()
-            Toast.makeText(requireContext(), "HISTORY CLEARED", Toast.LENGTH_SHORT).show()
+            view.showSnackWithoutAction("HISTORY CLEARED")
         }
     }
 

@@ -21,7 +21,7 @@ class MoviesListAdapter :
     private val mainPosterPath = "https://image.tmdb.org/t/p/"
     private val posterSize = "w342/"
 
-    fun setAdapterData(moviesMap: Map<String, Movie>) {
+    fun setAdapterData(moviesMap: Map<Int, Movie>) {
         notifyDataSetChanged()
         moviesList = moviesMap.values.toList()
     }

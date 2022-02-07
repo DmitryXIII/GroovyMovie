@@ -12,11 +12,11 @@ interface MovieDao {
     @Query("DELETE FROM HistoryEntity")
     fun clearAllHistory()
 
-    @Query("DELETE FROM HistoryEntity WHERE time LIKE :time")
-    fun deleteHistoryQuery(time: String)
-
     @Query("SELECT * FROM NotesEntity WHERE movieId == :id")
     fun getNote(id: Int): NotesEntity
+
+    @Query("DELETE FROM NotesEntity WHERE movieId == :movieId")
+    fun deleteNote(movieId: Int)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertHistoryEntity(entity: HistoryEntity)

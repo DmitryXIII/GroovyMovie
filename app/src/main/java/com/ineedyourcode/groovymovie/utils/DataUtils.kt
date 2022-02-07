@@ -7,18 +7,6 @@ import com.ineedyourcode.groovymovie.model.db.entities.NotesEntity
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun convertHistoryEntityToMovie(entityList: List<HistoryEntity>): List<HistoryEntity> {
-    return entityList.map {
-        HistoryEntity(0,
-            it.movieId,
-            it.movieTitle,
-            it.posterPath,
-            it.date,
-            it.time
-        )
-    }
-}
-
 fun convertMovieToHistoryEntity(movie: Movie): HistoryEntity =
     HistoryEntity(
         0,
@@ -32,9 +20,7 @@ fun convertMovieToHistoryEntity(movie: Movie): HistoryEntity =
 fun convertMovieToNoteEntity(movie: Movie, noteContent: String): NotesEntity =
     NotesEntity(movie.id, movie.title.toString(), noteContent)
 
-fun convertNoteEntityToString(note: NotesEntity): NotesEntity {
-    return note
-}
+fun convertNoteEntityToString(note: NotesEntity): NotesEntity = note
 
 @SuppressLint("SimpleDateFormat")
 fun getCurrentTime(): String {

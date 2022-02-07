@@ -10,4 +10,5 @@ interface IRoomRepository {
     fun clearAllHistory()
     fun saveNote(movie: Movie, noteContent: String)
     fun getNote(movieId: Int): NotesEntity
+    fun deleteNote(movieId: Int)
 }

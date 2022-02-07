@@ -8,7 +8,7 @@ import kotlin.random.Random
 class RandomMoviesRepository : IMoviesRepository {
 
     private val genresSet = mutableSetOf<String>()
-    private val moviesMap = mutableMapOf<String, Movie>()
+    private val moviesMap = mutableMapOf<Int, Movie>()
 
     override fun loadData() {
         (0..300).forEach { i ->
@@ -19,10 +19,11 @@ class RandomMoviesRepository : IMoviesRepository {
                 (Random.nextDouble(1.0, 5.0)).toString().substring(0, 3), randomGenre(),
                 "Описание...",
                 "1qp6p7IXXYQ6vTiQ3Fd5GMpD4mK.jpg",
-                "1qp6p7IXXYQ6vTiQ3Fd5GMpD4mK.jpg"
+                "1qp6p7IXXYQ6vTiQ3Fd5GMpD4mK.jpg",
+                false
             )
 
-            moviesMap[movie.id.toString()] = movie
+            moviesMap[movie.id] = movie
             genresSet.add(movie.genre.toString())
         }
     }
@@ -43,6 +44,6 @@ class RandomMoviesRepository : IMoviesRepository {
         }
     }
 
-    override fun getMoviesMap(): Map<String, Movie> = moviesMap
+    override fun getMoviesMap(): Map<Int, Movie> = moviesMap
     override fun getGenresList(): Set<String> = genresSet
 }
