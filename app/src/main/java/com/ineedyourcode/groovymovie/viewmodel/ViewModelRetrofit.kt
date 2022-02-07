@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.IRoomRepository
-import com.ineedyourcode.groovymovie.model.db.ItemHistory
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
+import com.ineedyourcode.groovymovie.model.db.entities.HistoryEntity
 import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieFromListDTO
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.IRetrofitRepository
@@ -70,7 +70,7 @@ class ViewModelRetrofit(
         return liveData
     }
 
-    fun getHistory(): List<ItemHistory> = roomHistoryRepository.getAllHistory()
+    fun getHistory(): List<HistoryEntity> = roomHistoryRepository.getAllHistory()
 
     fun clearHistory() = roomHistoryRepository.clearAllHistory()
 

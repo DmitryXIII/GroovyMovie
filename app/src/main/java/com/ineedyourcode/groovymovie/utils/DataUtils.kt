@@ -2,15 +2,14 @@ package com.ineedyourcode.groovymovie.utils
 
 import android.annotation.SuppressLint
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.model.db.ItemHistory
 import com.ineedyourcode.groovymovie.model.db.entities.HistoryEntity
 import com.ineedyourcode.groovymovie.model.db.entities.NotesEntity
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun convertHistoryEntityToMovie(entityList: List<HistoryEntity>): List<ItemHistory> {
+fun convertHistoryEntityToMovie(entityList: List<HistoryEntity>): List<HistoryEntity> {
     return entityList.map {
-        ItemHistory(
+        HistoryEntity(0,
             it.movieId,
             it.movieTitle,
             it.posterPath,

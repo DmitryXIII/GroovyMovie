@@ -7,17 +7,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.model.db.ItemHistory
+import com.ineedyourcode.groovymovie.model.db.entities.HistoryEntity
 import com.squareup.picasso.Picasso
 
 class HistoryAdapter :
     RecyclerView.Adapter<HistoryAdapter.HistoryListViewHolder>() {
 
-    private lateinit var historyList: List<ItemHistory>
+    private lateinit var historyList: List<HistoryEntity>
     private val mainPosterPath = "https://image.tmdb.org/t/p/"
     private val posterSize = "w185/"
 
-    fun setAdapterData(historyList: List<ItemHistory>) {
+    fun setAdapterData(historyList: List<HistoryEntity>) {
         this.historyList = historyList
         notifyDataSetChanged()
     }

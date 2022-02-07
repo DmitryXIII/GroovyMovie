@@ -27,11 +27,11 @@ import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.ViewModelRetrofit
 
 @RequiresApi(Build.VERSION_CODES.N)
-class MainScreenFragment(private val moviesListType: String) : Fragment() {
+class MainScreenFragment : Fragment() {
 
     private lateinit var mainRecyclerView: RecyclerView
     private lateinit var mainAdapter: MoviesListAdapter
-
+    private lateinit var moviesListType: String
     private lateinit var progressBar: ProgressBar // кастомный прогрессбар
 
     private var _binding: FragmentMainScreenBinding? = null
@@ -39,6 +39,17 @@ class MainScreenFragment(private val moviesListType: String) : Fragment() {
 
     private val viewModel: ViewModelRetrofit by lazy {
         ViewModelProvider(this)[ViewModelRetrofit::class.java]
+    }
+
+    companion object {
+        private const val ARG_MOVIE_TYPE = "ARG_MOVIE_TYPE"
+
+        fun newInstance(moviesListType: String) =
+            MainScreenFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_MOVIE_TYPE, moviesListType)
+                }
+            }
     }
 
     override fun onCreateView(
@@ -53,6 +64,11 @@ class MainScreenFragment(private val moviesListType: String) : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let{
+            moviesListType = it.getString(ARG_MOVIE_TYPE)!!
+        }
+
         viewModel.getData(moviesListType).observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })
@@ -91,7 +107,7 @@ class MainScreenFragment(private val moviesListType: String) : Fragment() {
                         position: Int,
                         moviesList: List<Movie>
                     ) {
-                         parentFragmentManager.beginTransaction()
+                        parentFragmentManager.beginTransaction()
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .replace(
                                 R.id.fragment_container,
