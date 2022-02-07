@@ -20,4 +20,15 @@
         android:visibility="gone"
         app:SpinKit_Color="@color/secondary_background" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_clear_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/margin_16dp"
+        android:backgroundTint="@color/secondary_background"
+        app:borderWidth="@dimen/zero_value"
+        android:src="@drawable/ic_baseline_delete_forever_24"/>
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,8 +2,8 @@ package com.ineedyourcode.groovymovie
 
 import android.app.Application
 import androidx.room.Room
-import com.ineedyourcode.groovymovie.model.db.HistoryDAO
-import com.ineedyourcode.groovymovie.model.db.HistoryDataBase
+import com.ineedyourcode.groovymovie.model.db.GroovyDataBase
+import com.ineedyourcode.groovymovie.model.db.MovieDao
 
 class App : Application() {
     override fun onCreate() {
@@ -13,18 +13,18 @@ class App : Application() {
 
     companion object {
         private var instance: App? = null
-        private var historyDb: HistoryDataBase? = null
-        private const val HISTORY_DB_NAME = "History.db"
+        private var appDb: GroovyDataBase? = null
+        private const val APP_DB_NAME = "Groovy.db"
 
-        fun getHistoryDao(): HistoryDAO{
-            if (historyDb == null){
-                synchronized(HistoryDataBase::class.java){
-                    if (historyDb == null){
+        fun getMovieDao(): MovieDao {
+            if (appDb == null){
+                synchronized(GroovyDataBase::class.java){
+                    if (appDb == null){
                         if (instance == null) throw IllegalAccessException("App is null")
-                        historyDb = Room.databaseBuilder(
+                        appDb = Room.databaseBuilder(
                             instance!!.applicationContext,
-                            HistoryDataBase::class.java,
-                            HISTORY_DB_NAME)
+                            GroovyDataBase::class.java,
+                            APP_DB_NAME)
                             .allowMainThreadQueries()
                             .fallbackToDestructiveMigration()
                             .build()
@@ -32,7 +32,7 @@ class App : Application() {
                 }
             }
 
-            return historyDb!!.historyDao()
+            return appDb!!.movieDao()
         }
     }
 

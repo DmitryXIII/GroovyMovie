@@ -7,8 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.ineedyourcode.groovymovie.utils.*
-import com.ineedyourcode.groovymovie.view.MainScreenFragment
-import com.ineedyourcode.groovymovie.view.MovieDetailsFragment
+import com.ineedyourcode.groovymovie.view.mainscreen.MainScreenFragment
 
 
 class PagerAdapter(fm: FragmentManager, lc: Lifecycle): FragmentStateAdapter(fm, lc)  {

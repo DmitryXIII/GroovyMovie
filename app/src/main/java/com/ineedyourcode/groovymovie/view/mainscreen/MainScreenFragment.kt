@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie.view
+package com.ineedyourcode.groovymovie.view.mainscreen
 
 import android.os.Build
 import android.os.Bundle
@@ -16,15 +16,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.ThreeBounce
-import com.google.android.material.textfield.TextInputEditText
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.utils.showSnackWithAction
 import com.ineedyourcode.groovymovie.utils.GridSpacingItemDecoration
+import com.ineedyourcode.groovymovie.view.details.MovieDetailsFragment
 import com.ineedyourcode.groovymovie.view.history.HistoryFragment
-import com.ineedyourcode.groovymovie.viewmodel.mainscreen.AppState
-import com.ineedyourcode.groovymovie.viewmodel.retrofit.ViewModelRetrofit
+import com.ineedyourcode.groovymovie.viewmodel.AppState
+import com.ineedyourcode.groovymovie.viewmodel.ViewModelRetrofit
 
 @RequiresApi(Build.VERSION_CODES.N)
 class MainScreenFragment(private val moviesListType: String) : Fragment() {
@@ -91,7 +91,7 @@ class MainScreenFragment(private val moviesListType: String) : Fragment() {
                         position: Int,
                         moviesList: List<Movie>
                     ) {
-                        parentFragmentManager.beginTransaction()
+                         parentFragmentManager.beginTransaction()
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                             .replace(
                                 R.id.fragment_container,

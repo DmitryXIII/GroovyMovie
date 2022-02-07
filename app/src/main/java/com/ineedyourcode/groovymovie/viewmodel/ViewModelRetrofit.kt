@@ -1,20 +1,19 @@
-package com.ineedyourcode.groovymovie.viewmodel.retrofit
+package com.ineedyourcode.groovymovie.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.model.db.IRoomHistoryRepository
+import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.ItemHistory
-import com.ineedyourcode.groovymovie.model.db.RoomHistoryRepository
+import com.ineedyourcode.groovymovie.model.db.RoomRepository
 import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieFromListDTO
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.IRetrofitRepository
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.RemoteDataSource
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.RetrofitRepository
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.TmdbResponse
-import com.ineedyourcode.groovymovie.viewmodel.mainscreen.AppState
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,12 +29,11 @@ private const val TAG = "RETROFIT_VIEW_MODEL"
  */
 class ViewModelRetrofit(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val liveDataHistory: MutableLiveData<AppState> = MutableLiveData(),
     private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource())
 ) : ViewModel() {
 
-    private val roomHistoryRepository: IRoomHistoryRepository =
-        RoomHistoryRepository(App.getHistoryDao())
+    private val roomHistoryRepository: IRoomRepository =
+        RoomRepository(App.getMovieDao())
     private val genresMap = mutableMapOf<Int, String>()
     private val moviesMap = mutableMapOf<String, Movie>()
 
@@ -62,7 +60,7 @@ class ViewModelRetrofit(
     }
 
     fun saveHistory(movie: Movie) {
-        roomHistoryRepository.saveEntity(movie)
+        roomHistoryRepository.saveHistoryEntity(movie)
     }
 
     // возвращает liveData для подписки на нее
@@ -73,6 +71,8 @@ class ViewModelRetrofit(
     }
 
     fun getHistory(): List<ItemHistory> = roomHistoryRepository.getAllHistory()
+
+    fun clearHistory() = roomHistoryRepository.clearAllHistory()
 
     // запросы на сервер
     private fun getMoviesListFromRemoteSource(moviesListType: String) {
