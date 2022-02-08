@@ -74,7 +74,7 @@ class MainFragment : Fragment() {
     private fun menuAction(fragment: Fragment, tag: String) {
         parentFragmentManager
             .beginTransaction()
-            .add(R.id.child_fragment_container, fragment, tag)
+            .add(R.id.fragment_container, fragment, tag)
             .addToBackStack("")
             .commit()
 

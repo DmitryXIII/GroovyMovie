@@ -56,8 +56,9 @@ class MovieDetailsFragment : Fragment() {
             txtMovieDetailsRating.text = selectedMovie.rating
             txtMovieDetailsGenre.text = selectedMovie.genre
 
-            if (selectedMovie.overview.isNullOrBlank()){
-                txtMovieOverview.text = getString(R.string.service_movie_overview_request_error_extra)
+            if (selectedMovie.overview.isNullOrBlank()) {
+                txtMovieOverview.text =
+                    getString(R.string.service_movie_overview_request_error_extra)
             } else {
                 txtMovieOverview.text = selectedMovie.overview
             }
@@ -74,11 +75,11 @@ class MovieDetailsFragment : Fragment() {
             checkboxFavorite.isChecked = favoriteMap[selectedMovie.id] == true
         }
 
-        binding.iconMovieDetailsNote.setOnClickListener{
+        binding.iconMovieDetailsNote.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(
-                    R.id.child_fragment_container,
+                .add(
+                    R.id.fragment_container,
                     NoteFragment.newInstance(selectedMovie)
                 )
                 .addToBackStack("")

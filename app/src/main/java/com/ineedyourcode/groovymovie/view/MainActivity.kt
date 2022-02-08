@@ -21,21 +21,5 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.fragment_container, MainFragment())
             .commit()
-
-//        val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
-//        val viewPager2 = findViewById<ViewPager2>(R.id.view_pager_2)
-//        val viewPagerAdapter = PagerAdapter(supportFragmentManager, lifecycle)
-//        viewPager2.adapter = viewPagerAdapter
-//        TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
-//            when (position) {
-//                0 -> tab.text = "Top rated"
-//                1 -> tab.text = "Popular"
-//                2 -> tab.text = "Upcoming"
-//                3 -> tab.text = "Now playing"
-//                4 -> tab.text = "Upcoming"
-//                5 -> tab.text = "Top rated"
-//            }
-//        }.attach()
-
     }
 }
