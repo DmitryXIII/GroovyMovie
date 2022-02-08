@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie.view.mainscreen
+package com.ineedyourcode.groovymovie.view.movieslist
 
 import android.view.LayoutInflater
 import android.view.View

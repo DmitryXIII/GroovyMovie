@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie.view.mainscreen
+package com.ineedyourcode.groovymovie.view.movieslist
 
 import android.os.Build
 import android.os.Bundle
@@ -16,17 +16,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
+import com.ineedyourcode.groovymovie.databinding.FragmentMoviesListBinding
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.utils.showSnackWithAction
-import com.ineedyourcode.groovymovie.utils.GridSpacingItemDecoration
 import com.ineedyourcode.groovymovie.view.details.MovieDetailsFragment
 import com.ineedyourcode.groovymovie.view.history.HistoryFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.RetrofitViewModel
 
 @RequiresApi(Build.VERSION_CODES.N)
-class MainScreenFragment : Fragment() {
+class MoviesListFragment : Fragment() {
 
     private lateinit var mainRecyclerView: RecyclerView
     private lateinit var mainAdapter: MoviesListAdapter
@@ -34,7 +33,7 @@ class MainScreenFragment : Fragment() {
     private lateinit var progressBar: ProgressBar // кастомный прогрессбар
 
     private val filterAdult = true
-    private var _binding: FragmentMainScreenBinding? = null
+    private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: RetrofitViewModel by lazy {
@@ -45,7 +44,7 @@ class MainScreenFragment : Fragment() {
         private const val ARG_MOVIE_TYPE = "ARG_MOVIE_TYPE"
 
         fun newInstance(moviesListType: String) =
-            MainScreenFragment().apply {
+            MoviesListFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_MOVIE_TYPE, moviesListType)
                 }
@@ -57,7 +56,7 @@ class MainScreenFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainScreenBinding.inflate(inflater, container, false)
+        _binding = FragmentMoviesListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -79,17 +78,6 @@ class MainScreenFragment : Fragment() {
         }
 
         progressBar.indeterminateDrawable = ThreeBounce()
-
-        binding.fab.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(
-                    R.id.fragment_container,
-                    HistoryFragment()
-                )
-                .addToBackStack("")
-                .commit()
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -101,7 +89,7 @@ class MainScreenFragment : Fragment() {
 
                 mainAdapter = MoviesListAdapter()
 
-                if (filterAdult){
+                if (filterAdult) {
                     mainAdapter.setAdapterData(appState.moviesData.filter { (_, v) -> !v.isAdult })
                 } else {
                     mainAdapter.setAdapterData(appState.moviesData)
@@ -114,9 +102,9 @@ class MainScreenFragment : Fragment() {
                         moviesList: List<Movie>
                     ) {
                         parentFragmentManager.beginTransaction()
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .replace(
-                                R.id.fragment_container,
+                                R.id.child_fragment_container,
                                 MovieDetailsFragment.newInstance(moviesList[position])
                             )
                             .addToBackStack("")
@@ -128,7 +116,6 @@ class MainScreenFragment : Fragment() {
 
                 mainRecyclerView.apply {
                     layoutManager = GridLayoutManager(requireContext(), 2)
-                    addItemDecoration(GridSpacingItemDecoration(2, 50, true))
                     adapter = mainAdapter
                 }
             }

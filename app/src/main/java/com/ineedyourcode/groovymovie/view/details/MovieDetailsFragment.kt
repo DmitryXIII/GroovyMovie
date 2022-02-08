@@ -76,9 +76,9 @@ class MovieDetailsFragment : Fragment() {
 
         binding.iconMovieDetailsNote.setOnClickListener{
             parentFragmentManager.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(
-                    R.id.fragment_container,
+                    R.id.child_fragment_container,
                     NoteFragment.newInstance(selectedMovie)
                 )
                 .addToBackStack("")
