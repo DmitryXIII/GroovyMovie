@@ -1,5 +1,6 @@
 package com.ineedyourcode.groovymovie.view.movieslist
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,9 +19,9 @@ import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMoviesListBinding
 import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.utils.PREFERENCES_ADULT
 import com.ineedyourcode.groovymovie.utils.showSnackWithAction
 import com.ineedyourcode.groovymovie.view.details.MovieDetailsFragment
-import com.ineedyourcode.groovymovie.view.history.HistoryFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.RetrofitViewModel
 
@@ -32,7 +33,6 @@ class MoviesListFragment : Fragment() {
     private lateinit var moviesListType: String
     private lateinit var progressBar: ProgressBar // кастомный прогрессбар
 
-    private val filterAdult = true
     private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
 
@@ -89,10 +89,14 @@ class MoviesListFragment : Fragment() {
 
                 mainAdapter = MoviesListAdapter()
 
-                if (filterAdult) {
-                    mainAdapter.setAdapterData(appState.moviesData.filter { (_, v) -> !v.isAdult })
-                } else {
-                    mainAdapter.setAdapterData(appState.moviesData)
+                activity?.let {
+                    if (it.getPreferences(Context.MODE_PRIVATE)
+                            .getBoolean(PREFERENCES_ADULT, false)
+                    ) {
+                        mainAdapter.setAdapterData(appState.moviesData.filter { (_, movie) -> !movie.isAdult })
+                    } else {
+                        mainAdapter.setAdapterData(appState.moviesData)
+                    }
                 }
 
                 mainAdapter.setOnItemClickListener(object :

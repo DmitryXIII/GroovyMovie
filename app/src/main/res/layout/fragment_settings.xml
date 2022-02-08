@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="@color/main_background"
+    tools:context=".view.settings.SettingsFragment">
+
+    <CheckBox
+        android:id="@+id/checkbox_settings_adult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_16dp"
+        android:backgroundTint="@color/secondary_background"
+        android:text="не показывать adult"
+        android:textColor="@color/secondary_background"/>
+
+</FrameLayout>
