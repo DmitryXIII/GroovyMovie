@@ -29,4 +29,5 @@
     <string name="note_content_hint" tools:ignore="TypographyEllipsis">Оставьте здесь заметку о фильме...</string>
     <string name="settings">Настройки</string>
     <string name="menu_title_about_app">О приложении</string>
+    <string name="menu_title_contacts">Контакты</string>
 </resources>

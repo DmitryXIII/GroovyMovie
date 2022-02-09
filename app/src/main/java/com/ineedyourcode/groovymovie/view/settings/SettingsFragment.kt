@@ -11,6 +11,7 @@ import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.utils.PREFERENCES_ADULT
 
 class SettingsFragment : Fragment() {
+    val TAG_FOR_BACKSTACK = "SettingsFragment"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

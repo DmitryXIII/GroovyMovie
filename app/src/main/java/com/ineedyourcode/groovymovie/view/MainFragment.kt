@@ -11,6 +11,7 @@ import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.FragmentTransaction
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMainBinding
+import com.ineedyourcode.groovymovie.view.contacts.ContactsFragment
 import com.ineedyourcode.groovymovie.view.history.HistoryFragment
 import com.ineedyourcode.groovymovie.view.settings.SettingsFragment
 import com.ineedyourcode.groovymovie.view.tabs.TabFragment
@@ -28,18 +29,25 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.menuNavDrawer.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.action_settings -> {
-                    menuAction(SettingsFragment(), "TAG")
+                    if(parentFragmentManager.findFragmentByTag(SettingsFragment().TAG_FOR_BACKSTACK) == null){
+                        menuAction(SettingsFragment(), SettingsFragment().TAG_FOR_BACKSTACK)
+                    } else {
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    }
                     true
                 }
-                R.id.action_about -> {
-                    menuAction(SettingsFragment(), "TAG")
+                R.id.action_contacts -> {
+                    if(parentFragmentManager.findFragmentByTag(ContactsFragment().TAG_FOR_BACKSTACK) == null){
+                        menuAction(ContactsFragment(), ContactsFragment().TAG_FOR_BACKSTACK)
+                    } else {
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    }
                     true
                 }
                 else -> {
