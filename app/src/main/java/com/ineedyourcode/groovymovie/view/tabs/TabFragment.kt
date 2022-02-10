@@ -32,14 +32,14 @@ class TabFragment : Fragment() {
         val viewPagerAdapter = PagerAdapter(parentFragmentManager, lifecycle)
         binding.viewPager2.adapter = viewPagerAdapter
         TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position ->
-            when (position) {
-                0 -> tab.text = "Top rated"
-                1 -> tab.text = "Popular"
-                2 -> tab.text = "Upcoming"
-                3 -> tab.text = "Now playing"
-                4 -> tab.text = "Upcoming"
-                5 -> tab.text = "Top rated"
-            }
+            tab.text =
+                when (position) {
+                    0 -> "Upcoming"
+                    1 -> "Now playing"
+                    2 -> "Popular"
+                    3 -> "Top rated"
+                    else -> ""
+                }
         }.attach()
     }
 
