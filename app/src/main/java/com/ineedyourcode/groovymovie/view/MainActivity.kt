@@ -1,6 +1,5 @@
 package com.ineedyourcode.groovymovie.view
 
-
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, MainFragment())
+            .replace(R.id.main_fragment_container, MainFragment())
             .commit()
     }
 }

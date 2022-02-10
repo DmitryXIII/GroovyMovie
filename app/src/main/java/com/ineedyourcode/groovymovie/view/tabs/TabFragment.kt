@@ -5,13 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.databinding.FragmentNoteBinding
 import com.ineedyourcode.groovymovie.databinding.FragmentTabBinding
-import com.ineedyourcode.groovymovie.view.tabs.PagerAdapter
 
 class TabFragment : Fragment() {
 

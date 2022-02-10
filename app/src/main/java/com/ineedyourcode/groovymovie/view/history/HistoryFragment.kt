@@ -15,6 +15,7 @@ import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.viewmodel.HistoryViewModel
 
 class HistoryFragment : Fragment() {
+    val TAG_FOR_BACKSTACK = "HistoryFragment"
 
     private lateinit var historyAdapter: HistoryAdapter
 

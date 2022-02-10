@@ -79,7 +79,7 @@ class MovieDetailsFragment : Fragment() {
             parentFragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .add(
-                    R.id.fragment_container,
+                    R.id.main_fragment_container,
                     NoteFragment.newInstance(selectedMovie)
                 )
                 .addToBackStack("")
