@@ -10,8 +10,8 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMainBinding
-import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.view.contacts.ContactsFragment
+import com.ineedyourcode.groovymovie.view.favorite.FavoriteFragment
 import com.ineedyourcode.groovymovie.view.history.HistoryFragment
 import com.ineedyourcode.groovymovie.view.settings.SettingsFragment
 import com.ineedyourcode.groovymovie.view.tabs.TabFragment
@@ -42,30 +42,12 @@ class MainFragment : Fragment() {
         binding.menuNavDrawer.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.action_settings -> {
-                    if (parentFragmentManager.findFragmentByTag(SettingsFragment().TAG_FOR_BACKSTACK) == null) {
-                        menuNavDrawerAction(
-                            SettingsFragment(),
-                            SettingsFragment().TAG_FOR_BACKSTACK
-                        )
-                    } else {
-                        binding.drawerLayout.closeDrawer(GravityCompat.START)
-                    }
-                    true
+                    menuNavDrawerAction(SettingsFragment(), SettingsFragment().TAG_FOR_BACKSTACK)
                 }
                 R.id.action_contacts -> {
-                    if (parentFragmentManager.findFragmentByTag(ContactsFragment().TAG_FOR_BACKSTACK) == null) {
-                        menuNavDrawerAction(
-                            ContactsFragment(),
-                            ContactsFragment().TAG_FOR_BACKSTACK
-                        )
-                    } else {
-                        binding.drawerLayout.closeDrawer(GravityCompat.START)
-                    }
-                    true
+                    menuNavDrawerAction(ContactsFragment(), ContactsFragment().TAG_FOR_BACKSTACK)
                 }
-                else -> {
-                    false
-                }
+                else -> false
             }
         }
 
@@ -81,49 +63,41 @@ class MainFragment : Fragment() {
         binding.bottomNavView.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_movies_list -> {
-                    if (parentFragmentManager.findFragmentByTag(TabFragment().TAG_FOR_BACKSTACK) == null) {
-                        menuBottomNavAction(
-                            TabFragment(),
-                            TabFragment().TAG_FOR_BACKSTACK
-                        )
-                    }
-                    true
+                    menuBottomNavAction(TabFragment(), TabFragment().TAG_FOR_BACKSTACK)
                 }
                 R.id.action_history -> {
-                    if (parentFragmentManager.findFragmentByTag(HistoryFragment().TAG_FOR_BACKSTACK) == null) {
-                        menuBottomNavAction(
-                            HistoryFragment(),
-                            HistoryFragment().TAG_FOR_BACKSTACK
-                        )
-                    }
-                    true
+                    menuBottomNavAction(HistoryFragment(), HistoryFragment().TAG_FOR_BACKSTACK)
                 }
                 R.id.action_favorite -> {
-                    binding.navigationContainer.showSnackWithoutAction("Избранное")
-                    true
+                    menuBottomNavAction(FavoriteFragment(), FavoriteFragment().TAG_FOR_BACKSTACK)
                 }
                 else -> false
             }
         }
     }
 
-    private fun menuNavDrawerAction(fragment: Fragment, tag: String) {
-        parentFragmentManager
-            .beginTransaction()
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .add(R.id.main_fragment_container, fragment, tag)
-            .addToBackStack("")
-            .commit()
-
+    private fun menuNavDrawerAction(fragment: Fragment, tag: String): Boolean {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
+        if (parentFragmentManager.findFragmentByTag(tag) == null) {
+            parentFragmentManager
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .add(R.id.main_fragment_container, fragment, tag)
+                .addToBackStack("")
+                .commit()
+        }
+        return true
     }
 
-    private fun menuBottomNavAction(fragment: Fragment, tag: String) {
-        parentFragmentManager
-            .beginTransaction()
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .replace(R.id.navigation_container, fragment, tag)
-            .commit()
+    private fun menuBottomNavAction(fragment: Fragment, tag: String): Boolean {
+        if (parentFragmentManager.findFragmentByTag(tag) == null) {
+            parentFragmentManager
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .replace(R.id.navigation_container, fragment, tag)
+                .commit()
+        }
+        return true
     }
 
     override fun onDestroy() {

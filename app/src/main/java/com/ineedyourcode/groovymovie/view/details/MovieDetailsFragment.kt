@@ -13,8 +13,10 @@ import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
 import com.ineedyourcode.groovymovie.utils.getImageHeight
 import com.ineedyourcode.groovymovie.utils.getImageWidth
 import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.utils.favoriteMap
 import com.ineedyourcode.groovymovie.view.note.NoteFragment
+import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
 import com.squareup.picasso.Picasso
 
 private const val MAIN_IMAGE_PATH = "https://image.tmdb.org/t/p/"
@@ -25,6 +27,8 @@ class MovieDetailsFragment : Fragment() {
 
     private var _binding: FragmentMovieDetailsBinding? = null
     private val binding get() = _binding!!
+    private val favoriteViewModel = FavoriteViewModel()
+    private val favoriteList = mutableSetOf<Int>()
     private lateinit var selectedMovie: Movie
 
     companion object {
@@ -72,7 +76,29 @@ class MovieDetailsFragment : Fragment() {
                 .load("${MAIN_IMAGE_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
                 .into(drawMovieDetailsPoster)
 
-            checkboxFavorite.isChecked = favoriteMap[selectedMovie.id] == true
+
+            favoriteViewModel.getAllFavorite().forEach { favoriteEntity ->
+                favoriteList.add(favoriteEntity.movieId)
+            }
+
+            checkboxFavorite.isChecked = favoriteList.contains(selectedMovie.id)
+            checkboxFavorite.setOnClickListener {
+                if(checkboxFavorite.isChecked) {
+                    favoriteViewModel.saveFavorite(FavoriteEntity(
+                        movieId = selectedMovie.id,
+                        movieTitle = selectedMovie.title,
+                        rating = selectedMovie.rating,
+                        posterPath = selectedMovie.posterPath
+                    ))
+                } else {
+                    favoriteViewModel.deleteFavorite(FavoriteEntity(
+                        movieId = selectedMovie.id,
+                        movieTitle = selectedMovie.title,
+                        rating = selectedMovie.rating,
+                        posterPath = selectedMovie.posterPath
+                    ))
+                }
+            }
         }
 
         binding.iconMovieDetailsNote.setOnClickListener {
