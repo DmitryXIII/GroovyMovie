@@ -1,6 +1,5 @@
 package com.ineedyourcode.groovymovie.view
 
-import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -33,11 +32,13 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // на старте отображается основной фрагмент со списками фильмов
         parentFragmentManager
             .beginTransaction()
             .replace(R.id.navigation_container, TabFragment())
             .commit()
 
+        // лисенер бокового меню
         binding.menuNavDrawer.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.action_settings -> {
@@ -72,34 +73,36 @@ class MainFragment : Fragment() {
         binding.drawerLayout.addDrawerListener(ActionBarDrawerToggle(
             activity,
             binding.drawerLayout,
-            binding.bottomBar,
+            binding.toolbar,
             R.string.appbar_scrolling_view_behavior,
             R.string.appbar_scrolling_view_behavior
         ).also { it.syncState() })
 
-        // цвет navigation icon
-        binding.bottomBar.apply {
-            navigationIcon!!.setColorFilter(
-                resources.getColor(R.color.neutral_white, context?.theme),
-                PorterDuff.Mode.SRC_ATOP
-            )
-            setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.action_history -> {
-                        if (parentFragmentManager.findFragmentByTag(HistoryFragment().TAG_FOR_BACKSTACK) == null) {
-                            menuBottomBarAction(
-                                HistoryFragment(),
-                                HistoryFragment().TAG_FOR_BACKSTACK
-                            )
-                        }
-                        true
+        binding.bottomNavView.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_movies_list -> {
+                    if (parentFragmentManager.findFragmentByTag(TabFragment().TAG_FOR_BACKSTACK) == null) {
+                        menuBottomNavAction(
+                            TabFragment(),
+                            TabFragment().TAG_FOR_BACKSTACK
+                        )
                     }
-                    R.id.action_favorite -> {
-                        binding.navigationContainer.showSnackWithoutAction("Избранное")
-                        true
-                    }
-                    else -> false
+                    true
                 }
+                R.id.action_history -> {
+                    if (parentFragmentManager.findFragmentByTag(HistoryFragment().TAG_FOR_BACKSTACK) == null) {
+                        menuBottomNavAction(
+                            HistoryFragment(),
+                            HistoryFragment().TAG_FOR_BACKSTACK
+                        )
+                    }
+                    true
+                }
+                R.id.action_favorite -> {
+                    binding.navigationContainer.showSnackWithoutAction("Избранное")
+                    true
+                }
+                else -> false
             }
         }
     }
@@ -115,12 +118,11 @@ class MainFragment : Fragment() {
         binding.drawerLayout.closeDrawer(GravityCompat.START)
     }
 
-    private fun menuBottomBarAction(fragment: Fragment, tag: String) {
+    private fun menuBottomNavAction(fragment: Fragment, tag: String) {
         parentFragmentManager
             .beginTransaction()
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .replace(R.id.main_fragment_container, fragment, tag)
-            .addToBackStack("")
+            .replace(R.id.navigation_container, fragment, tag)
             .commit()
     }
 

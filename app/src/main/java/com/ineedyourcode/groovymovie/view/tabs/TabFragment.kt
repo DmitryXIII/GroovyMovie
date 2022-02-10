@@ -9,7 +9,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.ineedyourcode.groovymovie.databinding.FragmentTabBinding
 
 class TabFragment : Fragment() {
-
+    val TAG_FOR_BACKSTACK = "TabFragment"
     private var _binding: FragmentTabBinding? = null
     private val binding get() = _binding!!
 
