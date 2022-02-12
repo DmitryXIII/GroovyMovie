@@ -32,7 +32,7 @@ fun getCurrentDate(): String {
 }
 
 // FAVORITE ENTITY
-fun convertMovieToFavoriteEntity(movie: Movie) = FavoriteEntity (movie.id, movie.title, movie.rating, movie.posterPath)
+fun convertMovieToFavoriteEntity(movie: Movie) = FavoriteEntity (movie.id, movie.title, movie.rating, movie.posterPath, movie.releaseDate)
 
 // NOTE ENTITY
 fun convertMovieToNoteEntity(movie: Movie, noteContent: String): NotesEntity =

@@ -18,8 +18,8 @@ fun View.hideKeyboard(): Boolean {
 //снэкбар без action, принимает в параметрах строковый ресурс
 fun View.showSnackWithoutAction(@StringRes message: Int) {
     Snackbar.make(this, message, Snackbar.LENGTH_SHORT).apply {
-        setBackgroundTint(resources.getColor(R.color.appbar_layout, context.theme))
-        setTextColor(resources.getColor(R.color.white, context.theme))
+        setBackgroundTint(resources.getColor(R.color.secondary_background, context.theme))
+        setTextColor(resources.getColor(R.color.main_background, context.theme))
         show()
     }
 }
@@ -27,8 +27,8 @@ fun View.showSnackWithoutAction(@StringRes message: Int) {
 //снэкбар без action, принимает в параметрах String
 fun View.showSnackWithoutAction(message: String) {
     Snackbar.make(this, message, Snackbar.LENGTH_SHORT).apply {
-        setBackgroundTint(resources.getColor(R.color.appbar_layout, context.theme))
-        setTextColor(resources.getColor(R.color.white, context.theme))
+        setBackgroundTint(resources.getColor(R.color.secondary_background, context.theme))
+        setTextColor(resources.getColor(R.color.main_background, context.theme))
         show()
     }
 }
@@ -36,9 +36,9 @@ fun View.showSnackWithoutAction(message: String) {
 //снэкбар без action, принимает в параметрах action
 fun View.showSnackWithAction(message: String, actionText: String, action: (View) -> Unit) {
     Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE).setAction(actionText, action).apply {
-        setBackgroundTint(resources.getColor(R.color.appbar_layout, context.theme))
-        setTextColor(resources.getColor(R.color.white, context.theme))
-        setActionTextColor(resources.getColor(R.color.secondary_background, context.theme))
+        setBackgroundTint(resources.getColor(R.color.secondary_background, context.theme))
+        setTextColor(resources.getColor(R.color.main_background, context.theme))
+        setActionTextColor(resources.getColor(R.color.action_color, context.theme))
         show()
     }
 }

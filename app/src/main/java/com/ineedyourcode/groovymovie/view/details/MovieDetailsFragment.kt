@@ -14,7 +14,7 @@ import com.ineedyourcode.groovymovie.utils.getImageHeight
 import com.ineedyourcode.groovymovie.utils.getImageWidth
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
-import com.ineedyourcode.groovymovie.utils.favoriteMap
+import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.view.note.NoteFragment
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
 import com.squareup.picasso.Picasso
@@ -83,20 +83,28 @@ class MovieDetailsFragment : Fragment() {
 
             checkboxFavorite.isChecked = favoriteList.contains(selectedMovie.id)
             checkboxFavorite.setOnClickListener {
-                if(checkboxFavorite.isChecked) {
-                    favoriteViewModel.saveFavorite(FavoriteEntity(
-                        movieId = selectedMovie.id,
-                        movieTitle = selectedMovie.title,
-                        rating = selectedMovie.rating,
-                        posterPath = selectedMovie.posterPath
-                    ))
+                if (checkboxFavorite.isChecked) {
+                    favoriteViewModel.saveFavorite(
+                        FavoriteEntity(
+                            movieId = selectedMovie.id,
+                            movieTitle = selectedMovie.title,
+                            rating = selectedMovie.rating,
+                            posterPath = selectedMovie.posterPath,
+                            releaseDate = selectedMovie.releaseDate
+                        )
+                    )
+                    checkboxFavorite.showSnackWithoutAction("${selectedMovie.title} добавлен в ИЗБРАННЫЕ")
                 } else {
-                    favoriteViewModel.deleteFavorite(FavoriteEntity(
-                        movieId = selectedMovie.id,
-                        movieTitle = selectedMovie.title,
-                        rating = selectedMovie.rating,
-                        posterPath = selectedMovie.posterPath
-                    ))
+                    favoriteViewModel.deleteFavorite(
+                        FavoriteEntity(
+                            movieId = selectedMovie.id,
+                            movieTitle = selectedMovie.title,
+                            rating = selectedMovie.rating,
+                            posterPath = selectedMovie.posterPath,
+                            releaseDate = selectedMovie.releaseDate
+                        )
+                    )
+                    checkboxFavorite.showSnackWithoutAction("${selectedMovie.title} удален из ИЗБРАННЫХ")
                 }
             }
         }

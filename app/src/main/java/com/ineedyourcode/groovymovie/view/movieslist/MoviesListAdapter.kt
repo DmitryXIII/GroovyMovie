@@ -11,7 +11,6 @@ import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
-import com.ineedyourcode.groovymovie.utils.favoriteMap
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
 import com.squareup.picasso.Picasso
 
@@ -50,7 +49,7 @@ class MoviesListAdapter :
 
     override fun onBindViewHolder(holder: MoviesListViewHolder, position: Int) {
         with(holder) {
-            movieTitle.text = moviesList[position].title
+            movieTitle.text = "\"${moviesList[position].title}\" (${moviesList[position].releaseDate?.substring(0, 4)})"
             movieRating.text = moviesList[position].rating
 
             // если фильм есть в списке избранных - установить флажок "избранное"
@@ -64,21 +63,21 @@ class MoviesListAdapter :
                             movieId = moviesList[position].id,
                             movieTitle = moviesList[position].title,
                             rating = moviesList[position].rating,
-                            posterPath = moviesList[position].posterPath
+                            posterPath = moviesList[position].posterPath,
+                            releaseDate = moviesList[position].releaseDate
                         )
                     )
-                    favoriteMap[moviesList[position].id] = true
                 } else {
                     favoriteViewModel.deleteFavorite(
                         FavoriteEntity(
                             movieId = moviesList[position].id,
                             movieTitle = moviesList[position].title,
                             rating = moviesList[position].rating,
-                            posterPath = moviesList[position].posterPath
+                            posterPath = moviesList[position].posterPath,
+                            releaseDate = moviesList[position].releaseDate
                         )
                     )
                     isFavorite.showSnackWithoutAction("${movieTitle.text} удален из ИЗБРАННЫХ")
-                    favoriteMap[moviesList[position].id] = false
                 }
             })
 
