@@ -68,7 +68,7 @@ class MoviesListFragment : Fragment() {
             moviesListType = it.getString(ARG_MOVIE_TYPE)!!
         }
 
-        viewModel.getData(moviesListType).observe(viewLifecycleOwner, Observer<Any> {
+        viewModel.getMoviesList(moviesListType).observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })
 
@@ -83,7 +83,7 @@ class MoviesListFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun renderData(appState: AppState) {
         when (appState) {
-            is AppState.Success -> {
+            is AppState.MoviesListSuccess -> {
                 progressBar.isVisible = false
                 mainRecyclerView.visibility = View.VISIBLE
 
@@ -137,7 +137,7 @@ class MoviesListFragment : Fragment() {
                     appState.e,
                     getString(R.string.retry)
                 ) {
-                    viewModel.getData(moviesListType)
+                    viewModel.getMoviesList(moviesListType)
                 }
             }
         }

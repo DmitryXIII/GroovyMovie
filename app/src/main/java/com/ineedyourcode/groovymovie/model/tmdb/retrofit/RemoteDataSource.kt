@@ -1,7 +1,8 @@
 package com.ineedyourcode.groovymovie.model.tmdb.retrofit
 
 import com.google.gson.GsonBuilder
-import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,7 +25,11 @@ class RemoteDataSource {
         tmdbAPI.getGenres().enqueue(callback)
     }
 
-    fun getMovieById(callback: Callback<TmdbMovieByIdDTO>) {
-        tmdbAPI.getMovieByID().enqueue(callback)
+    fun getMovieByIdWithCredits(movieId: Int, callback: Callback<TmdbMovieByIdDTO>) {
+        tmdbAPI.getMovieByIdWithCredits(movieId).enqueue(callback)
+    }
+
+    fun getActorById(actorId: Int, callback: Callback<TmdbActorDto>) {
+        tmdbAPI.getActorById(actorId).enqueue(callback)
     }
 }

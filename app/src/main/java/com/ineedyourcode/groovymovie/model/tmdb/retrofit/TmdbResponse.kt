@@ -1,8 +1,8 @@
 package com.ineedyourcode.groovymovie.model.tmdb.retrofit
 
 import com.google.gson.annotations.SerializedName
-import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieFromListDTO
-import com.ineedyourcode.groovymovie.model.tmdb.TmdbGenreDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieFromListDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbGenreDTO
 
 sealed class TmdbResponse {
 

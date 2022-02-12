@@ -7,12 +7,9 @@ import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
-import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieByIdDTO
-import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieFromListDTO
-import com.ineedyourcode.groovymovie.model.tmdb.retrofit.IRetrofitRepository
-import com.ineedyourcode.groovymovie.model.tmdb.retrofit.RemoteDataSource
-import com.ineedyourcode.groovymovie.model.tmdb.retrofit.RetrofitRepository
-import com.ineedyourcode.groovymovie.model.tmdb.retrofit.TmdbResponse
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieFromListDTO
+import com.ineedyourcode.groovymovie.model.tmdb.retrofit.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,7 +59,7 @@ class RetrofitViewModel(
 
     // возвращает liveData для подписки на нее
     // инициирует запросы на сервер
-    fun getData(moviesListType: String): MutableLiveData<AppState> {
+    fun getMoviesList(moviesListType: String): MutableLiveData<AppState> {
         getMoviesListFromRemoteSource(moviesListType)
         return liveData
     }
@@ -74,6 +71,22 @@ class RetrofitViewModel(
             getMoviesList(moviesListType, callbackMoviesList)
         }
     }
+
+    // возвращает liveData для подписки на нее
+    // инициирует запросы на сервер
+    fun getMovieById(movieId: Int): MutableLiveData<AppState> {
+        getMovieByIdFromRemoteSource(movieId)
+        return liveData
+    }
+
+    // запросы на сервер
+    private fun getMovieByIdFromRemoteSource(movieId: Int) {
+        liveData.value = AppState.Loading
+        retrofitRepository.apply {
+            getMovieByIdWithCredits(movieId, callbackMovieById)
+        }
+    }
+
 
     // обработка ответа с сервера на запрос списка фильмов
     private val callbackMoviesList = object : Callback<TmdbResponse.ResponseMoviesList> {
@@ -107,8 +120,10 @@ class RetrofitViewModel(
             if (responseMovie.isSuccessful) {
                 val responseBody = responseMovie.body()
                 if (responseBody != null) {
+                    liveData.postValue(checkResponseMovieById(responseBody))
                     Log.d(TAG, "Movie: $responseBody")
                 } else {
+                    liveData.postValue(AppState.Error(RESPONSE_MOVIE_BY_ID_ERROR))
                     Log.d(TAG, RESPONSE_MOVIE_BY_ID_ERROR)
                 }
             }
@@ -124,7 +139,15 @@ class RetrofitViewModel(
         return if (serverResponse.isNullOrEmpty()) {
             AppState.Error(CORRUPTED_DATA)
         } else {
-            AppState.Success(moviesMap)
+            AppState.MoviesListSuccess(moviesMap)
+        }
+    }
+
+    private fun checkResponseMovieById(serverResponse: TmdbMovieByIdDTO): AppState {
+        return if (serverResponse == null) {
+            AppState.Error(CORRUPTED_DATA)
+        } else {
+            AppState.MovieByIdSuccess(serverResponse)
         }
     }
 
@@ -141,6 +164,7 @@ class RetrofitViewModel(
                 movieDTO.backdropPath,
                 movieDTO.adult
             )
+
             // Список жанров формируется в виде genresSet и берется из приодящего списка фильмов.
             // Таким образом в адаптер для фильтрации по жанрам передаются только те жанры, которые
             // имеются в полученном списке фильмов.

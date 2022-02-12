@@ -1,24 +1,28 @@
 package com.ineedyourcode.groovymovie.view.details
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatViewInflater
-import androidx.appcompat.widget.AppCompatTextView
+import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
-import com.ineedyourcode.groovymovie.utils.getImageHeight
-import com.ineedyourcode.groovymovie.utils.getImageWidth
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
-import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbCastDto
+import com.ineedyourcode.groovymovie.utils.*
 import com.ineedyourcode.groovymovie.view.note.NoteFragment
+import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
+import com.ineedyourcode.groovymovie.viewmodel.RetrofitViewModel
 import com.squareup.picasso.Picasso
 
 private const val MAIN_IMAGE_PATH = "https://image.tmdb.org/t/p/"
@@ -32,6 +36,11 @@ class MovieDetailsFragment : Fragment() {
     private val favoriteViewModel = FavoriteViewModel()
     private val favoriteList = mutableSetOf<Int>()
     private lateinit var selectedMovie: Movie
+    private lateinit var selectedMovieCast: List<TmdbCastDto>
+
+    private val viewModel: RetrofitViewModel by lazy {
+        ViewModelProvider(this)[RetrofitViewModel::class.java]
+    }
 
     companion object {
         private const val ARG_MOVIE = "ARG_MOVIE"
@@ -52,9 +61,14 @@ class MovieDetailsFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner, Observer<Any> {
+            renderData(it as AppState)
+        })
 
         with(binding) {
             txtMovieDetailsTitle.text = "\"${selectedMovie.title}\""
@@ -124,17 +138,30 @@ class MovieDetailsFragment : Fragment() {
                 .addToBackStack("")
                 .commit()
         }
-addActors()
+
+        addActors()
     }
 
-    private fun addActors(){
-        for(i in 0..3){
-            val item = LayoutInflater.from(requireContext()).inflate(R.layout.item_actor, binding.containerForActors, false)
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.MovieByIdSuccess -> {
+                selectedMovieCast = appState.movieDto.credit.cast
+                Log.d("selectedMovieCast", "CAST: ${selectedMovieCast.toString()}")
+            }
+
+            is AppState.Error -> {}
+        }
+    }
+
+    private fun addActors() {
+        for (i in 0..3) {
+            val item = LayoutInflater.from(requireContext())
+                .inflate(R.layout.item_actor, binding.containerForActors, false)
 
             binding.containerForActors.addView(item)
         }
     }
-
 
 
     override fun onDestroy() {

@@ -1,7 +1,8 @@
 package com.ineedyourcode.groovymovie.model.tmdb.retrofit
 
 import com.ineedyourcode.groovymovie.BuildConfig
-import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -26,8 +27,23 @@ interface MovieAPI {
 
     @GET("movie/{id}")
     fun getMovieByID(
-        @Path("id") id: Int = 14,
+        @Path("id") id: Int,
         @Query("api_key") apiKey: String = BuildConfig.TMDB_API_KEY,
         @Query("language") lang: String = "ru-RU",
     ): Call<TmdbMovieByIdDTO>
+
+    @GET("movie/{id}")
+    fun getMovieByIdWithCredits(
+        @Path("id") id: Int,
+        @Query("api_key") apiKey: String = BuildConfig.TMDB_API_KEY,
+        @Query("append_to_response") response: String = "credits",
+        @Query("language") lang: String = "ru-RU"
+    ): Call<TmdbMovieByIdDTO>
+
+    @GET("movie/{id}")
+    fun getActorById(
+        @Path("id") id: Int,
+        @Query("api_key") apiKey: String = BuildConfig.TMDB_API_KEY,
+        @Query("language") lang: String = "ru-RU"
+    ): Call<TmdbActorDto>
 }

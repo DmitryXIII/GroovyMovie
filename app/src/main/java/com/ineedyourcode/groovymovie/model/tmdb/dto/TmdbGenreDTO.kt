@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie.model.tmdb
+package com.ineedyourcode.groovymovie.model.tmdb.dto
 
 import com.google.gson.annotations.SerializedName
 
