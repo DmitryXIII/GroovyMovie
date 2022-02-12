@@ -59,7 +59,7 @@ class MapsFragment : Fragment() {
         targetLocation = if (arguments != null) {
             requireArguments().getString(ARG_TARGET_LOCATION).toString()
         } else {
-            "Москва"
+            "Shawnee, Oklahoma, USA"
         }
         initSearchByAddress(targetLocation)
     }

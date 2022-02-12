@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatViewInflater
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -67,14 +69,14 @@ class MovieDetailsFragment : Fragment() {
                 txtMovieOverview.text = selectedMovie.overview
             }
 
-            selectedMovie.backdropPath?.let{
+            selectedMovie.backdropPath?.let {
                 Picasso.get()
                     .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
                     .resize(getImageWidth(), getImageHeight(1.77777))
                     .into(drawMovieBackdrop)
             }
 
-            selectedMovie.posterPath?.let{
+            selectedMovie.posterPath?.let {
                 Picasso.get()
                     .load("${MAIN_IMAGE_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
                     .into(drawMovieDetailsPoster)
@@ -122,7 +124,18 @@ class MovieDetailsFragment : Fragment() {
                 .addToBackStack("")
                 .commit()
         }
+addActors()
     }
+
+    private fun addActors(){
+        for(i in 0..3){
+            val item = LayoutInflater.from(requireContext()).inflate(R.layout.item_actor, binding.containerForActors, false)
+
+            binding.containerForActors.addView(item)
+        }
+    }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
