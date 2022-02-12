@@ -67,15 +67,18 @@ class MovieDetailsFragment : Fragment() {
                 txtMovieOverview.text = selectedMovie.overview
             }
 
-            Picasso.get()
-                .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
-                .resize(getImageWidth(), getImageHeight(1.77777))
-                .into(drawMovieBackdrop)
+            selectedMovie.backdropPath?.let{
+                Picasso.get()
+                    .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
+                    .resize(getImageWidth(), getImageHeight(1.77777))
+                    .into(drawMovieBackdrop)
+            }
 
-            Picasso.get()
-                .load("${MAIN_IMAGE_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
-                .into(drawMovieDetailsPoster)
-
+            selectedMovie.posterPath?.let{
+                Picasso.get()
+                    .load("${MAIN_IMAGE_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
+                    .into(drawMovieDetailsPoster)
+            }
 
             favoriteViewModel.getAllFavorite().forEach { favoriteEntity ->
                 favoriteList.add(favoriteEntity.movieId)

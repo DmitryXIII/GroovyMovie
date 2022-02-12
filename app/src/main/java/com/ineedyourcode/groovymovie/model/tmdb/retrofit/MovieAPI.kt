@@ -14,7 +14,8 @@ interface MovieAPI {
         @Path("listType") moviesListType: String,
         @Query("api_key") apiKey: String = BuildConfig.TMDB_API_KEY,
         @Query("language") lang: String = "ru-RU",
-        @Query("page") page: Int = 1
+        @Query("page") page: Int = 1,
+        @Query("region") region: String = "RU"
     ): Call<TmdbResponse.ResponseMoviesList>
 
     @GET("genre/movie/list")

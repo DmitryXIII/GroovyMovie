@@ -19,6 +19,7 @@
             app:tabBackground="@color/tab_background"
             app:tabIndicatorColor="@color/neutral_white"
             app:tabMode="scrollable"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
             app:tabSelectedTextColor="@color/neutral_white"
             app:tabTextColor="@color/secondary_background" />
 

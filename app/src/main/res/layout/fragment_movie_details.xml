@@ -21,8 +21,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_height="250dp"
-            tools:src="@drawable/tmdb_logo" />
+            android:src="@drawable/baseline_local_movies_black_24dp" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/icon_group"

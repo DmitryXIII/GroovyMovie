@@ -26,6 +26,7 @@
                 android:layout_width="162dp"
                 android:layout_height="@dimen/cardview_poster_height"
                 android:scaleType="centerCrop"
+                android:src="@drawable/baseline_local_movies_black_24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -29,10 +29,10 @@ class TabFragment : Fragment() {
         TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position ->
             tab.text =
                 when (position) {
-                    0 -> "Upcoming"
-                    1 -> "Now playing"
-                    2 -> "Popular"
-                    3 -> "Top rated"
+                    0 -> "Сейчас в кино"
+                    1 -> "Скоро в кино"
+                    2 -> "Популярные"
+                    3 -> "Топ рейтинга"
                     else -> ""
                 }
         }.attach()

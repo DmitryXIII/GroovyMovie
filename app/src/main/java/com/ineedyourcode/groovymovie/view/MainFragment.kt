@@ -13,6 +13,7 @@ import com.ineedyourcode.groovymovie.databinding.FragmentMainBinding
 import com.ineedyourcode.groovymovie.view.contacts.ContactsFragment
 import com.ineedyourcode.groovymovie.view.favorite.FavoriteFragment
 import com.ineedyourcode.groovymovie.view.history.HistoryFragment
+import com.ineedyourcode.groovymovie.view.maps.MapsFragment
 import com.ineedyourcode.groovymovie.view.settings.SettingsFragment
 import com.ineedyourcode.groovymovie.view.tabs.TabFragment
 
@@ -70,6 +71,9 @@ class MainFragment : Fragment() {
                 }
                 R.id.action_favorite -> {
                     menuBottomNavAction(FavoriteFragment(), FavoriteFragment().TAG_FOR_BACKSTACK)
+                }
+                R.id.action_maps -> {
+                    menuBottomNavAction(MapsFragment(), MapsFragment().TAG_FOR_BACKSTACK)
                 }
                 else -> false
             }

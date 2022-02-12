@@ -18,8 +18,8 @@ class PagerAdapter(fm: FragmentManager, lc: Lifecycle) : FragmentStateAdapter(fm
     @RequiresApi(Build.VERSION_CODES.N)
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> MoviesListFragment.newInstance(MOVIES_LIST_UPCOMING)
-            1 -> MoviesListFragment.newInstance(MOVIES_LIST_NOW_PLAYING)
+            0 -> MoviesListFragment.newInstance(MOVIES_LIST_NOW_PLAYING)
+            1 -> MoviesListFragment.newInstance(MOVIES_LIST_UPCOMING)
             2 -> MoviesListFragment.newInstance(MOVIES_LIST_POPULAR)
             3 -> MoviesListFragment.newInstance(MOVIES_LIST_TOP_RATED)
             else -> Fragment()
