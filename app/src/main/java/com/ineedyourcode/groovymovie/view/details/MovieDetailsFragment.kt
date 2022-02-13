@@ -3,7 +3,6 @@ package com.ineedyourcode.groovymovie.view.details
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +20,7 @@ import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
 import com.ineedyourcode.groovymovie.utils.*
+import com.ineedyourcode.groovymovie.view.maps.MapsFragment
 import com.ineedyourcode.groovymovie.view.note.NoteFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
@@ -83,7 +83,7 @@ class MovieDetailsFragment : Fragment() {
                 txtMovieOverview.text =
                     getString(R.string.service_movie_overview_request_error_extra)
             } else {
-                txtMovieOverview.text = selectedMovie.overview
+                txtMovieOverview.text = "\"${selectedMovie.overview}\""
             }
 
             selectedMovie.backdropPath?.let {
@@ -163,18 +163,42 @@ class MovieDetailsFragment : Fragment() {
                 itemActor.findViewById<TextView>(R.id.actor_name).text = it
             }
 
-            actor.birthday?.let {
-                itemActor.findViewById<TextView>(R.id.actor_birthdate).text = it
+            if (actor.birthday == null) {
+                itemActor.findViewById<TextView>(R.id.actor_birthdate).text =
+                    "Дата рождения: нет информации"
+            } else {
+                itemActor.findViewById<TextView>(R.id.actor_birthdate).text =
+                    "Дата рождения: ${actor.birthday}"
             }
 
-            actor.birthPlace?.let {
-                itemActor.findViewById<TextView>(R.id.actor_birthplace).text = it
+            if (actor.birthPlace == null) {
+                itemActor.findViewById<TextView>(R.id.actor_birthplace).text =
+                    "Место рождения: нет информации"
+            } else {
+                itemActor.findViewById<TextView>(R.id.actor_birthplace).text =
+                    "Место рождения: ${actor.birthPlace}"
             }
 
-            actor.profilePath?.let {
+            if (actor.profilePath == null) {
+                itemActor.findViewById<ImageView>(R.id.actor_photo).apply {
+                    setBackgroundResource(R.drawable.poster_border)
+                    setImageResource(R.drawable.ic_no_photo)
+                }
+            } else {
                 Picasso.get()
                     .load("${MAIN_IMAGE_PATH}${PHOTO_SIZE}${actor.profilePath}")
                     .into(itemActor.findViewById<ImageView>(R.id.actor_photo))
+            }
+
+            itemActor.setOnClickListener {
+                parentFragmentManager
+                    .beginTransaction()
+                    .add(
+                        R.id.main_fragment_container,
+                        MapsFragment.newInstance(actor.birthPlace.toString())
+                    )
+                    .addToBackStack("")
+                    .commit()
             }
 
             binding.containerForActors.addView(itemActor)

@@ -72,9 +72,6 @@ class MainFragment : Fragment() {
                 R.id.action_favorite -> {
                     menuBottomNavAction(FavoriteFragment(), FavoriteFragment().TAG_FOR_BACKSTACK)
                 }
-                R.id.action_maps -> {
-                    menuBottomNavAction(MapsFragment(), MapsFragment().TAG_FOR_BACKSTACK)
-                }
                 else -> false
             }
         }
