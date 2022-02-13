@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -17,7 +19,7 @@ import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbCastDto
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
 import com.ineedyourcode.groovymovie.utils.*
 import com.ineedyourcode.groovymovie.view.note.NoteFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
@@ -28,6 +30,7 @@ import com.squareup.picasso.Picasso
 private const val MAIN_IMAGE_PATH = "https://image.tmdb.org/t/p/"
 private const val POSTER_SIZE = "w342/"
 private const val BACKDROP_SIZE = "w1280/"
+private const val PHOTO_SIZE = "w185/"
 
 class MovieDetailsFragment : Fragment() {
 
@@ -36,7 +39,7 @@ class MovieDetailsFragment : Fragment() {
     private val favoriteViewModel = FavoriteViewModel()
     private val favoriteList = mutableSetOf<Int>()
     private lateinit var selectedMovie: Movie
-    private lateinit var selectedMovieCast: List<TmdbCastDto>
+    private lateinit var selectedMovieActors: List<TmdbActorDto>
 
     private val viewModel: RetrofitViewModel by lazy {
         ViewModelProvider(this)[RetrofitViewModel::class.java]
@@ -138,31 +141,45 @@ class MovieDetailsFragment : Fragment() {
                 .addToBackStack("")
                 .commit()
         }
-
-        addActors()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun renderData(appState: AppState) {
         when (appState) {
-            is AppState.MovieByIdSuccess -> {
-                selectedMovieCast = appState.movieDto.credit.cast
-                Log.d("selectedMovieCast", "CAST: ${selectedMovieCast.toString()}")
+            is AppState.ActorsListSuccess -> {
+                addActor(appState.actorsList)
             }
 
             is AppState.Error -> {}
         }
     }
 
-    private fun addActors() {
-        for (i in 0..3) {
-            val item = LayoutInflater.from(requireContext())
+    private fun addActor(actorsList: List<TmdbActorDto>) {
+        actorsList.forEach { actor ->
+            val itemActor = LayoutInflater.from(requireContext())
                 .inflate(R.layout.item_actor, binding.containerForActors, false)
 
-            binding.containerForActors.addView(item)
+            actor.name?.let {
+                itemActor.findViewById<TextView>(R.id.actor_name).text = it
+            }
+
+            actor.birthday?.let {
+                itemActor.findViewById<TextView>(R.id.actor_birthdate).text = it
+            }
+
+            actor.birthPlace?.let {
+                itemActor.findViewById<TextView>(R.id.actor_birthplace).text = it
+            }
+
+            actor.profilePath?.let {
+                Picasso.get()
+                    .load("${MAIN_IMAGE_PATH}${PHOTO_SIZE}${actor.profilePath}")
+                    .into(itemActor.findViewById<ImageView>(R.id.actor_photo))
+            }
+
+            binding.containerForActors.addView(itemActor)
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

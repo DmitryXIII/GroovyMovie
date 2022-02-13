@@ -40,7 +40,7 @@ interface MovieAPI {
         @Query("language") lang: String = "ru-RU"
     ): Call<TmdbMovieByIdDTO>
 
-    @GET("movie/{id}")
+    @GET("person/{id}")
     fun getActorById(
         @Path("id") id: Int,
         @Query("api_key") apiKey: String = BuildConfig.TMDB_API_KEY,
