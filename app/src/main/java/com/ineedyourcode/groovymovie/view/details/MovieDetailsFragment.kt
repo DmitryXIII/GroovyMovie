@@ -1,8 +1,6 @@
 package com.ineedyourcode.groovymovie.view.details
 
 import android.annotation.SuppressLint
-import android.icu.number.NumberFormatter.with
-import android.icu.number.NumberRangeFormatter.with
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,6 +31,7 @@ private const val MAIN_IMAGE_PATH = "https://image.tmdb.org/t/p/"
 private const val POSTER_SIZE = "w342/"
 private const val BACKDROP_SIZE = "w1280/"
 private const val PHOTO_SIZE = "w185/"
+private const val NO_PHOTO_PATH = "https://i.ibb.co/CPDK2sK/ic-no-photo.png"
 
 class MovieDetailsFragment : Fragment() {
 
@@ -107,26 +106,10 @@ class MovieDetailsFragment : Fragment() {
             checkboxFavorite.isChecked = favoriteList.contains(selectedMovie.id)
             checkboxFavorite.setOnClickListener {
                 if (checkboxFavorite.isChecked) {
-                    favoriteViewModel.saveFavorite(
-                        FavoriteEntity(
-                            movieId = selectedMovie.id,
-                            movieTitle = selectedMovie.title,
-                            rating = selectedMovie.rating,
-                            posterPath = selectedMovie.posterPath,
-                            releaseDate = selectedMovie.releaseDate
-                        )
-                    )
+                    favoriteViewModel.saveFavorite(convertMovieToFavoriteEntity(selectedMovie))
                     checkboxFavorite.showSnackWithoutAction("${selectedMovie.title} добавлен в ИЗБРАННЫЕ")
                 } else {
-                    favoriteViewModel.deleteFavorite(
-                        FavoriteEntity(
-                            movieId = selectedMovie.id,
-                            movieTitle = selectedMovie.title,
-                            rating = selectedMovie.rating,
-                            posterPath = selectedMovie.posterPath,
-                            releaseDate = selectedMovie.releaseDate
-                        )
-                    )
+                    favoriteViewModel.deleteFavorite(convertMovieToFavoriteEntity(selectedMovie))
                     checkboxFavorite.showSnackWithoutAction("${selectedMovie.title} удален из ИЗБРАННЫХ")
                 }
             }
@@ -182,12 +165,13 @@ class MovieDetailsFragment : Fragment() {
 
         if (actorDto.profilePath == null) {
             Picasso.get()
-                .load("https://i.ibb.co/CPDK2sK/ic-no-photo.png")
+                .load(NO_PHOTO_PATH)
+                .resize(250, 250 / 185 / 278)
                 .into(itemActor.findViewById<ImageView>(R.id.actor_photo))
         } else {
             Picasso.get()
                 .load("${MAIN_IMAGE_PATH}${PHOTO_SIZE}${actorDto.profilePath}")
-                .error(R.drawable.ic_no_photo_2)
+                .resize(250, 250 / 185 / 278)
                 .into(itemActor.findViewById<ImageView>(R.id.actor_photo))
         }
 

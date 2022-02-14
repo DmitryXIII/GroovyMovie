@@ -1,5 +1,6 @@
 package com.ineedyourcode.groovymovie.view.movieslist
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
+import com.ineedyourcode.groovymovie.utils.convertMovieToFavoriteEntity
 import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
 import com.squareup.picasso.Picasso
@@ -47,9 +48,12 @@ class MoviesListAdapter :
         return MoviesListViewHolder(itemView, mListener, moviesList)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MoviesListViewHolder, position: Int) {
         with(holder) {
-            movieTitle.text = "\"${moviesList[position].title}\" (${moviesList[position].releaseDate?.substring(0, 4)})"
+            movieTitle.text = "\"${moviesList[position].title}\" (${
+                moviesList[position].releaseDate?.substring(0, 4)
+            })"
             movieRating.text = moviesList[position].rating
 
             // если фильм есть в списке избранных - установить флажок "избранное"
@@ -58,25 +62,9 @@ class MoviesListAdapter :
             isFavorite.setOnClickListener(View.OnClickListener {
                 if (isFavorite.isChecked) {
                     isFavorite.showSnackWithoutAction("${movieTitle.text} добавлен в ИЗБРАННЫЕ")
-                    favoriteViewModel.saveFavorite(
-                        FavoriteEntity(
-                            movieId = moviesList[position].id,
-                            movieTitle = moviesList[position].title,
-                            rating = moviesList[position].rating,
-                            posterPath = moviesList[position].posterPath,
-                            releaseDate = moviesList[position].releaseDate
-                        )
-                    )
+                    favoriteViewModel.saveFavorite(convertMovieToFavoriteEntity(moviesList[position]))
                 } else {
-                    favoriteViewModel.deleteFavorite(
-                        FavoriteEntity(
-                            movieId = moviesList[position].id,
-                            movieTitle = moviesList[position].title,
-                            rating = moviesList[position].rating,
-                            posterPath = moviesList[position].posterPath,
-                            releaseDate = moviesList[position].releaseDate
-                        )
-                    )
+                    favoriteViewModel.deleteFavorite(convertMovieToFavoriteEntity(moviesList[position]))
                     isFavorite.showSnackWithoutAction("${movieTitle.text} удален из ИЗБРАННЫХ")
                 }
             })

@@ -14,10 +14,10 @@
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
         android:background="@drawable/poster_border"
-        android:src="@drawable/ic_no_photo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_no_photo"/>
 
     <TextView
         android:id="@+id/actor_name"
