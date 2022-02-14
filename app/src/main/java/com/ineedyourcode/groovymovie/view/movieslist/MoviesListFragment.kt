@@ -21,6 +21,7 @@ import com.ineedyourcode.groovymovie.databinding.FragmentMoviesListBinding
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.utils.PREFERENCES_ADULT
 import com.ineedyourcode.groovymovie.utils.showSnackWithAction
+import com.ineedyourcode.groovymovie.view.GridDecorator
 import com.ineedyourcode.groovymovie.view.details.MovieDetailsFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.RetrofitViewModel
@@ -121,6 +122,7 @@ class MoviesListFragment : Fragment() {
                 mainRecyclerView.apply {
                     layoutManager = GridLayoutManager(requireContext(), 2)
                     adapter = mainAdapter
+                    addItemDecoration(GridDecorator(2, 0, true))
                 }
             }
 

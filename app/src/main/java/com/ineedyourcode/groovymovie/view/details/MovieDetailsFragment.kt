@@ -1,6 +1,8 @@
 package com.ineedyourcode.groovymovie.view.details
 
 import android.annotation.SuppressLint
+import android.icu.number.NumberFormatter.with
+import android.icu.number.NumberRangeFormatter.with
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -179,13 +181,13 @@ class MovieDetailsFragment : Fragment() {
         }
 
         if (actorDto.profilePath == null) {
-            itemActor.findViewById<ImageView>(R.id.actor_photo).apply {
-                setBackgroundResource(R.drawable.poster_border)
-                setImageResource(R.drawable.ic_no_photo)
-            }
+            Picasso.get()
+                .load("https://i.ibb.co/CPDK2sK/ic-no-photo.png")
+                .into(itemActor.findViewById<ImageView>(R.id.actor_photo))
         } else {
             Picasso.get()
                 .load("${MAIN_IMAGE_PATH}${PHOTO_SIZE}${actorDto.profilePath}")
+                .error(R.drawable.ic_no_photo_2)
                 .into(itemActor.findViewById<ImageView>(R.id.actor_photo))
         }
 
