@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.ThreeBounce
+import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentFavoriteBinding
+import com.ineedyourcode.groovymovie.utils.GridDecorator
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
 
 class FavoriteFragment : Fragment() {
@@ -57,6 +59,7 @@ class FavoriteFragment : Fragment() {
         favoriteRecyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = favoriteAdapter
+            addItemDecoration(GridDecorator(2, resources.getDimensionPixelSize(R.dimen.movie_item_width).toFloat()))
         }
 
         binding.fabClearFavorite.setOnClickListener {
