@@ -40,4 +40,5 @@
     <string name="title_movies_list">Фильмы</string>
     <string name="title_maps">Карты</string>
     <string name="actors_header">Актерcкий состав:</string>
+    <string name="actor_birthdate">Дата рождения: %1$s</string>
 </resources>

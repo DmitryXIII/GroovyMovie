@@ -39,7 +39,6 @@ class MovieDetailsFragment : Fragment() {
     private val favoriteViewModel = FavoriteViewModel()
     private val favoriteList = mutableSetOf<Int>()
     private lateinit var selectedMovie: Movie
-    private lateinit var selectedMovieActors: List<TmdbActorDto>
 
     private val viewModel: RetrofitViewModel by lazy {
         ViewModelProvider(this)[RetrofitViewModel::class.java]
@@ -146,63 +145,62 @@ class MovieDetailsFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     private fun renderData(appState: AppState) {
         when (appState) {
-            is AppState.ActorsListSuccess -> {
-                addActor(appState.actorsList)
+            is AppState.ActorsByIdSuccess -> {
+                addActor(appState.actorDto)
             }
 
             is AppState.Error -> {}
         }
     }
 
-    private fun addActor(actorsList: List<TmdbActorDto>) {
-        actorsList.forEach { actor ->
-            val itemActor = LayoutInflater.from(requireContext())
-                .inflate(R.layout.item_actor, binding.containerForActors, false)
+    private fun addActor(actorDto: TmdbActorDto) {
 
-            actor.name?.let {
-                itemActor.findViewById<TextView>(R.id.actor_name).text = it
-            }
+        val itemActor = LayoutInflater.from(requireContext())
+            .inflate(R.layout.item_actor, binding.containerForActors, false)
 
-            if (actor.birthday == null) {
-                itemActor.findViewById<TextView>(R.id.actor_birthdate).text =
-                    "Дата рождения: нет информации"
-            } else {
-                itemActor.findViewById<TextView>(R.id.actor_birthdate).text =
-                    "Дата рождения: ${actor.birthday}"
-            }
-
-            if (actor.birthPlace == null) {
-                itemActor.findViewById<TextView>(R.id.actor_birthplace).text =
-                    "Место рождения: нет информации"
-            } else {
-                itemActor.findViewById<TextView>(R.id.actor_birthplace).text =
-                    "Место рождения: ${actor.birthPlace}"
-            }
-
-            if (actor.profilePath == null) {
-                itemActor.findViewById<ImageView>(R.id.actor_photo).apply {
-                    setBackgroundResource(R.drawable.poster_border)
-                    setImageResource(R.drawable.ic_no_photo)
-                }
-            } else {
-                Picasso.get()
-                    .load("${MAIN_IMAGE_PATH}${PHOTO_SIZE}${actor.profilePath}")
-                    .into(itemActor.findViewById<ImageView>(R.id.actor_photo))
-            }
-
-            itemActor.setOnClickListener {
-                parentFragmentManager
-                    .beginTransaction()
-                    .add(
-                        R.id.main_fragment_container,
-                        MapsFragment.newInstance(actor.birthPlace.toString())
-                    )
-                    .addToBackStack("")
-                    .commit()
-            }
-
-            binding.containerForActors.addView(itemActor)
+        actorDto.name?.let {
+            itemActor.findViewById<TextView>(R.id.actor_name).text = it
         }
+
+        if (actorDto.birthday == null) {
+            itemActor.findViewById<TextView>(R.id.actor_birthdate).text =
+                "Дата рождения: нет информации"
+        } else {
+            itemActor.findViewById<TextView>(R.id.actor_birthdate).text =
+                "Дата рождения: ${actorDto.birthday}"
+        }
+
+        if (actorDto.birthPlace == null) {
+            itemActor.findViewById<TextView>(R.id.actor_birthplace).text =
+                "Место рождения: нет информации"
+        } else {
+            itemActor.findViewById<TextView>(R.id.actor_birthplace).text =
+                "Место рождения: ${actorDto.birthPlace}"
+        }
+
+        if (actorDto.profilePath == null) {
+            itemActor.findViewById<ImageView>(R.id.actor_photo).apply {
+                setBackgroundResource(R.drawable.poster_border)
+                setImageResource(R.drawable.ic_no_photo)
+            }
+        } else {
+            Picasso.get()
+                .load("${MAIN_IMAGE_PATH}${PHOTO_SIZE}${actorDto.profilePath}")
+                .into(itemActor.findViewById<ImageView>(R.id.actor_photo))
+        }
+
+        itemActor.setOnClickListener {
+            parentFragmentManager
+                .beginTransaction()
+                .add(
+                    R.id.main_fragment_container,
+                    MapsFragment.newInstance(actorDto.birthPlace.toString())
+                )
+                .addToBackStack("")
+                .commit()
+        }
+
+        binding.containerForActors.addView(itemActor)
     }
 
     override fun onDestroy() {

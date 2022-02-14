@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
     android:layout_marginVertical="@dimen/margin_4dp"
+    android:background="?android:attr/selectableItemBackground"
     tools:background="@color/main_background">
 
     <ImageView
@@ -27,9 +26,9 @@
         android:gravity="start"
         android:text="Имя: "
         android:textColor="@color/neutral_white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/actor_photo"
-        app:layout_constraintTop_toTopOf="@id/actor_photo"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="@id/actor_photo" />
 
 
     <TextView
@@ -39,11 +38,11 @@
         android:layout_marginVertical="@dimen/margin_4dp"
         android:layout_marginStart="@dimen/margin_8dp"
         android:gravity="start"
-        android:text="Дата рождения: "
+        android:text="@string/actor_birthdate"
         android:textColor="@color/neutral_white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/actor_photo"
-        app:layout_constraintTop_toBottomOf="@id/actor_name"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/actor_name" />
 
     <TextView
         android:id="@+id/actor_birthplace"
@@ -54,8 +53,8 @@
         android:gravity="start"
         android:text="Место рождения: "
         android:textColor="@color/neutral_white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/actor_photo"
-        app:layout_constraintTop_toBottomOf="@id/actor_birthdate"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/actor_birthdate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
