@@ -2,15 +2,12 @@ package com.ineedyourcode.groovymovie
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.ineedyourcode.groovymovie.view.MainActivity
 
 class PushNotificationService : FirebaseMessagingService() {
 
@@ -39,17 +36,11 @@ class PushNotificationService : FirebaseMessagingService() {
     }
 
     private fun showNotification(title: String, message: String) {
-
-        val intent = Intent(this, MainActivity::class.java)
-        intent.putExtra("INTENT_KEY", 1)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
         val notificationBuilder =
             NotificationCompat.Builder(applicationContext, CHANNEL_ID).apply {
                 setSmallIcon(R.drawable.groovy_logo)
                 setContentTitle(title)
                 setContentText(message)
-                setContentIntent(pendingIntent)
                 setAutoCancel(true)
                 priority = NotificationCompat.PRIORITY_DEFAULT
             }
