@@ -2,20 +2,20 @@ package com.ineedyourcode.groovymovie.utils
 
 import android.annotation.SuppressLint
 import androidx.annotation.DimenRes
-import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.db.entities.HistoryEntity
 import com.ineedyourcode.groovymovie.model.db.entities.NotesEntity
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import java.text.SimpleDateFormat
 import java.util.*
 
 // HISTORY ENTITY
-fun convertMovieToHistoryEntity(movie: Movie): HistoryEntity =
+fun convertMovieToHistoryEntity(movie: TmdbMovieByIdDTO): HistoryEntity =
     HistoryEntity(
         0,
         movie.id,
-        movie.title.toString(),
-        movie.posterPath.toString(),
+        movie.title,
+        movie.posterPath,
         getCurrentDate(),
         getCurrentTime()
     )
@@ -34,13 +34,13 @@ fun getCurrentDate(): String {
 // ========================================================================
 
 // FAVORITE ENTITY
-fun convertMovieToFavoriteEntity(movie: Movie) =
-    FavoriteEntity(movie.id, movie.title, movie.rating, movie.posterPath, movie.releaseDate)
+fun convertMovieToFavoriteEntity(movie: TmdbMovieByIdDTO) =
+    FavoriteEntity(movie.id, movie.title, movie.voteAverage.toString(), movie.posterPath, movie.releaseDate)
 // ========================================================================
 
 // NOTE ENTITY
-fun convertMovieToNoteEntity(movie: Movie, noteContent: String): NotesEntity =
-    NotesEntity(movie.id, movie.title.toString(), noteContent)
+fun convertMovieToNoteEntity(movie: TmdbMovieByIdDTO, noteContent: String): NotesEntity =
+    NotesEntity(movie.id, movie.title, noteContent)
 // ========================================================================
 
 fun convertDpToPixels(resources: android.content.res.Resources, @DimenRes resourceId: Int) =

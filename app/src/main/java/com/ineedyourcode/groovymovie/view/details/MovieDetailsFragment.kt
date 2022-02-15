@@ -14,9 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
-import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbGenreDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.utils.*
 import com.ineedyourcode.groovymovie.view.maps.MapsFragment
 import com.ineedyourcode.groovymovie.view.note.NoteFragment
@@ -40,7 +40,7 @@ class MovieDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private val favoriteViewModel = FavoriteViewModel()
     private val favoriteList = mutableSetOf<Int>()
-    private lateinit var selectedMovie: Movie
+    private lateinit var selectedMovie: TmdbMovieByIdDTO
 
     private val viewModel: MovieDetailsViewModel by lazy {
         ViewModelProvider(this)[MovieDetailsViewModel::class.java]
@@ -48,7 +48,7 @@ class MovieDetailsFragment : Fragment() {
 
     companion object {
         private const val ARG_MOVIE = "ARG_MOVIE"
-        fun newInstance(movie: Movie) = MovieDetailsFragment().apply {
+        fun newInstance(movie: TmdbMovieByIdDTO) = MovieDetailsFragment().apply {
             arguments = bundleOf(
                 ARG_MOVIE to movie
             )
@@ -71,7 +71,7 @@ class MovieDetailsFragment : Fragment() {
         with(binding) {
             txtMovieDetailsTitle.text = getString(R.string.movie_details_title, selectedMovie.title)
             txtMovieDetailsReleaseDate.text = selectedMovie.releaseDate
-            txtMovieDetailsRating.text = selectedMovie.rating
+            txtMovieDetailsRating.text = selectedMovie.voteAverage.toString()
 
             if (selectedMovie.overview.isNullOrBlank()) {
                 txtMovieOverview.text =

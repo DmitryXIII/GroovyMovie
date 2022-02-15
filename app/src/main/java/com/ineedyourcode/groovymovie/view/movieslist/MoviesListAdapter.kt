@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.utils.convertMovieToFavoriteEntity
 import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
@@ -18,24 +18,26 @@ import com.squareup.picasso.Picasso
 class MoviesListAdapter :
     RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder>() {
 
-    private lateinit var moviesList: List<Movie>
+    private lateinit var moviesList: List<TmdbMovieByIdDTO>
     private lateinit var mListener: OnItemClickListener
     private val favoriteViewModel = FavoriteViewModel()
     private val favoriteList = mutableSetOf<Int>()
     private val mainPosterPath = "https://image.tmdb.org/t/p/"
     private val posterSize = "w342/"
 
-    fun setAdapterData(moviesMap: Map<Int, Movie>) {
+    fun setAdapterData(moviesListFromFragment: List<TmdbMovieByIdDTO>) {
+        moviesList = moviesListFromFragment
+        notifyItemRangeChanged(0, moviesList.size)
+
+        // получение списка id фильмов, записанных в таблицу избранных фильмов,
+        // для выставления чекбокса "Избранное" на фильмах в recyclerview
         favoriteViewModel.getAllFavorite().forEach { favoriteEntity ->
             favoriteList.add(favoriteEntity.movieId)
         }
-
-        moviesList = moviesMap.values.toList()
-        notifyItemRangeChanged(0, moviesList.size)
     }
 
     interface OnItemClickListener {
-        fun onItemClickListener(position: Int, moviesList: List<Movie>)
+        fun onItemClickListener(position: Int, moviesList: List<TmdbMovieByIdDTO>)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -52,9 +54,9 @@ class MoviesListAdapter :
     override fun onBindViewHolder(holder: MoviesListViewHolder, position: Int) {
         with(holder) {
             movieTitle.text = "\"${moviesList[position].title}\" (${
-                moviesList[position].releaseDate?.substring(0, 4)
+                moviesList[position].releaseDate.substring(0, 4)
             })"
-            movieRating.text = moviesList[position].rating
+            movieRating.text = moviesList[position].voteAverage.toString()
 
             // если фильм есть в списке избранных - установить флажок "избранное"
             isFavorite.isChecked = favoriteList.contains(moviesList[position].id)
@@ -80,7 +82,7 @@ class MoviesListAdapter :
     class MoviesListViewHolder(
         itemView: View,
         listener: OnItemClickListener,
-        moviesList: List<Movie>
+        moviesList: List<TmdbMovieByIdDTO>
     ) : RecyclerView.ViewHolder(itemView) {
 
         init {

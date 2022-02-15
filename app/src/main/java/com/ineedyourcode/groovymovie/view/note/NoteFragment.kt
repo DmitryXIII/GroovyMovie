@@ -9,7 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentNoteBinding
-import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.utils.hideKeyboard
 import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.viewmodel.NoteViewModel
@@ -23,11 +23,11 @@ class NoteFragment : Fragment() {
         ViewModelProvider(this)[NoteViewModel::class.java]
     }
 
-    private lateinit var selectedMovie: Movie
+    private lateinit var selectedMovie: TmdbMovieByIdDTO
 
     companion object {
         private const val ARG_MOVIE = "ARG_MOVIE"
-        fun newInstance(movie: Movie) = NoteFragment().apply {
+        fun newInstance(movie: TmdbMovieByIdDTO) = NoteFragment().apply {
             arguments = bundleOf(
                 ARG_MOVIE to movie
             )

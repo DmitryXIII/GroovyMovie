@@ -18,14 +18,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMoviesListBinding
-import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.utils.PREFERENCES_ADULT
 import com.ineedyourcode.groovymovie.utils.showSnackWithAction
 import com.ineedyourcode.groovymovie.utils.GridDecorator
 import com.ineedyourcode.groovymovie.utils.convertDpToPixels
 import com.ineedyourcode.groovymovie.view.details.MovieDetailsFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
-import com.ineedyourcode.groovymovie.viewmodel.RetrofitViewModel
+import com.ineedyourcode.groovymovie.viewmodel.MoviesListViewModel
 
 @RequiresApi(Build.VERSION_CODES.N)
 class MoviesListFragment : Fragment() {
@@ -38,8 +38,8 @@ class MoviesListFragment : Fragment() {
     private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: RetrofitViewModel by lazy {
-        ViewModelProvider(this)[RetrofitViewModel::class.java]
+    private val viewModel: MoviesListViewModel by lazy {
+        ViewModelProvider(this)[MoviesListViewModel::class.java]
     }
 
     companion object {
@@ -95,7 +95,7 @@ class MoviesListFragment : Fragment() {
                     if (it.getPreferences(Context.MODE_PRIVATE)
                             .getBoolean(PREFERENCES_ADULT, false)
                     ) {
-                        mainAdapter.setAdapterData(appState.moviesData.filter { (_, movie) -> !movie.isAdult })
+                        mainAdapter.setAdapterData(appState.moviesData.filter {movie -> !movie.adult })
                     } else {
                         mainAdapter.setAdapterData(appState.moviesData)
                     }
@@ -105,7 +105,7 @@ class MoviesListFragment : Fragment() {
                     MoviesListAdapter.OnItemClickListener {
                     override fun onItemClickListener(
                         position: Int,
-                        moviesList: List<Movie>
+                        moviesList: List<TmdbMovieByIdDTO>
                     ) {
                         parentFragmentManager.beginTransaction()
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
