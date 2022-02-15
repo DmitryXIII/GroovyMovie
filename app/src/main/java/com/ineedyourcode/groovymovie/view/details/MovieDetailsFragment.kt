@@ -1,14 +1,11 @@
 package com.ineedyourcode.groovymovie.view.details
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -17,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
 import com.ineedyourcode.groovymovie.utils.*
 import com.ineedyourcode.groovymovie.view.maps.MapsFragment
@@ -25,13 +21,16 @@ import com.ineedyourcode.groovymovie.view.note.NoteFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
 import com.ineedyourcode.groovymovie.viewmodel.RetrofitViewModel
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
 private const val MAIN_IMAGE_PATH = "https://image.tmdb.org/t/p/"
 private const val POSTER_SIZE = "w342/"
 private const val BACKDROP_SIZE = "w1280/"
-private const val PHOTO_SIZE = "w185/"
-private const val NO_PHOTO_PATH = "https://i.ibb.co/CPDK2sK/ic-no-photo.png"
+private const val ACTOR_PHOTO_SIZE = "w185/"
+private const val NO_ACTOR_PHOTO_PATH = "https://i.ibb.co/CPDK2sK/ic-no-photo.png"
+private const val ACTOR_PHOTO_RATIO = 0.666
+private const val BACKDROP_RATIO = 1.777
 
 class MovieDetailsFragment : Fragment() {
 
@@ -64,8 +63,6 @@ class MovieDetailsFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -74,7 +71,7 @@ class MovieDetailsFragment : Fragment() {
         })
 
         with(binding) {
-            txtMovieDetailsTitle.text = "\"${selectedMovie.title}\""
+            txtMovieDetailsTitle.text = getString(R.string.movie_details_title, selectedMovie.title)
             txtMovieDetailsReleaseDate.text = selectedMovie.releaseDate
             txtMovieDetailsRating.text = selectedMovie.rating
             txtMovieDetailsGenre.text = selectedMovie.genre
@@ -83,13 +80,14 @@ class MovieDetailsFragment : Fragment() {
                 txtMovieOverview.text =
                     getString(R.string.service_movie_overview_request_error_extra)
             } else {
-                txtMovieOverview.text = "\"${selectedMovie.overview}\""
+                txtMovieOverview.text =
+                    getString(R.string.movie_details_overview, selectedMovie.overview)
             }
 
             selectedMovie.backdropPath?.let {
                 Picasso.get()
                     .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
-                    .resize(getImageWidth(), getImageHeight(1.77777))
+                    .resize(getImageWidth(), getImageHeight(BACKDROP_RATIO))
                     .into(drawMovieBackdrop)
             }
 
@@ -127,66 +125,77 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.ActorsByIdSuccess -> {
                 addActor(appState.actorDto)
             }
 
-            is AppState.Error -> {}
+            is AppState.Error -> {
+                view?.showSnackWithoutAction(getString(R.string.data_receiving_error))
+            }
         }
     }
 
     private fun addActor(actorDto: TmdbActorDto) {
+        binding.containerForActors.addView(LayoutInflater.from(requireContext())
+            .inflate(R.layout.item_actor, binding.containerForActors, false).apply {
+                actorDto.name?.let { name ->
+                    this.findViewById<TextView>(R.id.actor_name).text = name
+                }
 
-        val itemActor = LayoutInflater.from(requireContext())
-            .inflate(R.layout.item_actor, binding.containerForActors, false)
+                if (actorDto.birthday == null) {
+                    this.findViewById<TextView>(R.id.actor_birthdate).text =
+                        getString(R.string.actor_birthdate, getString(R.string.no_information))
+                } else {
+                    this.findViewById<TextView>(R.id.actor_birthdate).text =
+                        getString(R.string.actor_birthdate, actorDto.birthday)
+                }
 
-        actorDto.name?.let {
-            itemActor.findViewById<TextView>(R.id.actor_name).text = it
-        }
+                if (actorDto.birthPlace == null) {
+                    this.findViewById<TextView>(R.id.actor_birthplace).text =
+                        getString(R.string.actor_birthplace, getString(R.string.no_information))
+                } else {
+                    this.findViewById<TextView>(R.id.actor_birthplace).text =
+                        getString(R.string.actor_birthplace, actorDto.birthPlace)
+                }
 
-        if (actorDto.birthday == null) {
-            itemActor.findViewById<TextView>(R.id.actor_birthdate).text =
-                "Дата рождения: нет информации"
-        } else {
-            itemActor.findViewById<TextView>(R.id.actor_birthdate).text =
-                "Дата рождения: ${actorDto.birthday}"
-        }
+                val photoWidthInPixels = convertDpToPixels(resources, R.dimen.actor_photo_width)
+                val actorPhoto = this.findViewById<ImageView>(R.id.actor_photo)
 
-        if (actorDto.birthPlace == null) {
-            itemActor.findViewById<TextView>(R.id.actor_birthplace).text =
-                "Место рождения: нет информации"
-        } else {
-            itemActor.findViewById<TextView>(R.id.actor_birthplace).text =
-                "Место рождения: ${actorDto.birthPlace}"
-        }
+                Picasso.get()
+                    .load("${MAIN_IMAGE_PATH}${ACTOR_PHOTO_SIZE}${actorDto.profilePath}")
+                    .resize(
+                        photoWidthInPixels,
+                        (photoWidthInPixels / ACTOR_PHOTO_RATIO).toInt()
+                    )
+                    .into(actorPhoto, object : Callback {
+                        override fun onSuccess() {
+                            actorPhoto.setBackgroundResource(R.drawable.poster_border)
+                        }
 
-        if (actorDto.profilePath == null) {
-            Picasso.get()
-                .load(NO_PHOTO_PATH)
-                .resize(250, 250 / 185 / 278)
-                .into(itemActor.findViewById<ImageView>(R.id.actor_photo))
-        } else {
-            Picasso.get()
-                .load("${MAIN_IMAGE_PATH}${PHOTO_SIZE}${actorDto.profilePath}")
-                .resize(250, 250 / 185 / 278)
-                .into(itemActor.findViewById<ImageView>(R.id.actor_photo))
-        }
+                        override fun onError(e: java.lang.Exception?) {
+                            Picasso.get()
+                                .load(NO_ACTOR_PHOTO_PATH)
+                                .resize(
+                                    photoWidthInPixels,
+                                    (photoWidthInPixels / ACTOR_PHOTO_RATIO).toInt()
+                                )
+                                .into(actorPhoto.also { it.setBackgroundResource(R.drawable.poster_border) })
+                        }
+                    })
 
-        itemActor.setOnClickListener {
-            parentFragmentManager
-                .beginTransaction()
-                .add(
-                    R.id.main_fragment_container,
-                    MapsFragment.newInstance(actorDto.birthPlace.toString())
-                )
-                .addToBackStack("")
-                .commit()
-        }
-
-        binding.containerForActors.addView(itemActor)
+                setOnClickListener {
+                    parentFragmentManager
+                        .beginTransaction()
+                        .add(
+                            R.id.main_fragment_container,
+                            MapsFragment.newInstance(actorDto.birthPlace.toString())
+                        )
+                        .addToBackStack("")
+                        .commit()
+                }
+            })
     }
 
     override fun onDestroy() {

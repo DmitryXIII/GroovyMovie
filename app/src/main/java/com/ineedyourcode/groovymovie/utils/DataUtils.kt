@@ -1,6 +1,8 @@
 package com.ineedyourcode.groovymovie.utils
 
 import android.annotation.SuppressLint
+import androidx.annotation.DimenRes
+import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.db.entities.HistoryEntity
@@ -39,3 +41,5 @@ fun convertMovieToNoteEntity(movie: Movie, noteContent: String): NotesEntity =
     NotesEntity(movie.id, movie.title.toString(), noteContent)
 
 fun convertNoteEntityToString(note: NotesEntity): NotesEntity = note
+
+fun convertDpToPixels(resources: android.content.res.Resources, @DimenRes resourceId: Int) = resources.getDimensionPixelSize(resourceId)

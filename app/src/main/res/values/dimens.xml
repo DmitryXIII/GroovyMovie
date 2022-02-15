@@ -23,4 +23,5 @@
     <dimen name="checkbox_size_35">35dp</dimen>
     <dimen name="main_container_text_size">8sp</dimen>
     <dimen name="movie_item_width">162dp</dimen>
+    <dimen name="actor_photo_width">100dp</dimen>
 </resources>
