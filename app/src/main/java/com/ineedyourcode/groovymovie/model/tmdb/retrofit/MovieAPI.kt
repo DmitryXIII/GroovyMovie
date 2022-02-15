@@ -26,13 +26,6 @@ interface MovieAPI {
     ): Call<TmdbResponse.ResponseGenres>
 
     @GET("movie/{id}")
-    fun getMovieByID(
-        @Path("id") id: Int,
-        @Query("api_key") apiKey: String = BuildConfig.TMDB_API_KEY,
-        @Query("language") lang: String = "ru-RU",
-    ): Call<TmdbMovieByIdDTO>
-
-    @GET("movie/{id}")
     fun getMovieByIdWithCredits(
         @Path("id") id: Int,
         @Query("api_key") apiKey: String = BuildConfig.TMDB_API_KEY,

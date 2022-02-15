@@ -3,10 +3,7 @@ package com.ineedyourcode.groovymovie.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.model.db.IRoomRepository
-import com.ineedyourcode.groovymovie.model.db.RoomRepository
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.*
@@ -15,37 +12,16 @@ import retrofit2.Callback
 import retrofit2.Response
 
 private const val CORRUPTED_DATA = "Неполные данные"
-private const val RESPONSE_MOVIES_LIST_ERROR = "Failed to get response movies list"
 private const val RESPONSE_MOVIE_BY_ID_ERROR = "Response movie by id failed"
 private const val RESPONSE_ACTOR_BY_ID_ERROR = "Response actor by id failed"
-private const val TAG = "RETROFIT_VIEW_MODEL"
+private const val TAG = "MOVIE_DETAILS_VIEW_MODEL"
 
-class RetrofitViewModel(
+class MovieDetailsViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
     private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource())
 ) : ViewModel() {
 
-    private val roomHistoryRepository: IRoomRepository =
-        RoomRepository(App.getMovieDao())
-
     private val moviesMap = mutableMapOf<Int, Movie>()
-
-    fun saveHistory(movie: Movie) {
-        roomHistoryRepository.saveHistoryEntity(movie)
-    }
-
-    // возвращает liveData для подписки на нее
-    // инициирует запросы на сервер
-    fun getMoviesList(moviesListType: String): MutableLiveData<AppState> {
-        getMoviesListFromRemoteSource(moviesListType)
-        return liveData
-    }
-
-    // запросы на сервер
-    private fun getMoviesListFromRemoteSource(moviesListType: String) {
-        liveData.value = AppState.Loading
-        retrofitRepository.getMoviesList(moviesListType, callbackMoviesList)
-    }
 
     // возвращает liveData для подписки на нее
     // инициирует запросы на сервер
@@ -69,31 +45,8 @@ class RetrofitViewModel(
 
     // запросы на сервер
     private fun getActorsByIdFromRemoteSource(actorId: Int) {
-        liveData.value = AppState.Loading
+//        liveData.value = AppState.Loading
         retrofitRepository.getActorById(actorId, callbackActorById)
-    }
-
-    // обработка ответа с сервера на запрос списка фильмов
-    private val callbackMoviesList = object : Callback<TmdbResponse.ResponseMoviesList> {
-        override fun onResponse(
-            call: Call<TmdbResponse.ResponseMoviesList>,
-            responseMoviesList: Response<TmdbResponse.ResponseMoviesList>
-        ) {
-            val responseBody = responseMoviesList.body()
-            if (responseMoviesList.isSuccessful) {
-                if (responseBody != null) {
-                    liveData.postValue(checkResponse(responseBody.movieFromLists))
-                } else {
-                    liveData.postValue(AppState.Error(RESPONSE_MOVIES_LIST_ERROR))
-                    Log.d(TAG, RESPONSE_MOVIES_LIST_ERROR)
-                }
-            }
-        }
-
-        override fun onFailure(call: Call<TmdbResponse.ResponseMoviesList>, t: Throwable) {
-            liveData.postValue(AppState.Error(RESPONSE_MOVIES_LIST_ERROR))
-            Log.e(TAG, RESPONSE_MOVIES_LIST_ERROR, t)
-        }
     }
 
     // обработка ответа с сервера на запрос фильма по id
@@ -103,13 +56,14 @@ class RetrofitViewModel(
             responseMovie: Response<TmdbMovieByIdDTO>
         ) {
             if (responseMovie.isSuccessful) {
-                // загрузка актеров по пришедшему в фильме списку id актеров
                 if (responseMovie.body() != null) {
+
+                    // отправка данных о фильме в фрагмент
+                    liveData.postValue(AppState.MovieByIdSuccess(responseMovie.body()!!))
+                    // загрузка актеров по пришедшему в фильме списку id актеров
                     responseMovie.body()!!.credit.cast.forEach {
                         getActorById(it.id)
                     }
-                    // отправка данных о фильме в фрагмент
-                    liveData.postValue(AppState.MovieByIdSuccess(responseMovie.body()!!))
                     Log.d(TAG, "Movie: ${responseMovie.body()}")
                 } else {
                     liveData.postValue(AppState.Error(RESPONSE_MOVIE_BY_ID_ERROR))

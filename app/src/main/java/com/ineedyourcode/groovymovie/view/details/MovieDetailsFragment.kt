@@ -1,6 +1,7 @@
 package com.ineedyourcode.groovymovie.view.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,12 +16,13 @@ import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
 import com.ineedyourcode.groovymovie.model.Movie
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbGenreDTO
 import com.ineedyourcode.groovymovie.utils.*
 import com.ineedyourcode.groovymovie.view.maps.MapsFragment
 import com.ineedyourcode.groovymovie.view.note.NoteFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
-import com.ineedyourcode.groovymovie.viewmodel.RetrofitViewModel
+import com.ineedyourcode.groovymovie.viewmodel.MovieDetailsViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
@@ -40,8 +42,8 @@ class MovieDetailsFragment : Fragment() {
     private val favoriteList = mutableSetOf<Int>()
     private lateinit var selectedMovie: Movie
 
-    private val viewModel: RetrofitViewModel by lazy {
-        ViewModelProvider(this)[RetrofitViewModel::class.java]
+    private val viewModel: MovieDetailsViewModel by lazy {
+        ViewModelProvider(this)[MovieDetailsViewModel::class.java]
     }
 
     companion object {
@@ -66,15 +68,10 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner, Observer<Any> {
-            renderData(it as AppState)
-        })
-
         with(binding) {
             txtMovieDetailsTitle.text = getString(R.string.movie_details_title, selectedMovie.title)
             txtMovieDetailsReleaseDate.text = selectedMovie.releaseDate
             txtMovieDetailsRating.text = selectedMovie.rating
-            txtMovieDetailsGenre.text = selectedMovie.genre
 
             if (selectedMovie.overview.isNullOrBlank()) {
                 txtMovieOverview.text =
@@ -123,18 +120,40 @@ class MovieDetailsFragment : Fragment() {
                 .addToBackStack("")
                 .commit()
         }
+
+        viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner, Observer<Any> {
+            when (it){
+                is AppState.MovieByIdSuccess -> {
+                    getGenres(it.movieDto.genreIds)
+                }
+
+                is AppState.ActorsByIdSuccess -> {
+                    addActor(it.actorDto)
+                }
+
+                is AppState.Error -> {
+                    view.showSnackWithoutAction("Ошибка 1")
+                }
+                is AppState.Loading -> {
+//                view?.showSnackWithoutAction("LOADING")
+                }
+                else -> view.showSnackWithoutAction("Ошибка 3")
+            }
+        })
     }
 
-    private fun renderData(appState: AppState) {
-        when (appState) {
-            is AppState.ActorsByIdSuccess -> {
-                addActor(appState.actorDto)
+    private fun getGenres(genreIds: List<TmdbGenreDTO>) {
+        for (genreDto in genreIds) {
+            if (genreDto == genreIds.last()) {
+                binding.txtMovieDetailsGenre.text =
+                    "${binding.txtMovieDetailsGenre.text} ${genreDto.name}"
+            } else {
+                binding.txtMovieDetailsGenre.text =
+                    "${binding.txtMovieDetailsGenre.text} ${genreDto.name},"
             }
-
-            is AppState.Error -> {
-                view?.showSnackWithoutAction(getString(R.string.data_receiving_error))
-            }
+            Log.d("DETAILSGENRE", "жанр: ${genreDto.name}")
         }
+
     }
 
     private fun addActor(actorDto: TmdbActorDto) {

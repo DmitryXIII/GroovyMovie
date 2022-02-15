@@ -9,7 +9,6 @@ data class Movie(
     val title: String?,
     val releaseDate: String?,
     val rating: String?,
-    val genre: String?,
     val overview: String?,
     val posterPath: String?,
     val backdropPath: String?,
