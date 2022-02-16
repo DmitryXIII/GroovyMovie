@@ -21,7 +21,6 @@ import com.ineedyourcode.groovymovie.utils.*
 import com.ineedyourcode.groovymovie.view.maps.MapsFragment
 import com.ineedyourcode.groovymovie.view.note.NoteFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
-import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
 import com.ineedyourcode.groovymovie.viewmodel.MovieDetailsViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -67,12 +66,18 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // изменение размера imageview для корректной загрузки backdrop
+        binding.drawMovieBackdrop.layoutParams.apply {
+            width = getImageWidth()
+            height = getImageHeight(BACKDROP_RATIO)
+        }
+
         // backdrop загружается дольше остальных элементов, поэтому
         // фрагмент становится видимым только после загрузки backdrop
         selectedMovie.backdropPath.let {
             Picasso.get()
                 .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
-                .resize(getImageWidth(), getImageHeight(BACKDROP_RATIO))
+                .error(R.drawable.no_backdrop)
                 .into(binding.drawMovieBackdrop, object : Callback {
                     override fun onSuccess() {
                         binding.detailsLayout.visibility = View.VISIBLE
@@ -160,8 +165,6 @@ class MovieDetailsFragment : Fragment() {
                 .addToBackStack("")
                 .commit()
         }
-
-
     }
 
     private fun getGenres(genreIds: List<TmdbGenreDTO>) {
