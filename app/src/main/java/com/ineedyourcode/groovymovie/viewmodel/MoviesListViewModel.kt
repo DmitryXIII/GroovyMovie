@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
+import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.*
 import retrofit2.Call
@@ -19,11 +20,24 @@ private const val TAG = "RETROFIT_VIEW_MODEL"
 class MoviesListViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
     private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource()),
-    private val roomHistoryRepository: IRoomRepository = RoomRepository(App.getMovieDao())
+    private val roomRepository: IRoomRepository = RoomRepository(App.getMovieDao())
 ) : ViewModel() {
 
+    fun getFavoriteList(): MutableLiveData<AppState> {
+        getAllFavoriteResponse()
+        return liveData
+    }
+
     fun saveHistory(movie: TmdbMovieByIdDTO) {
-        roomHistoryRepository.saveHistoryEntity(movie)
+        roomRepository.saveHistoryEntity(movie)
+    }
+
+    fun saveFavorite(entity: FavoriteEntity) {
+        roomRepository.saveFavoriteEntity(entity)
+    }
+
+    fun deleteFavorite(entity: FavoriteEntity) {
+        roomRepository.deleteFavorite(entity.movieId)
     }
 
     // возвращает liveData для подписки на нее
@@ -68,5 +82,10 @@ class MoviesListViewModel(
         } else {
             AppState.MoviesListSuccess(moviesList)
         }
+    }
+
+    private fun getAllFavoriteResponse() {
+        val favoriteList = roomRepository.getAllFavorite()
+        liveData.postValue(AppState.FavoriteListSuccess(favoriteList))
     }
 }

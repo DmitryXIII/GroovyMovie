@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMoviesListBinding
+import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.utils.PREFERENCES_ADULT
 import com.ineedyourcode.groovymovie.utils.showSnackWithAction
@@ -33,6 +34,7 @@ class MoviesListFragment : Fragment() {
     private lateinit var mainRecyclerView: RecyclerView
     private lateinit var mainAdapter: MoviesListAdapter
     private lateinit var moviesListType: String
+    private lateinit var favoriteList: List<FavoriteEntity>
     private lateinit var progressBar: ProgressBar // кастомный прогрессбар
 
     private var _binding: FragmentMoviesListBinding? = null
@@ -70,6 +72,16 @@ class MoviesListFragment : Fragment() {
             moviesListType = it.getString(ARG_MOVIE_TYPE)!!
         }
 
+        mainAdapter = MoviesListAdapter()
+
+        viewModel.getFavoriteList().observe(viewLifecycleOwner, Observer<Any> {
+            when(it) {
+                is AppState.FavoriteListSuccess -> {
+                    mainAdapter.setFavoriteList(it.favoriteList)
+                }
+            }
+        })
+
         viewModel.getMoviesList(moviesListType).observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })
@@ -88,8 +100,6 @@ class MoviesListFragment : Fragment() {
             is AppState.MoviesListSuccess -> {
                 progressBar.isVisible = false
                 mainRecyclerView.visibility = View.VISIBLE
-
-                mainAdapter = MoviesListAdapter()
 
                 activity?.let {
                     if (it.getPreferences(Context.MODE_PRIVATE)

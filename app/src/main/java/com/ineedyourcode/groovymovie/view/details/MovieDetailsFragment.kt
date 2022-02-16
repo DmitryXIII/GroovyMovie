@@ -68,6 +68,16 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.getFavoriteList().observe(viewLifecycleOwner, Observer<Any> {
+            when (it) {
+                is AppState.FavoriteListSuccess -> {
+                    for (entity in it.favoriteList) {
+                        this.favoriteList.add(entity.movieId)
+                    }
+                }
+            }
+        })
+
         with(binding) {
             txtMovieDetailsTitle.text = getString(R.string.movie_details_title, selectedMovie.title)
             txtMovieDetailsReleaseDate.text = selectedMovie.releaseDate
@@ -94,10 +104,6 @@ class MovieDetailsFragment : Fragment() {
                     .into(drawMovieDetailsPoster)
             }
 
-            favoriteViewModel.getAllFavorite().forEach { favoriteEntity ->
-                favoriteList.add(favoriteEntity.movieId)
-            }
-
             checkboxFavorite.isChecked = favoriteList.contains(selectedMovie.id)
             checkboxFavorite.setOnClickListener {
                 if (checkboxFavorite.isChecked) {
@@ -122,7 +128,7 @@ class MovieDetailsFragment : Fragment() {
         }
 
         viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner, Observer<Any> {
-            when (it){
+            when (it) {
                 is AppState.MovieByIdSuccess -> {
                     getGenres(it.movieDto.genreIds)
                 }

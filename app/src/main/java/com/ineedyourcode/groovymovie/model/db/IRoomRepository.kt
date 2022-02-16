@@ -19,6 +19,6 @@ interface IRoomRepository {
 
     // NOTE
     fun saveNote(movie: TmdbMovieByIdDTO, noteContent: String)
-    fun getNote(movieId: Int): NotesEntity
+    fun getNote(movieId: Int): NotesEntity?
     fun deleteNote(movieId: Int)
 }

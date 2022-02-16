@@ -6,18 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentNoteBinding
+import com.ineedyourcode.groovymovie.model.db.entities.NotesEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.utils.hideKeyboard
 import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
+import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.NoteViewModel
 
 class NoteFragment : Fragment() {
 
     private var _binding: FragmentNoteBinding? = null
     private val binding get() = _binding!!
+    private lateinit var note: NotesEntity
 
     private val noteViewModel: NoteViewModel by lazy {
         ViewModelProvider(this)[NoteViewModel::class.java]
@@ -48,19 +52,18 @@ class NoteFragment : Fragment() {
 
         binding.noteMovieTitle.text = getString(R.string.note_content_title, selectedMovie.title)
 
-        // если заметка еще не была создана, то создаем в БД заметку с пустым содержанием,
-        // иначе NullPointerException
-        try {
-            binding.noteContent.setText(noteViewModel.getNote(selectedMovie).noteContent)
-        } catch (e: NullPointerException) {
-            noteViewModel.saveNote(selectedMovie, "")
-            binding.noteContent.setText("")
-        }
+        noteViewModel.getNote(selectedMovie).observe(viewLifecycleOwner, Observer<Any> {
+            when (it) {
+                is AppState.NoteSuccess -> {
+                    note = it.note
+                    binding.noteContent.setText(note.noteContent)
+                }
+            }
+        })
 
         binding.fabSaveNote.setOnClickListener {
             view.hideKeyboard()
             noteViewModel.saveNote(selectedMovie, binding.noteContent.text.toString())
-            binding.noteContent.setText(noteViewModel.getNote(selectedMovie).noteContent)
             view.showSnackWithoutAction("Заметка сохранена")
         }
     }

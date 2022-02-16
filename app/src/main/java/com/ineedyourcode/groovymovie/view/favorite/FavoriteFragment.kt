@@ -1,13 +1,12 @@
 package com.ineedyourcode.groovymovie.view.favorite
 
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import androidx.annotation.RequiresApi
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +14,7 @@ import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentFavoriteBinding
 import com.ineedyourcode.groovymovie.utils.GridDecorator
+import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
 
 class FavoriteFragment : Fragment() {
@@ -39,11 +39,18 @@ class FavoriteFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getAllFavorite()
+        favoriteAdapter = FavoriteAdapter()
+
+        viewModel.getAllFavorite().observe(viewLifecycleOwner, Observer<Any> {
+            when (it) {
+                is AppState.FavoriteListSuccess -> {
+                    favoriteAdapter.setAdapterData(it.favoriteList)
+                }
+            }
+        })
 
         with(binding) {
             progressBar = favoriteSpinKit
@@ -52,14 +59,15 @@ class FavoriteFragment : Fragment() {
 
         progressBar.indeterminateDrawable = ThreeBounce()
 
-        favoriteAdapter = FavoriteAdapter().also {
-            it.setAdapterData(viewModel.getAllFavorite())
-        }
-
         favoriteRecyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = favoriteAdapter
-            addItemDecoration(GridDecorator(2, resources.getDimensionPixelSize(R.dimen.movie_item_width).toFloat()))
+            addItemDecoration(
+                GridDecorator(
+                    2,
+                    resources.getDimensionPixelSize(R.dimen.movie_item_width).toFloat()
+                )
+            )
         }
 
         binding.fabClearFavorite.setOnClickListener {

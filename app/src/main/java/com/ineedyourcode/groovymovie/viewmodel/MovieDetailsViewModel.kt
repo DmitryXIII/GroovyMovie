@@ -3,6 +3,9 @@ package com.ineedyourcode.groovymovie.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ineedyourcode.groovymovie.App
+import com.ineedyourcode.groovymovie.model.db.IRoomRepository
+import com.ineedyourcode.groovymovie.model.db.RoomRepository
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.*
@@ -10,15 +13,25 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-private const val CORRUPTED_DATA = "Неполные данные"
 private const val RESPONSE_MOVIE_BY_ID_ERROR = "Response movie by id failed"
 private const val RESPONSE_ACTOR_BY_ID_ERROR = "Response actor by id failed"
 private const val TAG = "MOVIE_DETAILS_VIEW_MODEL"
 
 class MovieDetailsViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource())
+    private val retrofitRepository: IRetrofitRepository = RetrofitRepository(RemoteDataSource()),
+    private val roomRepository: IRoomRepository = RoomRepository(App.getMovieDao())
 ) : ViewModel() {
+
+    fun getFavoriteList(): MutableLiveData<AppState> {
+        getAllFavoriteResponse()
+        return liveData
+    }
+
+    private fun getAllFavoriteResponse() {
+        val favoriteList = roomRepository.getAllFavorite()
+        liveData.postValue(AppState.FavoriteListSuccess(favoriteList))
+    }
 
     // возвращает liveData для подписки на нее
     // инициирует запросы на сервер

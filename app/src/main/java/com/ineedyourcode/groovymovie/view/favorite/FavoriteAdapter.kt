@@ -1,5 +1,6 @@
 package com.ineedyourcode.groovymovie.view.favorite
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +14,14 @@ import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
 import com.squareup.picasso.Picasso
 
+private const val POSTER_SIZE = "w342/"
+private const val MAIN_POSTER_PATH = "https://image.tmdb.org/t/p/"
+
 class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHolder>() {
-    private lateinit var favoriteMoviesList: MutableList<FavoriteEntity>
+    private var favoriteMoviesList = mutableListOf<FavoriteEntity>()
     private val viewModel = FavoriteViewModel()
-    private val mainPosterPath = "https://image.tmdb.org/t/p/"
-    private val posterSize = "w342/"
 
     fun setAdapterData(mFavoriteMoviesList: List<FavoriteEntity>) {
-
         favoriteMoviesList = mFavoriteMoviesList as MutableList<FavoriteEntity>
         notifyItemRangeInserted(0, favoriteMoviesList.size)
     }
@@ -36,6 +37,7 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHol
         return FavoriteListViewHolder(itemView)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: FavoriteListViewHolder, position: Int) {
         with(holder) {
             movieTitle.text = "\"${
@@ -68,7 +70,7 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHol
             })
 
             Picasso.get()
-                .load("${mainPosterPath}${posterSize}${favoriteMoviesList[position].posterPath}")
+                .load("${MAIN_POSTER_PATH}${POSTER_SIZE}${favoriteMoviesList[position].posterPath}")
                 .into(moviePoster)
         }
     }

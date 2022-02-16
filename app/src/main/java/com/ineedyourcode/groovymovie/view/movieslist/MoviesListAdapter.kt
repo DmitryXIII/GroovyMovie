@@ -9,10 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
+import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.utils.convertMovieToFavoriteEntity
 import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
-import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
+import com.ineedyourcode.groovymovie.viewmodel.MoviesListViewModel
 import com.squareup.picasso.Picasso
 
 class MoviesListAdapter :
@@ -20,7 +21,7 @@ class MoviesListAdapter :
 
     private lateinit var moviesList: List<TmdbMovieByIdDTO>
     private lateinit var mListener: OnItemClickListener
-    private val favoriteViewModel = FavoriteViewModel()
+    private val viewModel = MoviesListViewModel()
     private val favoriteList = mutableSetOf<Int>()
     private val mainPosterPath = "https://image.tmdb.org/t/p/"
     private val posterSize = "w342/"
@@ -28,11 +29,11 @@ class MoviesListAdapter :
     fun setAdapterData(moviesListFromFragment: List<TmdbMovieByIdDTO>) {
         moviesList = moviesListFromFragment
         notifyItemRangeChanged(0, moviesList.size)
+    }
 
-        // получение списка id фильмов, записанных в таблицу избранных фильмов,
-        // для выставления чекбокса "Избранное" на фильмах в recyclerview
-        favoriteViewModel.getAllFavorite().forEach { favoriteEntity ->
-            favoriteList.add(favoriteEntity.movieId)
+    fun setFavoriteList(favoriteListFromFragment: List<FavoriteEntity>) {
+        for (entity in favoriteListFromFragment) {
+            favoriteList.add(entity.movieId)
         }
     }
 
@@ -64,9 +65,9 @@ class MoviesListAdapter :
             isFavorite.setOnClickListener(View.OnClickListener {
                 if (isFavorite.isChecked) {
                     isFavorite.showSnackWithoutAction("${movieTitle.text} добавлен в ИЗБРАННЫЕ")
-                    favoriteViewModel.saveFavorite(convertMovieToFavoriteEntity(moviesList[position]))
+                    viewModel.saveFavorite(convertMovieToFavoriteEntity(moviesList[position]))
                 } else {
-                    favoriteViewModel.deleteFavorite(convertMovieToFavoriteEntity(moviesList[position]))
+                    viewModel.deleteFavorite(convertMovieToFavoriteEntity(moviesList[position]))
                     isFavorite.showSnackWithoutAction("${movieTitle.text} удален из ИЗБРАННЫХ")
                 }
             })

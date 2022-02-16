@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.ImageViewCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentHistoryBinding
 import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
+import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.HistoryViewModel
 
 class HistoryFragment : Fragment() {
@@ -38,13 +40,18 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        historyAdapter = HistoryAdapter()
-        historyAdapter.setAdapterData(viewModelHistory.getHistory())
-
-        binding.historyRecyclerview.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = historyAdapter
-        }
+        viewModelHistory.getHistory().observe(viewLifecycleOwner, Observer<Any> {
+            when (it) {
+                is AppState.HistorySuccess -> {
+                    historyAdapter = HistoryAdapter()
+                    historyAdapter.setAdapterData(it.history)
+                    binding.historyRecyclerview.apply {
+                        layoutManager = LinearLayoutManager(requireContext())
+                        adapter = historyAdapter
+                    }
+                }
+            }
+        })
 
         // Замена цвета иконки внутри FAB
         ImageViewCompat.setImageTintList(
