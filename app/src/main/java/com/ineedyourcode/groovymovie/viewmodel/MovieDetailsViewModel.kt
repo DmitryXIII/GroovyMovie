@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
+import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.*
@@ -23,14 +24,22 @@ class MovieDetailsViewModel(
     private val roomRepository: IRoomRepository = RoomRepository(App.getMovieDao())
 ) : ViewModel() {
 
-    fun getFavoriteList(): MutableLiveData<AppState> {
-        getAllFavoriteResponse()
+    fun checkIsFavorite(movie: TmdbMovieByIdDTO): MutableLiveData<AppState> {
+        checkIsFavoriteResponse(movie.id)
         return liveData
     }
 
-    private fun getAllFavoriteResponse() {
-        val favoriteList = roomRepository.getAllFavorite()
-        liveData.postValue(AppState.FavoriteListSuccess(favoriteList))
+    private fun checkIsFavoriteResponse(movieId: Int) {
+        val isFavorite = roomRepository.checkIsFavorite(movieId)
+        liveData.postValue(AppState.IsFavoriteSuccess(isFavorite))
+    }
+
+    fun saveFavorite(entity: FavoriteEntity) {
+        roomRepository.saveFavoriteEntity(entity)
+    }
+
+    fun deleteFavorite(entity: FavoriteEntity) {
+        roomRepository.deleteFavorite(entity.movieId)
     }
 
     // возвращает liveData для подписки на нее

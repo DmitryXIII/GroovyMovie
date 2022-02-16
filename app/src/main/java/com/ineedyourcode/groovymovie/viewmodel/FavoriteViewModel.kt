@@ -6,6 +6,7 @@ import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 
 class FavoriteViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),
@@ -27,6 +28,11 @@ class FavoriteViewModel(
 
     fun deleteAllFavorite() {
         roomFavoriteRepository.clearAllFavorite()
+    }
+
+    private fun checkIsFavoriteResponse(movieId: Int) {
+        val isFavorite = roomFavoriteRepository.checkIsFavorite(movieId)
+        liveData.postValue(AppState.IsFavoriteSuccess(isFavorite))
     }
 
     private fun getAllFavoriteResponse() {

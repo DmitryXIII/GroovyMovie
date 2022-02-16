@@ -34,6 +34,10 @@ class RoomRepository(private val roomDataSource: MovieDao) : IRoomRepository {
         roomDataSource.deleteFavorite(movieId)
     }
 
+    override fun checkIsFavorite(movieId: Int): Boolean {
+        return roomDataSource.getFavorite(movieId) != null
+    }
+
     // NOTE
     override fun saveNote(movie: TmdbMovieByIdDTO, noteContent: String) {
         roomDataSource.insertNote(convertMovieToNoteEntity(movie, noteContent))

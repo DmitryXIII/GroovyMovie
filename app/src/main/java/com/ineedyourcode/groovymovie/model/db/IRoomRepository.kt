@@ -16,6 +16,7 @@ interface IRoomRepository {
     fun saveFavoriteEntity(entity: FavoriteEntity)
     fun clearAllFavorite()
     fun deleteFavorite(movieId: Int)
+    fun checkIsFavorite(movieId: Int): Boolean
 
     // NOTE
     fun saveNote(movie: TmdbMovieByIdDTO, noteContent: String)

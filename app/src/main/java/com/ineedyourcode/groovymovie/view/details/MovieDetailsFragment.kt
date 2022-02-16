@@ -38,8 +38,7 @@ class MovieDetailsFragment : Fragment() {
 
     private var _binding: FragmentMovieDetailsBinding? = null
     private val binding get() = _binding!!
-    private val favoriteViewModel = FavoriteViewModel()
-    private val favoriteList = mutableSetOf<Int>()
+
     private lateinit var selectedMovie: TmdbMovieByIdDTO
 
     private val viewModel: MovieDetailsViewModel by lazy {
@@ -68,6 +67,23 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // backdrop загружается дольше остальных элементов, поэтому
+        // фрагмент становится видимым только после загрузки backdrop
+        selectedMovie.backdropPath.let {
+            Picasso.get()
+                .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
+                .resize(getImageWidth(), getImageHeight(BACKDROP_RATIO))
+                .into(binding.drawMovieBackdrop, object : Callback {
+                    override fun onSuccess() {
+                        binding.detailsLayout.visibility = View.VISIBLE
+                    }
+
+                    override fun onError(e: java.lang.Exception?) {
+                        binding.detailsLayout.visibility = View.VISIBLE
+                    }
+                })
+        }
+
         viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner, Observer<Any> {
             when (it) {
                 is AppState.MovieByIdSuccess -> {
@@ -84,18 +100,20 @@ class MovieDetailsFragment : Fragment() {
                 is AppState.Loading -> {
 //                view.showSnackWithoutAction("LOADING")
                 }
-                is AppState.FavoriteListSuccess -> {
-                    for (entity in it.favoriteList) {
-                        this.favoriteList.add(entity.movieId)
-                        binding.checkboxFavorite.isChecked = favoriteList.contains(selectedMovie.id)
-                    }
+
+                is AppState.IsFavoriteSuccess -> {
+                    binding.checkboxFavorite.isChecked = it.isFavorite
                 }
-                else -> view.showSnackWithoutAction("Ошибка 3")
+
+                else -> view.showSnackWithoutAction("Необработанное событие")
             }
         })
 
+        viewModel.checkIsFavorite(selectedMovie)
+
         with(binding) {
-            txtMovieDetailsTitle.text = getString(R.string.movie_details_title, selectedMovie.title)
+            txtMovieDetailsTitle.text =
+                getString(R.string.movie_details_title, selectedMovie.title)
             txtMovieDetailsReleaseDate.text = selectedMovie.releaseDate
             txtMovieDetailsRating.text = selectedMovie.voteAverage.toString()
 
@@ -107,13 +125,6 @@ class MovieDetailsFragment : Fragment() {
                     getString(R.string.movie_details_overview, selectedMovie.overview)
             }
 
-            selectedMovie.backdropPath.let {
-                Picasso.get()
-                    .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
-                    .resize(getImageWidth(), getImageHeight(BACKDROP_RATIO))
-                    .into(drawMovieBackdrop)
-            }
-
             selectedMovie.posterPath.let {
                 Picasso.get()
                     .load("${MAIN_IMAGE_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
@@ -122,10 +133,18 @@ class MovieDetailsFragment : Fragment() {
 
             checkboxFavorite.setOnClickListener {
                 if (checkboxFavorite.isChecked) {
-                    favoriteViewModel.saveFavorite(convertMovieToFavoriteEntity(selectedMovie))
+                    viewModel.saveFavorite(
+                        convertMovieToFavoriteEntity(
+                            selectedMovie
+                        )
+                    )
                     checkboxFavorite.showSnackWithoutAction("${selectedMovie.title} добавлен в ИЗБРАННЫЕ")
                 } else {
-                    favoriteViewModel.deleteFavorite(convertMovieToFavoriteEntity(selectedMovie))
+                    viewModel.deleteFavorite(
+                        convertMovieToFavoriteEntity(
+                            selectedMovie
+                        )
+                    )
                     checkboxFavorite.showSnackWithoutAction("${selectedMovie.title} удален из ИЗБРАННЫХ")
                 }
             }
@@ -168,7 +187,10 @@ class MovieDetailsFragment : Fragment() {
 
                 if (actorDto.birthday == null) {
                     this.findViewById<TextView>(R.id.actor_birthdate).text =
-                        getString(R.string.actor_birthdate, getString(R.string.no_information))
+                        getString(
+                            R.string.actor_birthdate,
+                            getString(R.string.no_information)
+                        )
                 } else {
                     this.findViewById<TextView>(R.id.actor_birthdate).text =
                         getString(R.string.actor_birthdate, actorDto.birthday)
@@ -176,7 +198,10 @@ class MovieDetailsFragment : Fragment() {
 
                 if (actorDto.birthPlace == null) {
                     this.findViewById<TextView>(R.id.actor_birthplace).text =
-                        getString(R.string.actor_birthplace, getString(R.string.no_information))
+                        getString(
+                            R.string.actor_birthplace,
+                            getString(R.string.no_information)
+                        )
                 } else {
                     this.findViewById<TextView>(R.id.actor_birthplace).text =
                         getString(R.string.actor_birthplace, actorDto.birthPlace)
