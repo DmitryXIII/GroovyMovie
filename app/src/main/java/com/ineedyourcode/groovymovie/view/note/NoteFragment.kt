@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentNoteBinding
-import com.ineedyourcode.groovymovie.model.db.entities.NotesEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 import com.ineedyourcode.groovymovie.utils.hideKeyboard
 import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
@@ -21,7 +20,6 @@ class NoteFragment : Fragment() {
 
     private var _binding: FragmentNoteBinding? = null
     private val binding get() = _binding!!
-    private lateinit var note: NotesEntity
 
     private val noteViewModel: NoteViewModel by lazy {
         ViewModelProvider(this)[NoteViewModel::class.java]
@@ -55,8 +53,7 @@ class NoteFragment : Fragment() {
         noteViewModel.getNote(selectedMovie).observe(viewLifecycleOwner, Observer<Any> {
             when (it) {
                 is AppState.NoteSuccess -> {
-                    note = it.note
-                    binding.noteContent.setText(note.noteContent)
+                    binding.noteContent.setText(it.note.noteContent)
                 }
             }
         })

@@ -68,13 +68,29 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getFavoriteList().observe(viewLifecycleOwner, Observer<Any> {
+        viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner, Observer<Any> {
             when (it) {
+                is AppState.MovieByIdSuccess -> {
+                    getGenres(it.movieDto.genreIds)
+                }
+
+                is AppState.ActorsByIdSuccess -> {
+                    addActor(it.actorDto)
+                }
+
+                is AppState.Error -> {
+                    view.showSnackWithoutAction("Ошибка 1")
+                }
+                is AppState.Loading -> {
+//                view.showSnackWithoutAction("LOADING")
+                }
                 is AppState.FavoriteListSuccess -> {
                     for (entity in it.favoriteList) {
                         this.favoriteList.add(entity.movieId)
+                        binding.checkboxFavorite.isChecked = favoriteList.contains(selectedMovie.id)
                     }
                 }
+                else -> view.showSnackWithoutAction("Ошибка 3")
             }
         })
 
@@ -83,7 +99,7 @@ class MovieDetailsFragment : Fragment() {
             txtMovieDetailsReleaseDate.text = selectedMovie.releaseDate
             txtMovieDetailsRating.text = selectedMovie.voteAverage.toString()
 
-            if (selectedMovie.overview.isNullOrBlank()) {
+            if (selectedMovie.overview.isBlank()) {
                 txtMovieOverview.text =
                     getString(R.string.service_movie_overview_request_error_extra)
             } else {
@@ -91,20 +107,19 @@ class MovieDetailsFragment : Fragment() {
                     getString(R.string.movie_details_overview, selectedMovie.overview)
             }
 
-            selectedMovie.backdropPath?.let {
+            selectedMovie.backdropPath.let {
                 Picasso.get()
                     .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
                     .resize(getImageWidth(), getImageHeight(BACKDROP_RATIO))
                     .into(drawMovieBackdrop)
             }
 
-            selectedMovie.posterPath?.let {
+            selectedMovie.posterPath.let {
                 Picasso.get()
                     .load("${MAIN_IMAGE_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
                     .into(drawMovieDetailsPoster)
             }
 
-            checkboxFavorite.isChecked = favoriteList.contains(selectedMovie.id)
             checkboxFavorite.setOnClickListener {
                 if (checkboxFavorite.isChecked) {
                     favoriteViewModel.saveFavorite(convertMovieToFavoriteEntity(selectedMovie))
@@ -127,25 +142,7 @@ class MovieDetailsFragment : Fragment() {
                 .commit()
         }
 
-        viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner, Observer<Any> {
-            when (it) {
-                is AppState.MovieByIdSuccess -> {
-                    getGenres(it.movieDto.genreIds)
-                }
 
-                is AppState.ActorsByIdSuccess -> {
-                    addActor(it.actorDto)
-                }
-
-                is AppState.Error -> {
-                    view.showSnackWithoutAction("Ошибка 1")
-                }
-                is AppState.Loading -> {
-//                view?.showSnackWithoutAction("LOADING")
-                }
-                else -> view.showSnackWithoutAction("Ошибка 3")
-            }
-        })
     }
 
     private fun getGenres(genreIds: List<TmdbGenreDTO>) {
