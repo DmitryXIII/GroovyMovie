@@ -13,7 +13,6 @@ import com.ineedyourcode.groovymovie.databinding.FragmentMainBinding
 import com.ineedyourcode.groovymovie.view.contacts.ContactsFragment
 import com.ineedyourcode.groovymovie.view.favorite.FavoriteFragment
 import com.ineedyourcode.groovymovie.view.history.HistoryFragment
-import com.ineedyourcode.groovymovie.view.maps.MapsFragment
 import com.ineedyourcode.groovymovie.view.settings.SettingsFragment
 import com.ineedyourcode.groovymovie.view.tabs.TabFragment
 
