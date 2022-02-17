@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.ineedyourcode.groovymovie.BuildConfig
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
@@ -72,22 +73,28 @@ class MovieDetailsFragment : Fragment() {
             height = getImageHeight(BACKDROP_RATIO)
         }
 
-        // backdrop загружается дольше остальных элементов, поэтому
-        // фрагмент становится видимым только после загрузки backdrop
-        selectedMovie.backdropPath.let {
-            Picasso.get()
-                .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
-                .error(R.drawable.no_backdrop)
-                .into(binding.drawMovieBackdrop, object : Callback {
-                    override fun onSuccess() {
-                        binding.detailsLayout.visibility = View.VISIBLE
-                    }
+        if (BuildConfig.BUILD_TYPE == "beta") {
+            binding.drawMovieBackdrop.setImageResource(R.drawable.appbar_background)
+            binding.detailsLayout.visibility = View.VISIBLE
+        } else {
+            // backdrop загружается дольше остальных элементов, поэтому
+            // фрагмент становится видимым только после загрузки backdrop
+            selectedMovie.backdropPath.let {
+                Picasso.get()
+                    .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
+                    .error(R.drawable.no_backdrop)
+                    .into(binding.drawMovieBackdrop, object : Callback {
+                        override fun onSuccess() {
+                            binding.detailsLayout.visibility = View.VISIBLE
+                        }
 
-                    override fun onError(e: java.lang.Exception?) {
-                        binding.detailsLayout.visibility = View.VISIBLE
-                    }
-                })
+                        override fun onError(e: java.lang.Exception?) {
+                            binding.detailsLayout.visibility = View.VISIBLE
+                        }
+                    })
+            }
         }
+
 
         viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner, Observer<Any> {
             when (it) {
