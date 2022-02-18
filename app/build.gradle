@@ -7,11 +7,27 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+
 android {
     signingConfigs {
         beta {
         }
         release {
+            if (project.hasProperty("keyRepo")) {
+                def projectPropsFile = file(project.property("keyRepo") + "/groovy_movie.properties")
+                if (projectPropsFile.exists()) {
+                    Properties props = new Properties()
+                    props.load(new FileInputStream(projectPropsFile))
+                    storeFile file(file(project.property("keyRepo") + props['RELEASE_STORE_FILE']))
+                    storePassword props['RELEASE_STORE_PASS']
+                    keyAlias props['RELEASE_ALIAS']
+                    keyPassword props['RELEASE_KEY_PASS']
+                }
+            } else {
+                println "==================================="
+                println "[ERROR] - Check your signing config"
+                println "==================================="
+            }
         }
     }
     compileSdk 31
@@ -28,6 +44,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -62,11 +79,11 @@ android {
     productFlavors {
         free {
             dimension 'version'
-            versionNameSuffix '-free'
+            versionNameSuffix '-FREE'
         }
         pro {
             dimension 'version'
-            versionNameSuffix '-pro'
+            versionNameSuffix '-PRO'
         }
     }
 }
