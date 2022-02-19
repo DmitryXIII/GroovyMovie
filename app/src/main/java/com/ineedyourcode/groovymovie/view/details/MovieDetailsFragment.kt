@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.ineedyourcode.groovymovie.BuildConfig
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
@@ -25,6 +26,8 @@ import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.MovieDetailsViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import java.lang.Exception
+import kotlin.math.abs
 
 private const val MAIN_IMAGE_PATH = "https://image.tmdb.org/t/p/"
 private const val POSTER_SIZE = "w342/"
@@ -67,39 +70,34 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // эффект fade on на backdrop при начале скроллинга страницы
+        binding.appBar.addOnOffsetChangedListener(OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            binding.collaps.alpha = 1.0f - abs(
+                verticalOffset / appBarLayout.totalScrollRange
+                    .toFloat()
+            )
+        })
+
         // изменение размера imageview для корректной загрузки backdrop
         binding.drawMovieBackdrop.layoutParams.apply {
             width = getImageWidth()
             height = getImageHeight(BACKDROP_RATIO)
         }
 
-        if (BuildConfig.BUILD_TYPE == "beta") {
-            binding.drawMovieBackdrop.setImageResource(R.drawable.appbar_background)
-            binding.detailsLayout.visibility = View.VISIBLE
-        } else {
-            // backdrop загружается дольше остальных элементов, поэтому
-            // фрагмент становится видимым только после загрузки backdrop
-            selectedMovie.backdropPath.let {
-                Picasso.get()
-                    .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
-                    .error(R.drawable.no_backdrop)
-                    .into(binding.drawMovieBackdrop, object : Callback {
-                        override fun onSuccess() {
-                            binding.detailsLayout.visibility = View.VISIBLE
-                        }
-
-                        override fun onError(e: java.lang.Exception?) {
-                            binding.detailsLayout.visibility = View.VISIBLE
-                        }
-                    })
-            }
-        }
-
-
         viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner, Observer<Any> {
             when (it) {
                 is AppState.MovieByIdSuccess -> {
-                    getGenres(it.movieDto.genreIds)
+                    Picasso.get()
+                        .load("${MAIN_IMAGE_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
+                        .into(binding.drawMovieDetailsPoster, object : Callback {
+                            override fun onSuccess() {
+                                getGenres(it.movieDto.genreIds)
+                            }
+
+                            override fun onError(e: Exception?) {
+                                getGenres(it.movieDto.genreIds)
+                            }
+                        })
                 }
 
                 is AppState.ActorsByIdSuccess -> {
@@ -135,12 +133,6 @@ class MovieDetailsFragment : Fragment() {
             } else {
                 txtMovieOverview.text =
                     getString(R.string.movie_details_overview, selectedMovie.overview)
-            }
-
-            selectedMovie.posterPath.let {
-                Picasso.get()
-                    .load("${MAIN_IMAGE_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
-                    .into(drawMovieDetailsPoster)
             }
 
             checkboxFavorite.setOnClickListener {
@@ -186,6 +178,30 @@ class MovieDetailsFragment : Fragment() {
             Log.d("DETAILSGENRE", "жанр: ${genreDto.name}")
         }
 
+        if (BuildConfig.BUILD_TYPE == "beta") {
+            binding.drawMovieBackdrop.setImageResource(R.drawable.appbar_background)
+            binding.detailsSpinKit.visibility = View.GONE
+            binding.detailsLayout.visibility = View.VISIBLE
+        } else {
+            // backdrop загружается дольше остальных элементов, поэтому
+            // фрагмент становится видимым только после загрузки backdrop
+            selectedMovie.backdropPath.let {
+                Picasso.get()
+                    .load("${MAIN_IMAGE_PATH}${BACKDROP_SIZE}${selectedMovie.backdropPath}")
+                    .error(R.drawable.no_backdrop)
+                    .into(binding.drawMovieBackdrop, object : Callback {
+                        override fun onSuccess() {
+                            binding.detailsSpinKit.visibility = View.GONE
+                            binding.detailsLayout.visibility = View.VISIBLE
+                        }
+
+                        override fun onError(e: Exception) {
+                            binding.detailsSpinKit.visibility = View.GONE
+                            binding.detailsLayout.visibility = View.VISIBLE
+                        }
+                    })
+            }
+        }
     }
 
     private fun addActor(actorDto: TmdbActorDto) {
@@ -260,3 +276,5 @@ class MovieDetailsFragment : Fragment() {
         _binding = null
     }
 }
+
+
