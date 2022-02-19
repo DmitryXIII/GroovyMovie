@@ -8,7 +8,7 @@ import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,7 +24,7 @@ class MovieDetailsViewModel(
     private val roomRepository: IRoomRepository = RoomRepository(App.getMovieDao())
 ) : ViewModel() {
 
-    fun checkIsFavorite(movie: TmdbMovieByIdDTO): MutableLiveData<AppState> {
+    fun checkIsFavorite(movie: TmdbMovieByIdDto): MutableLiveData<AppState> {
         checkIsFavoriteResponse(movie.id)
         return liveData
     }
@@ -69,10 +69,10 @@ class MovieDetailsViewModel(
     }
 
     // обработка ответа с сервера на запрос фильма по id
-    private val callbackMovieById = object : Callback<TmdbMovieByIdDTO> {
+    private val callbackMovieById = object : Callback<TmdbMovieByIdDto> {
         override fun onResponse(
-            call: Call<TmdbMovieByIdDTO>,
-            responseMovie: Response<TmdbMovieByIdDTO>
+            call: Call<TmdbMovieByIdDto>,
+            responseMovie: Response<TmdbMovieByIdDto>
         ) {
             if (responseMovie.isSuccessful) {
                 if (responseMovie.body() != null) {
@@ -91,7 +91,7 @@ class MovieDetailsViewModel(
             }
         }
 
-        override fun onFailure(call: Call<TmdbMovieByIdDTO>, t: Throwable) {
+        override fun onFailure(call: Call<TmdbMovieByIdDto>, t: Throwable) {
             Log.e(TAG, RESPONSE_MOVIE_BY_ID_ERROR, t)
         }
     }

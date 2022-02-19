@@ -3,7 +3,7 @@ package com.ineedyourcode.groovymovie.model.db
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.db.entities.HistoryEntity
 import com.ineedyourcode.groovymovie.model.db.entities.NotesEntity
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import com.ineedyourcode.groovymovie.utils.convertMovieToHistoryEntity
 import com.ineedyourcode.groovymovie.utils.convertMovieToNoteEntity
 
@@ -11,7 +11,7 @@ class RoomRepository(private val roomDataSource: MovieDao) : IRoomRepository {
     // HISTORY
     override fun getAllHistory(): List<HistoryEntity> = roomDataSource.getAllHistory()
 
-    override fun saveHistoryEntity(movie: TmdbMovieByIdDTO) {
+    override fun saveHistoryEntity(movie: TmdbMovieByIdDto) {
         roomDataSource.insertHistoryEntity(convertMovieToHistoryEntity(movie))
     }
 
@@ -39,7 +39,7 @@ class RoomRepository(private val roomDataSource: MovieDao) : IRoomRepository {
     }
 
     // NOTE
-    override fun saveNote(movie: TmdbMovieByIdDTO, noteContent: String) {
+    override fun saveNote(movie: TmdbMovieByIdDto, noteContent: String) {
         roomDataSource.insertNote(convertMovieToNoteEntity(movie, noteContent))
     }
 

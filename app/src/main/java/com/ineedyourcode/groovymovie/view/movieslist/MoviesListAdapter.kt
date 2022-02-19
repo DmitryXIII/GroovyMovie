@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import com.ineedyourcode.groovymovie.utils.convertMovieToFavoriteEntity
 import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.viewmodel.MoviesListViewModel
@@ -19,14 +19,14 @@ import com.squareup.picasso.Picasso
 class MoviesListAdapter :
     RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder>() {
 
-    private lateinit var moviesList: List<TmdbMovieByIdDTO>
+    private lateinit var moviesList: List<TmdbMovieByIdDto>
     private lateinit var mListener: OnItemClickListener
     private val viewModel = MoviesListViewModel()
     private val favoriteList = mutableSetOf<Int>()
     private val mainPosterPath = "https://image.tmdb.org/t/p/"
     private val posterSize = "w342/"
 
-    fun setAdapterData(moviesListFromFragment: List<TmdbMovieByIdDTO>) {
+    fun setAdapterData(moviesListFromFragment: List<TmdbMovieByIdDto>) {
         moviesList = moviesListFromFragment
         notifyItemRangeChanged(0, moviesList.size)
     }
@@ -38,7 +38,7 @@ class MoviesListAdapter :
     }
 
     interface OnItemClickListener {
-        fun onItemClickListener(position: Int, moviesList: List<TmdbMovieByIdDTO>)
+        fun onItemClickListener(position: Int, moviesList: List<TmdbMovieByIdDto>)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -83,7 +83,7 @@ class MoviesListAdapter :
     class MoviesListViewHolder(
         itemView: View,
         listener: OnItemClickListener,
-        moviesList: List<TmdbMovieByIdDTO>
+        moviesList: List<TmdbMovieByIdDto>
     ) : RecyclerView.ViewHolder(itemView) {
 
         init {

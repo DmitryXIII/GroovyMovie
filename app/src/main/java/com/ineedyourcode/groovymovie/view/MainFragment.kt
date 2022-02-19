@@ -2,32 +2,20 @@ package com.ineedyourcode.groovymovie.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
+import com.ineedyourcode.groovymovie.BuildConfig
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMainBinding
-import com.ineedyourcode.groovymovie.view.contacts.ContactsFragment
+import com.ineedyourcode.groovymovie.utils.showToast
 import com.ineedyourcode.groovymovie.view.favorite.FavoriteFragment
 import com.ineedyourcode.groovymovie.view.history.HistoryFragment
 import com.ineedyourcode.groovymovie.view.settings.SettingsFragment
 import com.ineedyourcode.groovymovie.view.tabs.TabFragment
 
-class MainFragment : Fragment() {
-
-    private var _binding: FragmentMainBinding? = null
-    private val binding get() = _binding!!
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+class MainFragment : BaseBindingFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,8 +32,9 @@ class MainFragment : Fragment() {
                 R.id.action_settings -> {
                     menuNavDrawerAction(SettingsFragment(), SettingsFragment().TAG_FOR_BACKSTACK)
                 }
-                R.id.action_contacts -> {
-                    menuNavDrawerAction(ContactsFragment(), ContactsFragment().TAG_FOR_BACKSTACK)
+                R.id.action_about -> {
+                    showToast(requireContext(), BuildConfig.VERSION_NAME)
+                    true
                 }
                 else -> false
             }
@@ -98,10 +87,5 @@ class MainFragment : Fragment() {
                 .commit()
         }
         return true
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

@@ -3,13 +3,10 @@ package com.ineedyourcode.groovymovie.view.movieslist
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,27 +15,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMoviesListBinding
-import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import com.ineedyourcode.groovymovie.utils.PREFERENCES_ADULT
 import com.ineedyourcode.groovymovie.utils.showSnackWithAction
 import com.ineedyourcode.groovymovie.utils.GridDecorator
 import com.ineedyourcode.groovymovie.utils.convertDpToPixels
+import com.ineedyourcode.groovymovie.view.BaseBindingFragment
 import com.ineedyourcode.groovymovie.view.details.MovieDetailsFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.MoviesListViewModel
 
 @RequiresApi(Build.VERSION_CODES.N)
-class MoviesListFragment : Fragment() {
+class MoviesListFragment :
+    BaseBindingFragment<FragmentMoviesListBinding>(FragmentMoviesListBinding::inflate) {
 
     private lateinit var mainRecyclerView: RecyclerView
     private lateinit var mainAdapter: MoviesListAdapter
     private lateinit var moviesListType: String
-    private lateinit var favoriteList: List<FavoriteEntity>
     private lateinit var progressBar: ProgressBar // кастомный прогрессбар
-
-    private var _binding: FragmentMoviesListBinding? = null
-    private val binding get() = _binding!!
 
     private val viewModel: MoviesListViewModel by lazy {
         ViewModelProvider(this)[MoviesListViewModel::class.java]
@@ -55,15 +49,6 @@ class MoviesListFragment : Fragment() {
             }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMoviesListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,7 +60,7 @@ class MoviesListFragment : Fragment() {
         mainAdapter = MoviesListAdapter()
 
         viewModel.getFavoriteList().observe(viewLifecycleOwner, Observer<Any> {
-            when(it) {
+            when (it) {
                 is AppState.FavoriteListSuccess -> {
                     mainAdapter.setFavoriteList(it.favoriteList)
                 }
@@ -105,7 +90,7 @@ class MoviesListFragment : Fragment() {
                     if (it.getPreferences(Context.MODE_PRIVATE)
                             .getBoolean(PREFERENCES_ADULT, false)
                     ) {
-                        mainAdapter.setAdapterData(appState.moviesData.filter {movie -> !movie.adult })
+                        mainAdapter.setAdapterData(appState.moviesData.filter { movie -> !movie.adult })
                     } else {
                         mainAdapter.setAdapterData(appState.moviesData)
                     }
@@ -115,7 +100,7 @@ class MoviesListFragment : Fragment() {
                     MoviesListAdapter.OnItemClickListener {
                     override fun onItemClickListener(
                         position: Int,
-                        moviesList: List<TmdbMovieByIdDTO>
+                        moviesList: List<TmdbMovieByIdDto>
                     ) {
                         parentFragmentManager.beginTransaction()
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -159,10 +144,5 @@ class MoviesListFragment : Fragment() {
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

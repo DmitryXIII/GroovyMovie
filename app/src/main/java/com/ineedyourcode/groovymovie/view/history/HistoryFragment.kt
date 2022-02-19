@@ -2,10 +2,7 @@ package com.ineedyourcode.groovymovie.view.history
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.widget.ImageViewCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,28 +10,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentHistoryBinding
 import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
+import com.ineedyourcode.groovymovie.view.BaseBindingFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.HistoryViewModel
 
-class HistoryFragment : Fragment() {
+class HistoryFragment :
+    BaseBindingFragment<FragmentHistoryBinding>(FragmentHistoryBinding::inflate) {
     val TAG_FOR_BACKSTACK = "HistoryFragment"
 
     private lateinit var historyAdapter: HistoryAdapter
 
-    private var _binding: FragmentHistoryBinding? = null
-    private val binding get() = _binding!!
-
     private val viewModelHistory: HistoryViewModel by lazy {
         ViewModelProvider(this)[HistoryViewModel::class.java]
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,10 +51,5 @@ class HistoryFragment : Fragment() {
             historyAdapter.clearData()
             view.showSnackWithoutAction("HISTORY CLEARED")
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

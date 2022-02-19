@@ -7,7 +7,7 @@ import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import com.ineedyourcode.groovymovie.model.tmdb.retrofit.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,7 +28,7 @@ class MoviesListViewModel(
         return liveData
     }
 
-    fun saveHistory(movie: TmdbMovieByIdDTO) {
+    fun saveHistory(movie: TmdbMovieByIdDto) {
         roomRepository.saveHistoryEntity(movie)
     }
 
@@ -76,7 +76,7 @@ class MoviesListViewModel(
         }
     }
 
-    private fun checkResponse(moviesList: List<TmdbMovieByIdDTO>): AppState {
+    private fun checkResponse(moviesList: List<TmdbMovieByIdDto>): AppState {
         return if (moviesList.isNullOrEmpty()) {
             AppState.Error(CORRUPTED_DATA)
         } else {

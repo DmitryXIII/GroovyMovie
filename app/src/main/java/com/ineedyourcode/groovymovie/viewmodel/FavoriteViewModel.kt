@@ -6,7 +6,6 @@ import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
 
 class FavoriteViewModel(
     private val liveData: MutableLiveData<AppState> = MutableLiveData(),

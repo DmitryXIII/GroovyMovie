@@ -10,10 +10,10 @@ import kotlinx.android.parcel.RawValue
  * (отличается от модели фильма, полуаемого в списке из TMDB)
  */
 @Parcelize
-data class TmdbMovieByIdDTO(
+data class TmdbMovieByIdDto(
     @SerializedName("adult") val adult: Boolean,
     @SerializedName("backdrop_path") val backdropPath: String,
-    @SerializedName("genres") val genreIds: @RawValue List<TmdbGenreDTO> = listOf(),
+    @SerializedName("genres") val genreIds: @RawValue List<TmdbGenreDto> = listOf(),
     @SerializedName("id") val id: Int,
     @SerializedName("original_language") val originalLanguage: String,
     @SerializedName("original_title") val originalTitle: String,

@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,10 +15,10 @@ import com.ineedyourcode.groovymovie.BuildConfig
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbGenreDTO
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbGenreDto
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import com.ineedyourcode.groovymovie.utils.*
-import com.ineedyourcode.groovymovie.view.maps.MapsFragment
+import com.ineedyourcode.groovymovie.view.BaseBindingFragment
 import com.ineedyourcode.groovymovie.view.note.NoteFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.MovieDetailsViewModel
@@ -37,12 +35,10 @@ private const val NO_ACTOR_PHOTO_PATH = "https://i.ibb.co/CPDK2sK/ic-no-photo.pn
 private const val ACTOR_PHOTO_RATIO = 0.666
 private const val BACKDROP_RATIO = 1.777
 
-class MovieDetailsFragment : Fragment() {
+class MovieDetailsFragment :
+    BaseBindingFragment<FragmentMovieDetailsBinding>(FragmentMovieDetailsBinding::inflate) {
 
-    private var _binding: FragmentMovieDetailsBinding? = null
-    private val binding get() = _binding!!
-
-    private lateinit var selectedMovie: TmdbMovieByIdDTO
+    private lateinit var selectedMovie: TmdbMovieByIdDto
 
     private val viewModel: MovieDetailsViewModel by lazy {
         ViewModelProvider(this)[MovieDetailsViewModel::class.java]
@@ -50,21 +46,12 @@ class MovieDetailsFragment : Fragment() {
 
     companion object {
         private const val ARG_MOVIE = "ARG_MOVIE"
-        fun newInstance(movie: TmdbMovieByIdDTO) = MovieDetailsFragment().apply {
+        fun newInstance(movie: TmdbMovieByIdDto) = MovieDetailsFragment().apply {
             arguments = bundleOf(
                 ARG_MOVIE to movie
             )
             selectedMovie = movie
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -166,7 +153,7 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    private fun getGenres(genreIds: List<TmdbGenreDTO>) {
+    private fun getGenres(genreIds: List<TmdbGenreDto>) {
         for (genreDto in genreIds) {
             if (genreDto == genreIds.last()) {
                 binding.txtMovieDetailsGenre.text =
@@ -259,21 +246,9 @@ class MovieDetailsFragment : Fragment() {
                     })
 
                 setOnClickListener {
-                    parentFragmentManager
-                        .beginTransaction()
-                        .add(
-                            R.id.main_fragment_container,
-                            MapsFragment.newInstance(actorDto.birthPlace.toString())
-                        )
-                        .addToBackStack("")
-                        .commit()
+                    showToast(requireContext(), "clicked: ${actorDto.name}")
                 }
             })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }
 

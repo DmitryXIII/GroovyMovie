@@ -3,12 +3,12 @@ package com.ineedyourcode.groovymovie.model.db
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.db.entities.HistoryEntity
 import com.ineedyourcode.groovymovie.model.db.entities.NotesEntity
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 
 interface IRoomRepository {
     // HISTORY
     fun getAllHistory(): List<HistoryEntity>
-    fun saveHistoryEntity(movie: TmdbMovieByIdDTO)
+    fun saveHistoryEntity(movie: TmdbMovieByIdDto)
     fun clearAllHistory()
 
     // FAVORITE
@@ -19,7 +19,7 @@ interface IRoomRepository {
     fun checkIsFavorite(movieId: Int): Boolean
 
     // NOTE
-    fun saveNote(movie: TmdbMovieByIdDTO, noteContent: String)
+    fun saveNote(movie: TmdbMovieByIdDto, noteContent: String)
     fun getNote(movieId: Int): NotesEntity?
     fun deleteNote(movieId: Int)
 }
