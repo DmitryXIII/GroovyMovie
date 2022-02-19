@@ -57,7 +57,7 @@ class MoviesListFragment :
             moviesListType = it.getString(ARG_MOVIE_TYPE)!!
         }
 
-        mainAdapter = MoviesListAdapter()
+        mainAdapter = MoviesListAdapter(requireContext())
 
         viewModel.getFavoriteList().observe(viewLifecycleOwner, Observer<Any> {
             when (it) {

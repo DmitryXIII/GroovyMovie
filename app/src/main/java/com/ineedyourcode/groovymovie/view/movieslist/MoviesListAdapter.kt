@@ -1,27 +1,25 @@
 package com.ineedyourcode.groovymovie.view.movieslist
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
-import com.ineedyourcode.groovymovie.utils.convertMovieToFavoriteEntity
-import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
-import com.ineedyourcode.groovymovie.viewmodel.MoviesListViewModel
 import com.squareup.picasso.Picasso
 
-class MoviesListAdapter :
+class MoviesListAdapter(private val context: Context) :
     RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder>() {
 
     private lateinit var moviesList: List<TmdbMovieByIdDto>
     private lateinit var mListener: OnItemClickListener
-    private val viewModel = MoviesListViewModel()
     private val favoriteList = mutableSetOf<Int>()
     private val mainPosterPath = "https://image.tmdb.org/t/p/"
     private val posterSize = "w342/"
@@ -57,20 +55,15 @@ class MoviesListAdapter :
             movieTitle.text = "\"${moviesList[position].title}\" (${
                 moviesList[position].releaseDate.substring(0, 4)
             })"
-            movieRating.text = moviesList[position].voteAverage.toString()
 
-            // если фильм есть в списке избранных - установить флажок "избранное"
-            isFavorite.isChecked = favoriteList.contains(moviesList[position].id)
-
-            isFavorite.setOnClickListener(View.OnClickListener {
-                if (isFavorite.isChecked) {
-                    isFavorite.showSnackWithoutAction("${movieTitle.text} добавлен в ИЗБРАННЫЕ")
-                    viewModel.saveFavorite(convertMovieToFavoriteEntity(moviesList[position]))
-                } else {
-                    viewModel.deleteFavorite(convertMovieToFavoriteEntity(moviesList[position]))
-                    isFavorite.showSnackWithoutAction("${movieTitle.text} удален из ИЗБРАННЫХ")
+            ratingBackground.apply {
+                when (moviesList[position].voteAverage) {
+                    in 0.0..4.0 -> {setCardBackgroundColor(context.getColor(R.color.color_until_3_9))}
+                    in 4.1..6.9 -> {setCardBackgroundColor(context.getColor(R.color.color_until_6_9))}
+                    else -> {setCardBackgroundColor(context.getColor(R.color.color_until_9_9))}
                 }
-            })
+            }
+            movieRating.text = moviesList[position].voteAverage.toString()
 
             Picasso.get()
                 .load("${mainPosterPath}${posterSize}${moviesList[position].posterPath}")
@@ -98,6 +91,6 @@ class MoviesListAdapter :
         val movieTitle: TextView = itemView.findViewById(R.id.txt_movie_title)
         val movieRating: TextView = itemView.findViewById(R.id.txt_movie_rating)
         val moviePoster: ImageView = itemView.findViewById(R.id.draw_movie_poster)
-        val isFavorite: CheckBox = itemView.findViewById(R.id.checkbox_favorite)
+        val ratingBackground: CardView = itemView.findViewById(R.id.rating_background)
     }
 }
