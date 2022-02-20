@@ -3,6 +3,7 @@ package com.ineedyourcode.groovymovie.view.favorite
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,6 +12,7 @@ import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentFavoriteBinding
 import com.ineedyourcode.groovymovie.utils.GridDecorator
+import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
 import com.ineedyourcode.groovymovie.view.BaseBindingFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
 import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
@@ -34,27 +36,29 @@ class FavoriteFragment :
         viewModel.getAllFavorite().observe(viewLifecycleOwner, Observer<Any> {
             when (it) {
                 is AppState.Loading -> {
-                    binding.favoriteSpinKit.visibility = View.VISIBLE
+                    binding.favoriteSpinKit.isVisible = true
                 }
 
                 is AppState.FavoriteListSuccess -> {
-                    if (it.favoriteList.isEmpty()){
-                        binding.tvNoFavorite.visibility = View.VISIBLE
-                        binding.favoriteRecyclerview.visibility = View.GONE
+                    if (it.favoriteList.isEmpty()) {
+                        binding.tvNoFavorite.isVisible = true
+                        binding.favoriteRecyclerview.isVisible = false
                     } else {
                         favoriteAdapter.setAdapterData(it.favoriteList)
-                        binding.tvNoFavorite.visibility = View.GONE
-                        binding.favoriteRecyclerview.visibility = View.VISIBLE
+                        binding.tvNoFavorite.isVisible = false
+                        binding.favoriteRecyclerview.isVisible = true
                     }
-                    binding.favoriteSpinKit.visibility = View.GONE
+                    binding.favoriteSpinKit.isVisible = false
+                }
+
+                is AppState.Error -> {
+                    view.showSnackWithoutAction(R.string.data_receiving_error)
                 }
             }
         })
 
-        with(binding) {
-            progressBar = favoriteSpinKit
-            favoriteRecyclerView = binding.favoriteRecyclerview
-        }
+        progressBar = binding.favoriteSpinKit
+        favoriteRecyclerView = binding.favoriteRecyclerview
 
         progressBar.indeterminateDrawable = ThreeBounce()
 

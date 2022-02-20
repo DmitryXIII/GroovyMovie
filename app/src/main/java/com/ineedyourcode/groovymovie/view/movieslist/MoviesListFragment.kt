@@ -76,7 +76,7 @@ class MoviesListFragment :
         when (appState) {
             is AppState.MoviesListSuccess -> {
                 progressBar.isVisible = false
-                mainRecyclerView.visibility = View.VISIBLE
+                mainRecyclerView.isVisible = true
 
                 activity?.let {
                     if (it.getPreferences(Context.MODE_PRIVATE)
@@ -121,12 +121,12 @@ class MoviesListFragment :
 
             is AppState.Loading -> {
                 progressBar.isVisible = true
-                mainRecyclerView.visibility = View.INVISIBLE
+                mainRecyclerView.isVisible = false
             }
 
             is AppState.Error -> {
                 progressBar.isVisible = false
-                mainRecyclerView.visibility = View.INVISIBLE
+                mainRecyclerView.isVisible = false
 
                 view?.showSnackWithAction(
                     appState.e,
