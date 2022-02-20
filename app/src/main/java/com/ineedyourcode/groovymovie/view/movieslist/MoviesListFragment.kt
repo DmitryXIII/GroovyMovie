@@ -59,14 +59,6 @@ class MoviesListFragment :
 
         mainAdapter = MoviesListAdapter(requireContext())
 
-        viewModel.getFavoriteList().observe(viewLifecycleOwner, Observer<Any> {
-            when (it) {
-                is AppState.FavoriteListSuccess -> {
-                    mainAdapter.setFavoriteList(it.favoriteList)
-                }
-            }
-        })
-
         viewModel.getMoviesList(moviesListType).observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })

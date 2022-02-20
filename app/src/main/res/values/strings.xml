@@ -30,7 +30,7 @@
     <string name="note_content_hint" tools:ignore="TypographyEllipsis">Оставьте здесь заметку о фильме...</string>
     <string name="settings">Настройки</string>
     <string name="menu_title_about_app">О приложении</string>
-    <string name="title_favorite">Избранное</string>
+    <string name="title_favorite">Закладки</string>
     <string name="title_history">История</string>
     <string name="alert_dialog_contacts_permission_title">Доступ к контактам</string>
     <string name="alert_dialog_contacts_permission_message">Чтобы увидеть контакты, необходимо разрешить доступ к контактам</string>
@@ -44,4 +44,5 @@
     <string name="actor_birthplace">Место рождения: %1$s</string>
     <string name="movie_details_title">\"%1$s\"</string>
     <string name="movie_details_overview">\"%1$s\"</string>
+    <string name="no_favorite">Ни один фильм не добавлен в закладки</string>
 </resources>

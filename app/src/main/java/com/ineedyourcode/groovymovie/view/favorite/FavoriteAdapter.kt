@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import com.ineedyourcode.groovymovie.utils.setBackgroundColorByRating
 import com.squareup.picasso.Picasso
 
@@ -17,15 +18,15 @@ private const val POSTER_SIZE = "w342/"
 private const val MAIN_POSTER_PATH = "https://image.tmdb.org/t/p/"
 
 class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHolder>() {
-    private var favoriteMoviesList = mutableListOf<FavoriteEntity>()
+    private var favoriteMoviesList = listOf<TmdbMovieByIdDto>()
 
-    fun setAdapterData(mFavoriteMoviesList: List<FavoriteEntity>) {
-        favoriteMoviesList = mFavoriteMoviesList as MutableList<FavoriteEntity>
+    fun setAdapterData(mFavoriteMoviesList: List<TmdbMovieByIdDto>) {
+        favoriteMoviesList = mFavoriteMoviesList
         notifyItemRangeInserted(0, favoriteMoviesList.size)
     }
 
     fun clearData() {
-        favoriteMoviesList = mutableListOf()
+        favoriteMoviesList = listOf()
         notifyItemRangeRemoved(0, favoriteMoviesList.size)
     }
 
@@ -39,13 +40,13 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHol
     override fun onBindViewHolder(holder: FavoriteListViewHolder, position: Int) {
         with(holder) {
             movieTitle.text = "\"${
-                favoriteMoviesList[position].movieTitle
+                favoriteMoviesList[position].title
             }\" (${
                 favoriteMoviesList[position].releaseDate?.substring(0, 4)
             })"
 
-            ratingBackground.setBackgroundColorByRating(favoriteMoviesList[position].rating!!.toDouble())
-            movieRating.text = favoriteMoviesList[position].rating
+            ratingBackground.setBackgroundColorByRating(favoriteMoviesList[position].voteAverage)
+            movieRating.text = favoriteMoviesList[position].voteAverage.toString()
 
             Picasso.get()
                 .load("${MAIN_POSTER_PATH}${POSTER_SIZE}${favoriteMoviesList[position].posterPath}")

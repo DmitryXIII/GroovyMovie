@@ -11,7 +11,7 @@ sealed class AppState {
     data class ActorsByIdSuccess(val actorDto: TmdbActorDto) : AppState()
     data class MovieByIdSuccess(val movieDto: TmdbMovieByIdDto) : AppState()
     data class HistorySuccess(val history: List<HistoryEntity>) : AppState()
-    data class FavoriteListSuccess(val favoriteList: List<FavoriteEntity>) : AppState()
+    data class FavoriteListSuccess(val favoriteList: List<TmdbMovieByIdDto>) : AppState()
     data class IsFavoriteSuccess(val isFavorite: Boolean) : AppState()
     data class NoteSuccess(val note: NotesEntity) : AppState()
     data class Error(val e: String): AppState()

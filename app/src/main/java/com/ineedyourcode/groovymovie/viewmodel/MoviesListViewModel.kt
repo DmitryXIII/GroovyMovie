@@ -23,21 +23,8 @@ class MoviesListViewModel(
     private val roomRepository: IRoomRepository = RoomRepository(App.getMovieDao())
 ) : ViewModel() {
 
-    fun getFavoriteList(): MutableLiveData<AppState> {
-        getAllFavoriteResponse()
-        return liveData
-    }
-
     fun saveHistory(movie: TmdbMovieByIdDto) {
         roomRepository.saveHistoryEntity(movie)
-    }
-
-    fun saveFavorite(entity: FavoriteEntity) {
-        roomRepository.saveFavoriteEntity(entity)
-    }
-
-    fun deleteFavorite(entity: FavoriteEntity) {
-        roomRepository.deleteFavorite(entity.movieId)
     }
 
     // возвращает liveData для подписки на нее
@@ -82,10 +69,5 @@ class MoviesListViewModel(
         } else {
             AppState.MoviesListSuccess(moviesList)
         }
-    }
-
-    private fun getAllFavoriteResponse() {
-        val favoriteList = roomRepository.getAllFavorite()
-        liveData.postValue(AppState.FavoriteListSuccess(favoriteList))
     }
 }

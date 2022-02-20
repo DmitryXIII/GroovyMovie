@@ -129,14 +129,14 @@ class MovieDetailsFragment :
                             selectedMovie
                         )
                     )
-                    checkboxFavorite.showSnackWithoutAction("${selectedMovie.title} добавлен в ИЗБРАННЫЕ")
+                    checkboxFavorite.showSnackWithoutAction("\"${selectedMovie.title}\" добавлен в закладки")
                 } else {
                     viewModel.deleteFavorite(
                         convertMovieToFavoriteEntity(
                             selectedMovie
                         )
                     )
-                    checkboxFavorite.showSnackWithoutAction("${selectedMovie.title} удален из ИЗБРАННЫХ")
+                    checkboxFavorite.showSnackWithoutAction("\"${selectedMovie.title}\" удален из закладок")
                 }
             }
         }

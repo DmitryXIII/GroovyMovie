@@ -12,15 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/favorite_spin_kit"
-        style="@style/SpinKitView.Large.ThreeBounce"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:SpinKit_Color="@color/secondary_background" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_clear_favorite"
         android:layout_width="wrap_content"
@@ -31,4 +22,24 @@
         android:src="@drawable/ic_baseline_delete_forever_24"
         app:borderWidth="@dimen/zero_value" />
 
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/favorite_spin_kit"
+        style="@style/SpinKitView.Large.ThreeBounce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/main_background"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:SpinKit_Color="@color/secondary_background" />
+
+    <TextView
+        android:id="@+id/tv_no_favorite"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_favorite"
+        android:textColor="@color/neutral_white"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -33,8 +33,20 @@ class FavoriteFragment :
 
         viewModel.getAllFavorite().observe(viewLifecycleOwner, Observer<Any> {
             when (it) {
+                is AppState.Loading -> {
+                    binding.favoriteSpinKit.visibility = View.VISIBLE
+                }
+
                 is AppState.FavoriteListSuccess -> {
-                    favoriteAdapter.setAdapterData(it.favoriteList)
+                    if (it.favoriteList.isEmpty()){
+                        binding.tvNoFavorite.visibility = View.VISIBLE
+                        binding.favoriteRecyclerview.visibility = View.GONE
+                    } else {
+                        favoriteAdapter.setAdapterData(it.favoriteList)
+                        binding.tvNoFavorite.visibility = View.GONE
+                        binding.favoriteRecyclerview.visibility = View.VISIBLE
+                    }
+                    binding.favoriteSpinKit.visibility = View.GONE
                 }
             }
         })
