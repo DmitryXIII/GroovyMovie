@@ -5,6 +5,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.StringRes
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.ineedyourcode.groovymovie.R
@@ -57,4 +58,18 @@ fun Fragment.getImageHeight(ratio: Double): Int {
     val displayMetrics = DisplayMetrics()
     activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
     return (displayMetrics.widthPixels / ratio).toInt()
+}
+
+fun CardView.setBackgroundColorByRating(rating: Double) {
+    when (rating) {
+        in 0.0..4.0 -> {
+            setCardBackgroundColor(context.getColor(R.color.color_until_3_9))
+        }
+        in 4.1..6.9 -> {
+            setCardBackgroundColor(context.getColor(R.color.color_until_6_9))
+        }
+        else -> {
+            setCardBackgroundColor(context.getColor(R.color.color_until_9_9))
+        }
+    }
 }

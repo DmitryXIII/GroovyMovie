@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
+import com.ineedyourcode.groovymovie.utils.setBackgroundColorByRating
 import com.squareup.picasso.Picasso
 
 private const val POSTER_SIZE = "w342/"
@@ -41,6 +43,8 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHol
             }\" (${
                 favoriteMoviesList[position].releaseDate?.substring(0, 4)
             })"
+
+            ratingBackground.setBackgroundColorByRating(favoriteMoviesList[position].rating!!.toDouble())
             movieRating.text = favoriteMoviesList[position].rating
 
             Picasso.get()
@@ -58,6 +62,7 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHol
         val movieTitle: TextView = itemView.findViewById(R.id.txt_movie_title)
         val movieRating: TextView = itemView.findViewById(R.id.txt_movie_rating)
         val moviePoster: ImageView = itemView.findViewById(R.id.draw_movie_poster)
+        val ratingBackground: CardView = itemView.findViewById(R.id.rating_background)
     }
 }
 

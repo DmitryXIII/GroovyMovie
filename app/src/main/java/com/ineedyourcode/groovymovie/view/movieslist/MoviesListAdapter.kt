@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
+import com.ineedyourcode.groovymovie.utils.setBackgroundColorByRating
 import com.squareup.picasso.Picasso
 
 class MoviesListAdapter(private val context: Context) :
@@ -56,13 +57,7 @@ class MoviesListAdapter(private val context: Context) :
                 moviesList[position].releaseDate.substring(0, 4)
             })"
 
-            ratingBackground.apply {
-                when (moviesList[position].voteAverage) {
-                    in 0.0..4.0 -> {setCardBackgroundColor(context.getColor(R.color.color_until_3_9))}
-                    in 4.1..6.9 -> {setCardBackgroundColor(context.getColor(R.color.color_until_6_9))}
-                    else -> {setCardBackgroundColor(context.getColor(R.color.color_until_9_9))}
-                }
-            }
+            ratingBackground.setBackgroundColorByRating(moviesList[position].voteAverage)
             movieRating.text = moviesList[position].voteAverage.toString()
 
             Picasso.get()
