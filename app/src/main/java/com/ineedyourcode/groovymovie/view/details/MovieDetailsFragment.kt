@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
 import com.ineedyourcode.groovymovie.BuildConfig
@@ -31,8 +30,8 @@ private const val MAIN_IMAGE_PATH = "https://image.tmdb.org/t/p/"
 private const val POSTER_SIZE = "w342/"
 private const val BACKDROP_SIZE = "w1280/"
 private const val ACTOR_PHOTO_SIZE = "w185/"
-private const val NO_ACTOR_PHOTO_PATH = "https://i.ibb.co/CPDK2sK/ic-no-photo.png"
 private const val ACTOR_PHOTO_RATIO = 0.666
+private const val POSTER_RATIO = 0.666
 private const val BACKDROP_RATIO = 1.777
 
 class MovieDetailsFragment :
@@ -71,9 +70,14 @@ class MovieDetailsFragment :
             height = getImageHeight(BACKDROP_RATIO)
         }
 
-        viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner, Observer<Any> {
+        viewModel.getMovieById(selectedMovie.id).observe(viewLifecycleOwner) {
             when (it) {
                 is AppState.MovieByIdSuccess -> {
+                    // изменение размера imageview для корректной загрузки poster (ширина постера = 1/3 ширины экрана)
+                    binding.drawMovieDetailsPoster.layoutParams.apply {
+                        width = getImageWidth() / 3
+                        height = getImageHeight(POSTER_RATIO) / 3
+                    }
                     Picasso.get()
                         .load("${MAIN_IMAGE_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
                         .into(binding.drawMovieDetailsPoster, object : Callback {
@@ -82,6 +86,10 @@ class MovieDetailsFragment :
                             }
 
                             override fun onError(e: Exception?) {
+                                binding.drawMovieDetailsPoster.apply {
+                                    setImageResource(R.drawable.no_backdrop)
+                                    scaleType = ImageView.ScaleType.FIT_XY
+                                }
                                 getGenres(it.movieDto.genreIds)
                             }
                         })
@@ -104,7 +112,7 @@ class MovieDetailsFragment :
 
                 else -> view.showSnackWithoutAction("Необработанное событие")
             }
-        })
+        }
 
         viewModel.checkIsFavorite(selectedMovie)
 
@@ -220,30 +228,18 @@ class MovieDetailsFragment :
                         getString(R.string.actor_birthplace, actorDto.birthPlace)
                 }
 
-                val photoWidthInPixels = convertDpToPixels(resources, R.dimen.actor_photo_width)
                 val actorPhoto = this.findViewById<ImageView>(R.id.actor_photo)
+
+                // изменение размера imageview для корректной загрузки actor photo
+                actorPhoto.layoutParams.apply {
+                    width = convertDpToPixels(resources, R.dimen.actor_photo_width)
+                    height = (convertDpToPixels(resources, R.dimen.actor_photo_width) / ACTOR_PHOTO_RATIO).toInt()
+                }
 
                 Picasso.get()
                     .load("${MAIN_IMAGE_PATH}${ACTOR_PHOTO_SIZE}${actorDto.profilePath}")
-                    .resize(
-                        photoWidthInPixels,
-                        (photoWidthInPixels / ACTOR_PHOTO_RATIO).toInt()
-                    )
-                    .into(actorPhoto, object : Callback {
-                        override fun onSuccess() {
-                            actorPhoto.setBackgroundResource(R.drawable.poster_border)
-                        }
-
-                        override fun onError(e: java.lang.Exception?) {
-                            Picasso.get()
-                                .load(NO_ACTOR_PHOTO_PATH)
-                                .resize(
-                                    photoWidthInPixels,
-                                    (photoWidthInPixels / ACTOR_PHOTO_RATIO).toInt()
-                                )
-                                .into(actorPhoto.also { it.setBackgroundResource(R.drawable.poster_border) })
-                        }
-                    })
+                    .error(R.drawable.ic_no_photo)
+                    .into(actorPhoto)
 
                 setOnClickListener {
                     showToast(requireContext(), "clicked: ${actorDto.name}")

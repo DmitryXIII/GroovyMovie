@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import com.ineedyourcode.groovymovie.utils.setBackgroundColorByRating
 import com.squareup.picasso.Picasso
@@ -19,6 +18,7 @@ private const val MAIN_POSTER_PATH = "https://image.tmdb.org/t/p/"
 
 class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHolder>() {
     private var favoriteMoviesList = listOf<TmdbMovieByIdDto>()
+    private lateinit var mListener: OnItemClickListener
 
     fun setAdapterData(mFavoriteMoviesList: List<TmdbMovieByIdDto>) {
         favoriteMoviesList = mFavoriteMoviesList
@@ -26,14 +26,22 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHol
     }
 
     fun clearData() {
-        favoriteMoviesList = listOf()
         notifyItemRangeRemoved(0, favoriteMoviesList.size)
+        favoriteMoviesList = listOf()
+    }
+
+    interface OnItemClickListener {
+        fun onItemClickListener(position: Int, moviesList: List<TmdbMovieByIdDto>)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        mListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteListViewHolder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
-        return FavoriteListViewHolder(itemView)
+        return FavoriteListViewHolder(itemView, mListener, favoriteMoviesList)
     }
 
     @SuppressLint("SetTextI18n")
@@ -42,7 +50,7 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHol
             movieTitle.text = "\"${
                 favoriteMoviesList[position].title
             }\" (${
-                favoriteMoviesList[position].releaseDate?.substring(0, 4)
+                favoriteMoviesList[position].releaseDate.substring(0, 4)
             })"
 
             ratingBackground.setBackgroundColorByRating(favoriteMoviesList[position].voteAverage)
@@ -58,7 +66,18 @@ class FavoriteAdapter : RecyclerView.Adapter<FavoriteAdapter.FavoriteListViewHol
 
     class FavoriteListViewHolder(
         itemView: View,
+        listener: OnItemClickListener,
+        favoriteMoviesList: List<TmdbMovieByIdDto>
     ) : RecyclerView.ViewHolder(itemView) {
+
+        init {
+            itemView.setOnClickListener {
+                listener.onItemClickListener(
+                    absoluteAdapterPosition,
+                    favoriteMoviesList
+                )
+            }
+        }
 
         val movieTitle: TextView = itemView.findViewById(R.id.txt_movie_title)
         val movieRating: TextView = itemView.findViewById(R.id.txt_movie_rating)

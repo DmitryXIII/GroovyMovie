@@ -8,7 +8,6 @@ import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -57,11 +56,11 @@ class MoviesListFragment :
             moviesListType = it.getString(ARG_MOVIE_TYPE)!!
         }
 
-        mainAdapter = MoviesListAdapter(requireContext())
+        mainAdapter = MoviesListAdapter()
 
-        viewModel.getMoviesList(moviesListType).observe(viewLifecycleOwner, Observer<Any> {
+        viewModel.getMoviesList(moviesListType).observe(viewLifecycleOwner) {
             renderData(it as AppState)
-        })
+        }
 
         with(binding) {
             progressBar = spinKit
@@ -135,6 +134,7 @@ class MoviesListFragment :
                     viewModel.getMoviesList(moviesListType)
                 }
             }
+            else -> {}
         }
     }
 }

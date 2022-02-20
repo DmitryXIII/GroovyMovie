@@ -47,7 +47,7 @@ fun View.showSnackWithAction(message: String, actionText: String, action: (View)
 // Методы используются для корректной загрузки и отображения backdrop-фона фильма.
 // Backdrop корректно растягивается на ширину дисплея без обрезки
 // ни по вертикали, ни по горизонтали.
-// ratio - отношение ширины к высоте backdrop-фона, загружаемого из TMDB (= 1,77777...)
+// ratio - отношение ширины картинки к ее высоте
 fun Fragment.getImageWidth(): Int {
     val displayMetrics = DisplayMetrics()
     activity?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)

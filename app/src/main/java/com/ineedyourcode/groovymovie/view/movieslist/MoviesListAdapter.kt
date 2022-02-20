@@ -1,8 +1,6 @@
 package com.ineedyourcode.groovymovie.view.movieslist
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,29 +9,22 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import com.ineedyourcode.groovymovie.utils.setBackgroundColorByRating
 import com.squareup.picasso.Picasso
 
-class MoviesListAdapter(private val context: Context) :
+private const val MAIN_POSTER_PATH = "https://image.tmdb.org/t/p/"
+private const val POSTER_SIZE = "w342/"
+
+class MoviesListAdapter :
     RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder>() {
 
     private lateinit var moviesList: List<TmdbMovieByIdDto>
     private lateinit var mListener: OnItemClickListener
-    private val favoriteList = mutableSetOf<Int>()
-    private val mainPosterPath = "https://image.tmdb.org/t/p/"
-    private val posterSize = "w342/"
 
     fun setAdapterData(moviesListFromFragment: List<TmdbMovieByIdDto>) {
         moviesList = moviesListFromFragment
         notifyItemRangeChanged(0, moviesList.size)
-    }
-
-    fun setFavoriteList(favoriteListFromFragment: List<FavoriteEntity>) {
-        for (entity in favoriteListFromFragment) {
-            favoriteList.add(entity.movieId)
-        }
     }
 
     interface OnItemClickListener {
@@ -61,7 +52,8 @@ class MoviesListAdapter(private val context: Context) :
             movieRating.text = moviesList[position].voteAverage.toString()
 
             Picasso.get()
-                .load("${mainPosterPath}${posterSize}${moviesList[position].posterPath}")
+                .load("${MAIN_POSTER_PATH}${POSTER_SIZE}${moviesList[position].posterPath}")
+                .error(R.drawable.no_backdrop)
                 .into(moviePoster)
         }
     }

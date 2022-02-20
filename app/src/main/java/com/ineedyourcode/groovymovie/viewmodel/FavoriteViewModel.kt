@@ -29,11 +29,7 @@ class FavoriteViewModel(
 
     fun deleteAllFavorite() {
         roomFavoriteRepository.clearAllFavorite()
-    }
-
-    private fun checkIsFavoriteResponse(movieId: Int) {
-        val isFavorite = roomFavoriteRepository.checkIsFavorite(movieId)
-        liveData.postValue(AppState.IsFavoriteSuccess(isFavorite))
+        liveData.postValue(AppState.Success())
     }
 
     private fun getAllFavoriteResponse() {
@@ -41,12 +37,8 @@ class FavoriteViewModel(
         val favoriteListFromDB = roomFavoriteRepository.getAllFavorite()
         val favoriteMoviesList = mutableListOf<TmdbMovieByIdDto>()
 
-        if (favoriteListFromDB.size == 0) {
-            liveData.postValue(
-                AppState.FavoriteListSuccess(
-                    favoriteMoviesList
-                )
-            )
+        if (favoriteListFromDB.isEmpty()) {
+            liveData.postValue(AppState.FavoriteListSuccess(favoriteMoviesList))
         } else {
 
             favoriteListFromDB.forEach {
