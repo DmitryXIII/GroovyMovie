@@ -5,11 +5,12 @@ import com.ineedyourcode.groovymovie.model.Movie
 import org.json.JSONException
 import org.json.JSONObject
 
+private const val TMDB_JSON_PARSER_TAG = "TMDB_JSON_PARSER_TAG"
+
 class TMDBJsonParser {
-    private val parserTag = "TMDB_Json_parser_TAG"
-    private val mapOfGenres = mutableMapOf<Int, String>()
 
     fun parseGenresList(requestResult: String): Map<Int, String> {
+        val mapOfGenres = mutableMapOf<Int, String>()
         try {
             val jsonObj = JSONObject(requestResult)
             val array = jsonObj.getJSONArray("genres")
@@ -19,9 +20,18 @@ class TMDBJsonParser {
                 mapOfGenres[genre.getInt("id")] = genre.getString("name")
             }
         } catch (e: JSONException) {
-            Log.e(parserTag, "Error parsing genres from JSON: $requestResult")
+            Log.e(TMDB_JSON_PARSER_TAG, "Error parsing genres from JSON: $requestResult")
         }
         return mapOfGenres
+    }
+
+    fun parseMovieOverview(requestResult: String): String {
+        return try {
+            JSONObject(requestResult).getString("overview")
+        } catch (e: JSONException) {
+            Log.e(TMDB_JSON_PARSER_TAG, "Error parsing genres from JSON: $requestResult")
+            "null"
+        }
     }
 
     fun parseTopRatedList(result: String, mapOfGenres: Map<Int, String>): Map<String, Movie> {
@@ -70,7 +80,7 @@ class TMDBJsonParser {
                 topRatedMoviesMap[movie.id.toString()] = movie
             }
         } catch (e: JSONException) {
-            Log.e(parserTag, "Error parsing movies from JSON: $result")
+            Log.e(TMDB_JSON_PARSER_TAG, "Error parsing movies from JSON: $result")
         }
         return topRatedMoviesMap
     }

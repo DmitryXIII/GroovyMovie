@@ -12,11 +12,17 @@
     <string name="rating_example">4.5</string>
     <string name="movie_title_example">MOVIE_TITLE</string>
     <string name="empty_request">Пустой запрос</string>
-    <string name="retry">Еще раз</string>
+    <string name="retry">Повторить запрос</string>
     <string name="action">Боевики</string>
     <string name="comedy">Комедии</string>
     <string name="drama">Драмы</string>
     <string name="triller">Триллеры</string>
     <string name="family">Семейные</string>
     <string name="data_receiving_error">Data receiving error</string>
+    <string name="service_movie_overview_response_emty_extra">В базе данных нет описания для этого фильма</string>
+    <string name="service_movie_overview_request_error_extra">Не удалось загрузить описание для этого фильма</string>
+    <string name="snack_msg_overview_load_error">Ошибка загрузки описания</string>
+    <string name="snack_msg_overview_load_success">Описание фильма успешно загружено через сервис</string>
+    <string name="msg_no_connection">NO INTERNET CONNECTION</string>
+    <string name="connection_icon">connection icon</string>
 </resources>

@@ -12,10 +12,11 @@ import java.net.URL
 import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
 
+private const val TMDB_REPOSITORY_TAG = "TMDB_REPOSITORY_TAG"
 
 @RequiresApi(Build.VERSION_CODES.N)
 class TMDBRepository : IMoviesRepository {
-    private val tmdbTag = "TMDB_TAG"
+
     private lateinit var mapOfGenres: Map<Int, String>
     private val topRatedMoviesMap = mutableMapOf<String, Movie>()
     private val parser = TMDBJsonParser()
@@ -58,7 +59,7 @@ class TMDBRepository : IMoviesRepository {
                     }
             }
         } catch (e: Exception) {
-            Log.e(tmdbTag, e.toString())
+            Log.e(TMDB_REPOSITORY_TAG, e.toString())
             throw Exception("Connection failed")
         }
     }

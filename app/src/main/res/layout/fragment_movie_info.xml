@@ -135,11 +135,11 @@
             android:id="@+id/txt_movie_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="top"
             android:layout_gravity="top"
-            android:textStyle="italic"
-            android:text="@string/some_movie_information"
+            android:gravity="top"
             android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textStyle="italic"
+            tools:text="@string/some_movie_information" />
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
