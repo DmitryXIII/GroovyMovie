@@ -12,7 +12,7 @@ import com.ineedyourcode.groovymovie.model.Movie
 
 class MainMoviesAdapter(
     private var moviesMap: Map<String, Movie>,
-    private var genresList: List<String>,
+    private var genresList: Set<String>,
     private var fragment: MainScreenFragment
 ) : RecyclerView.Adapter<MainMoviesAdapter.MainMoviesViewHolder>() {
 
@@ -28,7 +28,8 @@ class MainMoviesAdapter(
     override fun onBindViewHolder(holder: MainMoviesViewHolder, position: Int) {
         // создание адаптера для каждого жанра из пришедшего списка фильмов
         val adapterByGenres = FilteredByGenresAdapter().apply {
-            setAdapterData(moviesMap.values.toList().filter { it.genre == genresList[position] })
+            setAdapterData(
+                moviesMap.values.toList().filter { it.genre == genresList.toList()[position] })
 
             // обработка клика по вложенным горизонтальным спискам фильмов
             setOnItemClickListener(object :
@@ -47,7 +48,9 @@ class MainMoviesAdapter(
         }
 
         with(holder) {
-            genreHeader.text = genresList[position]
+            // Заглавная буква в названии жанра
+            genreHeader.text =
+                genresList.toList()[position].lowercase().replaceFirstChar { it.uppercase() }
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = adapterByGenres

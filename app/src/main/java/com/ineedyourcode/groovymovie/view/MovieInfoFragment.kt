@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMovieInfoBinding
 import com.ineedyourcode.groovymovie.model.Movie
 
@@ -41,7 +42,8 @@ class MovieInfoFragment : Fragment() {
                 txtMovieInfoReleaseDate.text = movie.releaseDate
                 txtMovieInfoRating.text = movie.rating
                 txtMovieInfoGenre.text = movie.genre
-                drawMovieInfoPoster.setImageResource(movie.poster)
+                drawMovieInfoPoster.setImageResource(R.drawable.tmdb_logo)
+                txtMovieInfo.text = movie.overview
             }
         }
     }

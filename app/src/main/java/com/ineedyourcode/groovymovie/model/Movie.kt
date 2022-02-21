@@ -1,9 +1,7 @@
 package com.ineedyourcode.groovymovie.model
 
 import android.os.Parcelable
-import androidx.annotation.DrawableRes
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 @Parcelize
 data class Movie(
@@ -12,8 +10,5 @@ data class Movie(
     val releaseDate: String?,
     val rating: String?,
     val genre: String?,
-
-    @DrawableRes
-    val poster: Int
-
+    val overview: String?
 ) : Parcelable

@@ -1,16 +1,19 @@
 package com.ineedyourcode.groovymovie.viewmodel
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ineedyourcode.groovymovie.model.RandomMoviesRepository
-import java.lang.Thread.sleep
+import com.ineedyourcode.groovymovie.model.IMoviesRepository
+import com.ineedyourcode.groovymovie.model.tmdb.TMDBRepository
 
+@RequiresApi(Build.VERSION_CODES.N)
 class MainScreenViewModel(private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()) :
     ViewModel() {
 
-    private val repository = RandomMoviesRepository()
-
+    private val repository: IMoviesRepository = TMDBRepository()
+    private var requestsTriesCounter = 0
     fun getData(): LiveData<AppState> {
         getDataFromDb()
         return liveDataToObserve
@@ -19,21 +22,26 @@ class MainScreenViewModel(private val liveDataToObserve: MutableLiveData<AppStat
     private fun getDataFromDb() {
         liveDataToObserve.value = AppState.Loading
         Thread {
-            sleep(1000)
-            when (randomResult()) {
-                in 1..7 ->
+            while (true) {
+                try {
+                    repository.loadData()
                     liveDataToObserve.postValue(
                         AppState.Success(
                             repository.getMoviesMap(),
                             repository.getGenresList()
                         )
                     )
-                in 8..10 -> liveDataToObserve.postValue(AppState.Error(IllegalAccessException("Data receiving error")))
+                    requestsTriesCounter = 0
+                    break
+                } catch (e: Throwable) {
+                    requestsTriesCounter++
+                    if (requestsTriesCounter == 2) {
+                        liveDataToObserve.postValue(AppState.Error(e.localizedMessage!!))
+                        requestsTriesCounter = 0
+                        break
+                    }
+                }
             }
         }.start()
-    }
-
-    private fun randomResult(): Int {
-        return (1..10).random()
     }
 }
