@@ -4,22 +4,45 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/appbar_background.xml" value="0.2" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/baseline_history_black_24dp.xml" value="0.2355" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/favorite_checkbox.xml" value="0.1815" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/favorite_checkbox_40.xml" value="0.1" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/favorite_circle.xml" value="0.1595" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_baseline_block_24.xml" value="0.103" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_baseline_bookmark_24.xml" value="0.1925" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_baseline_bookmark_border_40.xml" value="0.1925" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.1725" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.1815" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2703125" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_baseline_star_24.xml" value="0.2703125" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_baseline_star_border_24.xml" value="0.2703125" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_baseline_sticky_note_2_24.xml" value="0.1" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_baseline_sticky_note_2_40.xml" value="0.1" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2703125" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/no_connection_background.xml" value="0.235" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/outline_save_black_24dp.xml" value="0.182" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/drawable/poster_border.xml" value="0.1595" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_blank.xml" value="0.25416666666666665" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_connectivity.xml" value="0.171875" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_history.xml" value="0.25416666666666665" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_main.xml" value="0.25052083333333336" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_main_screen.xml" value="0.2" />
-        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_movie_details.xml" value="0.1386861313868613" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_movie_details.xml" value="0.264" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_movie_info.xml" value="0.2" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_movies_list.xml" value="0.25052083333333336" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_note.xml" value="0.264" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_one.xml" value="0.25416666666666665" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_settings.xml" value="0.25416666666666665" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_tab.xml" value="0.25052083333333336" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_three.xml" value="0.25416666666666665" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/fragment_two.xml" value="0.25416666666666665" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/genre_item.xml" value="0.25416666666666665" />
-        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/movie_item.xml" value="0.5560253699788583" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/item_history.xml" value="0.25416666666666665" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/movie_item.xml" value="0.264" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/recycler_view_item.xml" value="0.25416666666666665" />
         <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/layout/recyclerview_item.xml" value="0.25416666666666665" />
+        <entry key="..\:/GB_Android/Kotlin/Groovymovie/app/src/main/res/menu/menu_nav_drawer.xml" value="0.2" />
       </map>
     </option>
   </component>

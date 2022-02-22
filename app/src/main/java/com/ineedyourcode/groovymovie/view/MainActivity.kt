@@ -4,15 +4,13 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_FADE
-import androidx.fragment.app.FragmentTransaction.TRANSIT_FRAGMENT_OPEN
-import androidx.lifecycle.Observer
-import com.ineedyourcode.groovymovie.utils.ConnectivityLiveData
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.ineedyourcode.groovymovie.R
+import com.ineedyourcode.groovymovie.view.tabs.PagerAdapter
 
 class MainActivity : AppCompatActivity() {
-
-    private var isConnected = true
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,33 +19,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .setTransition(TRANSIT_FRAGMENT_OPEN)
-            .replace(R.id.fragment_container, MainScreenFragment())
+            .replace(R.id.fragment_container, MainFragment())
             .commit()
-
-        ConnectivityLiveData(this)
-            .observe(this, Observer { isConnectFromReceiver ->
-                if (!isConnectFromReceiver && isConnected) {
-                    isConnected = false
-                    supportFragmentManager
-                        .beginTransaction()
-                        .setTransition(TRANSIT_FRAGMENT_FADE)
-                        .replace(
-                            R.id.fragment_no_connection_container,
-                            ConnectivityFragment(),
-                            "NO_CONNECTION_FRAGMENT"
-                        )
-                        .commit()
-                } else if (isConnectFromReceiver && isConnected == false) {
-                    isConnected = true
-                    supportFragmentManager
-                        .findFragmentByTag("NO_CONNECTION_FRAGMENT")?.let { fragment ->
-                            supportFragmentManager
-                                .beginTransaction()
-                                .remove(fragment)
-                                .commit()
-                        }
-                }
-            })
     }
 }
