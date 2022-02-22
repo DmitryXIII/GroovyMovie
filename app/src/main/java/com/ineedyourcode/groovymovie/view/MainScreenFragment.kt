@@ -2,6 +2,7 @@ package com.ineedyourcode.groovymovie.view
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,8 +22,8 @@ import com.ineedyourcode.groovymovie.databinding.FragmentMainScreenBinding
 import com.ineedyourcode.groovymovie.hideKeyboard
 import com.ineedyourcode.groovymovie.showSnackWithAction
 import com.ineedyourcode.groovymovie.showSnackWithoutAction
-import com.ineedyourcode.groovymovie.viewmodel.AppState
-import com.ineedyourcode.groovymovie.viewmodel.MainScreenViewModel
+import com.ineedyourcode.groovymovie.viewmodel.mainscreen.AppState
+import com.ineedyourcode.groovymovie.viewmodel.retrofit.ViewModelRetrofit
 
 @RequiresApi(Build.VERSION_CODES.N)
 class MainScreenFragment : Fragment() {
@@ -37,8 +38,12 @@ class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainScreenViewModel by lazy {
-        ViewModelProvider(this)[MainScreenViewModel::class.java]
+//    private val viewModel: MainScreenViewModel by lazy {
+//        ViewModelProvider(this)[MainScreenViewModel::class.java]
+//    }
+
+    private val viewModel: ViewModelRetrofit by lazy {
+        ViewModelProvider(this)[ViewModelRetrofit::class.java]
     }
 
     override fun onCreateView(
@@ -53,7 +58,7 @@ class MainScreenFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getData().observe(viewLifecycleOwner, Observer<Any> {
+        viewModel.getData(14, "ru-RU", 1).observe(viewLifecycleOwner, Observer<Any> {
             renderData(it as AppState)
         })
 
@@ -90,6 +95,9 @@ class MainScreenFragment : Fragment() {
                 // пока не найдено
                 mainAdapter = MainMoviesAdapter(appState.moviesData, appState.genresData, this)
 
+                Log.d("MainScreen", "Movies: ${appState.moviesData}")
+                Log.d("MainScreen", "Genres: ${appState.genresData}")
+
                 mainRecyclerView.apply {
                     layoutManager = LinearLayoutManager(requireContext())
                     adapter = mainAdapter
@@ -108,7 +116,9 @@ class MainScreenFragment : Fragment() {
                 searchValue.showSnackWithAction(
                     appState.e,
                     getString(R.string.retry)
-                ) { viewModel.getData() }
+                ) {
+                    viewModel.getData(14, "ru-RU", 1)
+                }
             }
         }
     }

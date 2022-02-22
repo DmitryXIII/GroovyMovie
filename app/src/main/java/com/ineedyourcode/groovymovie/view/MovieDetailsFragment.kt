@@ -12,12 +12,13 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.databinding.FragmentMovieInfoBinding
+import com.ineedyourcode.groovymovie.databinding.FragmentMovieDetailsBinding
 import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.model.tmdb.MOVIE_ID_EXTRA
-import com.ineedyourcode.groovymovie.model.tmdb.TMDBMovieOverviewService
+import com.ineedyourcode.groovymovie.model.tmdb.service.MOVIE_ID_EXTRA
+import com.ineedyourcode.groovymovie.model.tmdb.service.TmdbMovieOverviewService
 import com.ineedyourcode.groovymovie.showSnackWithAction
 import com.ineedyourcode.groovymovie.showSnackWithoutAction
+import com.squareup.picasso.Picasso
 
 const val TMDB_SERVICE_INTENT_FILTER = "TMDB SERVICE INTENT FILTER"
 const val TMDB_SERVICE_LOAD_RESULT_EXTRA = "LOAD RESULT"
@@ -27,10 +28,12 @@ const val TMDB_SERVICE_REQUEST_ERROR_MESSAGE_EXTRA = "REQUEST ERROR MESSAGE"
 const val TMDB_SERVICE_URL_MALFORMED_EXTRA = "URL MALFORMED"
 const val TMDB_SERVICE_RESPONSE_SUCCESS_EXTRA = "RESPONSE SUCCESS"
 const val TMDB_SERVICE_MOVIE_OVERVIEW_EXTRA = "MOVIE OVERVIEW"
+private const val MAIN_POSTER_PATH = "https://image.tmdb.org/t/p/"
+private const val POSTER_SIZE = "w500/"
 
-class MovieInfoFragment : Fragment() {
+class MovieDetailsFragment : Fragment() {
 
-    private var _binding: FragmentMovieInfoBinding? = null
+    private var _binding: FragmentMovieDetailsBinding? = null
     private val binding get() = _binding!!
     private lateinit var selectedMovie: Movie
 
@@ -61,7 +64,7 @@ class MovieInfoFragment : Fragment() {
 
     companion object {
         private const val ARG_MOVIE = "ARG_MOVIE"
-        fun newInstance(movie: Movie) = MovieInfoFragment().apply {
+        fun newInstance(movie: Movie) = MovieDetailsFragment().apply {
             arguments = bundleOf(
                 ARG_MOVIE to movie
             )
@@ -85,7 +88,7 @@ class MovieInfoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMovieInfoBinding.inflate(inflater, container, false)
+        _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -97,7 +100,11 @@ class MovieInfoFragment : Fragment() {
             txtMovieInfoReleaseDate.text = selectedMovie.releaseDate
             txtMovieInfoRating.text = selectedMovie.rating
             txtMovieInfoGenre.text = selectedMovie.genre
-            drawMovieInfoPoster.setImageResource(R.drawable.tmdb_logo)
+
+            Picasso.get()
+                .load("${MAIN_POSTER_PATH}${POSTER_SIZE}${selectedMovie.posterPath}")
+                .into(drawMovieInfoPoster)
+
             // для задания № 6 способ получения описания фильма временно изменен
             // на "сервис <-> бродкастресивер"
             // txtMovieInfo.text = movie.overview
@@ -108,7 +115,7 @@ class MovieInfoFragment : Fragment() {
 
     private fun getMovieOverview(movie: Movie) {
         context?.let {
-            it.startService(Intent(it, TMDBMovieOverviewService::class.java).apply {
+            it.startService(Intent(it, TmdbMovieOverviewService::class.java).apply {
                 putExtra(
                     MOVIE_ID_EXTRA,
                     movie.id

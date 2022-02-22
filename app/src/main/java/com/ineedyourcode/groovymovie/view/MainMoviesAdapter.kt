@@ -1,5 +1,6 @@
 package com.ineedyourcode.groovymovie.view
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +31,8 @@ class MainMoviesAdapter(
         val adapterByGenres = FilteredByGenresAdapter().apply {
             setAdapterData(
                 moviesMap.values.toList().filter { it.genre == genresList.toList()[position] })
-
+            Log.d("Adapter", "Movies: ${moviesMap}")
+            Log.d("Adapter", "Genres: ${genresList}")
             // обработка клика по вложенным горизонтальным спискам фильмов
             setOnItemClickListener(object :
                 FilteredByGenresAdapter.OnItemClickListener {
@@ -39,7 +41,7 @@ class MainMoviesAdapter(
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .replace(
                             R.id.fragment_container,
-                            MovieInfoFragment.newInstance(filteredByGenresList[position])
+                            MovieDetailsFragment.newInstance(filteredByGenresList[position])
                         )
                         .addToBackStack("")
                         .commit()

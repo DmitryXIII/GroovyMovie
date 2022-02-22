@@ -1,13 +1,14 @@
-package com.ineedyourcode.groovymovie.model.tmdb
+package com.ineedyourcode.groovymovie.model.tmdb.httpsurlconnection
 
 import android.util.Log
 import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.model.tmdb.TmdbMovieFromListDTO
 import org.json.JSONException
 import org.json.JSONObject
 
 private const val TMDB_JSON_PARSER_TAG = "TMDB_JSON_PARSER_TAG"
 
-class TMDBJsonParser {
+class TmdbJsonParser {
 
     fun parseGenresList(requestResult: String): Map<Int, String> {
         val mapOfGenres = mutableMapOf<Int, String>()
@@ -51,7 +52,7 @@ class TMDBJsonParser {
                     }
                 }
 
-                val movieDTO = TMDBMovieDTO(
+                val movieDTO = TmdbMovieFromListDTO(
                     adult = jsonMovie.getBoolean("adult"),
                     backdropPath = jsonMovie.getString("backdrop_path"),
                     genreIds = genreArr,
@@ -74,7 +75,8 @@ class TMDBJsonParser {
                     movieDTO.releaseDate,
                     movieDTO.voteAverage.toString(),
                     mapOfGenres[movieDTO.genreIds[0]],
-                    movieDTO.overview
+                    movieDTO.overview,
+                    movieDTO.posterPath
                 )
 
                 topRatedMoviesMap[movie.id.toString()] = movie

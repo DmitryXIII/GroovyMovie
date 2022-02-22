@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie.viewmodel
+package com.ineedyourcode.groovymovie.viewmodel.mainscreen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -6,14 +6,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.model.IMoviesRepository
-import com.ineedyourcode.groovymovie.model.tmdb.TMDBRepository
+import com.ineedyourcode.groovymovie.model.tmdb.httpsurlconnection.TmdbRepository
 
+/**
+ * MainScreenViewModel используется для получения данных
+ * через HttpsURLConnection или из репозитория с списком сгенерированных
+ * случайным образом фильмов
+ */
 @RequiresApi(Build.VERSION_CODES.N)
 class MainScreenViewModel(private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()) :
     ViewModel() {
 
-    private val repository: IMoviesRepository = TMDBRepository()
+    private val repository: IMoviesRepository = TmdbRepository()
     private var requestsTriesCounter = 0
+
     fun getData(): LiveData<AppState> {
         getDataFromDb()
         return liveDataToObserve
