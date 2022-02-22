@@ -108,7 +108,7 @@ class MoviesListFragment : Fragment() {
                         parentFragmentManager.beginTransaction()
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .add(
-                                R.id.fragment_container,
+                                R.id.main_fragment_container,
                                 MovieDetailsFragment.newInstance(moviesList[position])
                             )
                             .addToBackStack("")

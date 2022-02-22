@@ -10,20 +10,18 @@ import com.ineedyourcode.groovymovie.utils.*
 import com.ineedyourcode.groovymovie.view.movieslist.MoviesListFragment
 
 
-class PagerAdapter(fm: FragmentManager, lc: Lifecycle): FragmentStateAdapter(fm, lc)  {
+class PagerAdapter(fm: FragmentManager, lc: Lifecycle) : FragmentStateAdapter(fm, lc) {
     override fun getItemCount(): Int {
-        return 6
+        return 4
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun createFragment(position: Int): Fragment {
-        return when (position){
-            0 -> MoviesListFragment.newInstance(MOVIES_LIST_TOP_RATED)
-            1 -> MoviesListFragment.newInstance(MOVIES_LIST_POPULAR)
-            2 -> MoviesListFragment.newInstance(MOVIES_LIST_UPCOMING)
-            3 -> MoviesListFragment.newInstance(MOVIES_LIST_NOW_PLAYING)
-            4 -> MoviesListFragment.newInstance(MOVIES_LIST_UPCOMING)
-            5 -> MoviesListFragment.newInstance(MOVIES_LIST_TOP_RATED)
+        return when (position) {
+            0 -> MoviesListFragment.newInstance(MOVIES_LIST_UPCOMING)
+            1 -> MoviesListFragment.newInstance(MOVIES_LIST_NOW_PLAYING)
+            2 -> MoviesListFragment.newInstance(MOVIES_LIST_POPULAR)
+            3 -> MoviesListFragment.newInstance(MOVIES_LIST_TOP_RATED)
             else -> Fragment()
         }
     }

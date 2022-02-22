@@ -4,11 +4,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.view.tabs.PagerAdapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,7 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, MainFragment())
+            .replace(R.id.main_fragment_container, MainFragment())
             .commit()
     }
 }
