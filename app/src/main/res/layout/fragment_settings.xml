@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true"
     android:background="@color/main_background"
+    android:clickable="true"
+    android:focusable="true"
     tools:context=".view.settings.SettingsFragment">
 
     <CheckBox
@@ -14,6 +15,6 @@
         android:layout_margin="@dimen/margin_16dp"
         android:backgroundTint="@color/secondary_background"
         android:text="не показывать adult"
-        android:textColor="@color/secondary_background"/>
+        android:textColor="@color/secondary_background" />
 
 </FrameLayout>

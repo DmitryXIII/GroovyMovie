@@ -32,8 +32,6 @@ class RetrofitViewModel(
 
     private val genresMap = mutableMapOf<Int, String>()
     private val moviesMap = mutableMapOf<Int, Movie>()
-    private val actorsIdsList = mutableListOf<Int>()
-    private val actorsList = mutableListOf<TmdbActorDto>()
 
     init {
         // обработка ответа с сервера на запрос списка жанров, имеющихся в TMDB
@@ -97,10 +95,8 @@ class RetrofitViewModel(
     // запросы на сервер
     private fun getActorsByIdFromRemoteSource(actorId: Int) {
         liveData.value = AppState.Loading
-
         retrofitRepository.getActorById(actorId, callbackActorById)
     }
-
 
     // обработка ответа с сервера на запрос списка фильмов
     private val callbackMoviesList = object : Callback<TmdbResponse.ResponseMoviesList> {
@@ -132,14 +128,14 @@ class RetrofitViewModel(
             responseMovie: Response<TmdbMovieByIdDTO>
         ) {
             if (responseMovie.isSuccessful) {
-                val responseBody = responseMovie.body()
-                if (responseBody != null) {
-                    responseBody.credit.cast.forEach {
-                        actorsIdsList.add(it.id)
+                // загрузка актеров по пришедшему в фильме списку id актеров
+                if (responseMovie.body() != null) {
+                    responseMovie.body()!!.credit.cast.forEach {
                         getActorById(it.id)
                     }
-//                    liveData.postValue(checkResponseMovieById(responseBody))
-                    Log.d(TAG, "Movie: $responseBody")
+                    // отправка данных о фильме в фрагмент
+                    liveData.postValue(AppState.MovieByIdSuccess(responseMovie.body()!!))
+                    Log.d(TAG, "Movie: ${responseMovie.body()}")
                 } else {
                     liveData.postValue(AppState.Error(RESPONSE_MOVIE_BY_ID_ERROR))
                     Log.d(TAG, RESPONSE_MOVIE_BY_ID_ERROR)
@@ -159,13 +155,11 @@ class RetrofitViewModel(
             responseActor: Response<TmdbActorDto>
         ) {
             if (responseActor.isSuccessful) {
-                val responseBody = responseActor.body()
-                if (responseBody != null) {
-                    actorsList.add(responseBody)
-                    if (actorsList.size == actorsIdsList.size){
-                        liveData.postValue(checkResponseActorById())
-                    }
-                    Log.d(TAG, "Actor: $responseBody")
+                val actorFromRemoteServer = responseActor.body()
+                if (responseActor.body() != null) {
+                    // отправка данных об актере в фрагмент
+                    liveData.postValue(AppState.ActorsByIdSuccess(responseActor.body()!!))
+                    Log.d(TAG, "Actor: $actorFromRemoteServer")
                 } else {
                     liveData.postValue(AppState.Error(RESPONSE_MOVIE_BY_ID_ERROR))
                     Log.d(TAG, RESPONSE_MOVIE_BY_ID_ERROR)
@@ -184,19 +178,6 @@ class RetrofitViewModel(
             AppState.Error(CORRUPTED_DATA)
         } else {
             AppState.MoviesListSuccess(moviesMap)
-        }
-    }
-
-
-    private fun checkResponseActorById(): AppState {
-        return AppState.ActorsListSuccess(actorsList)
-    }
-
-    private fun checkResponseMovieById(serverResponse: TmdbMovieByIdDTO): AppState {
-        return if (serverResponse == null) {
-            AppState.Error(CORRUPTED_DATA)
-        } else {
-            AppState.ActorsListSuccess(actorsList)
         }
     }
 
