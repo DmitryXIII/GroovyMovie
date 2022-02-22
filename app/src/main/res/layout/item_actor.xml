@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_marginVertical="@dimen/margin_4dp"
+    tools:background="@color/main_background">
+
+    <ImageView
+        android:id="@+id/actor_photo"
+        android:layout_width="110dp"
+        android:layout_height="167dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_no_photo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/actor_name"
+        android:layout_width="@dimen/zero_value"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:gravity="start"
+        android:text="Имя: "
+        android:textColor="@color/neutral_white"
+        app:layout_constraintStart_toEndOf="@id/actor_photo"
+        app:layout_constraintTop_toTopOf="@id/actor_photo"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/actor_birthdate"
+        android:layout_width="@dimen/zero_value"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_4dp"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:gravity="start"
+        android:text="Дата рождения: "
+        android:textColor="@color/neutral_white"
+        app:layout_constraintStart_toEndOf="@id/actor_photo"
+        app:layout_constraintTop_toBottomOf="@id/actor_name"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/actor_birthplace"
+        android:layout_width="@dimen/zero_value"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_4dp"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:gravity="start"
+        android:text="Место рождения: "
+        android:textColor="@color/neutral_white"
+        app:layout_constraintStart_toEndOf="@id/actor_photo"
+        app:layout_constraintTop_toBottomOf="@id/actor_birthdate"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

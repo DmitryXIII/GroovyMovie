@@ -19,7 +19,7 @@ class HistoryAdapter :
 
     fun setAdapterData(historyList: List<HistoryEntity>) {
         this.historyList = historyList
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, historyList.size)
     }
 
     fun clearData(){

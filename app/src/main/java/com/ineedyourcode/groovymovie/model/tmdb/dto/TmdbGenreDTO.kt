@@ -1,7 +1,6 @@
-package com.ineedyourcode.groovymovie.model.tmdb
+package com.ineedyourcode.groovymovie.model.tmdb.dto
 
 import com.google.gson.annotations.SerializedName
-
 
 /**
  * Модель жанра, получаемая в общем списке жанров из TMDB.

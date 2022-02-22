@@ -1,81 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card_movie"
+    android:layout_marginVertical="@dimen/margin_8dp"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/cardview_height"
-    android:layout_marginTop="@dimen/margin_16dp"
-    android:backgroundTint="@color/main_background"
-    app:cardCornerRadius="@dimen/zero_value"
-    app:cardElevation="@dimen/zero_value"
-    app:rippleColor="@color/tab_background">
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/main_background">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_movie"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/cardview_height"
+        android:backgroundTint="@color/main_background"
+        android:layout_gravity="center"
+        app:cardCornerRadius="@dimen/zero_value"
+        app:cardElevation="@dimen/zero_value"
+        app:rippleColor="@color/tab_background">
 
-        <ImageView
-            android:id="@+id/draw_movie_poster"
-            android:layout_width="162dp"
-            android:layout_height="@dimen/cardview_poster_height"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <View
-            android:layout_width="@dimen/zero_value"
-            android:layout_height="@dimen/zero_value"
-            android:background="@color/neutral_white"
-            app:layout_constraintTop_toBottomOf="@id/draw_movie_poster"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/draw_movie_poster"
-            app:layout_constraintEnd_toEndOf="@id/draw_movie_poster"/>
+            <ImageView
+                android:id="@+id/draw_movie_poster"
+                android:layout_width="162dp"
+                android:layout_height="@dimen/cardview_poster_height"
+                android:scaleType="centerCrop"
+                android:src="@drawable/baseline_local_movies_black_24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_movie_title"
-            android:layout_width="@dimen/zero_value"
-            android:layout_height="wrap_content"
-            android:textColor="@color/tab_background"
-            android:textSize="@dimen/cardview_text_size"
-            android:textStyle="bold"
-            android:layout_marginStart="@dimen/margin_4dp"
-            app:layout_constraintEnd_toEndOf="@id/draw_movie_poster"
-            app:layout_constraintStart_toStartOf="@id/draw_movie_poster"
-            app:layout_constraintTop_toBottomOf="@id/draw_movie_poster"
-            tools:text="@string/movie_title_example" />
+            <View
+                android:layout_width="@dimen/zero_value"
+                android:layout_height="@dimen/zero_value"
+                android:background="@color/neutral_white"
+                app:layout_constraintTop_toBottomOf="@id/draw_movie_poster"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/draw_movie_poster"
+                app:layout_constraintEnd_toEndOf="@id/draw_movie_poster"/>
 
-        <TextView
-            android:id="@+id/txt_movie_rating"
-            android:layout_width="@dimen/zero_value"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_8dp"
-            android:textColor="@color/tab_background"
-            android:textSize="@dimen/cardview_text_size"
-            app:layout_constraintBottom_toBottomOf="@id/icon_star"
-            app:layout_constraintStart_toEndOf="@id/icon_star"
-            app:layout_constraintTop_toTopOf="@id/icon_star"
-            tools:text="@string/rating_example" />
+            <TextView
+                android:id="@+id/txt_movie_title"
+                android:layout_width="@dimen/zero_value"
+                android:layout_height="wrap_content"
+                android:textColor="@color/tab_background"
+                android:textSize="@dimen/cardview_text_size"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/margin_4dp"
+                app:layout_constraintEnd_toEndOf="@id/draw_movie_poster"
+                app:layout_constraintStart_toStartOf="@id/draw_movie_poster"
+                app:layout_constraintTop_toBottomOf="@id/draw_movie_poster"
+                tools:text="@string/movie_title_example" />
 
-        <ImageView
-            android:id="@+id/icon_star"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_star_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/txt_movie_rating"
-            app:layout_constraintStart_toStartOf="@id/draw_movie_poster"
-            app:tint="@color/tab_background" />
+            <TextView
+                android:id="@+id/txt_movie_rating"
+                android:layout_width="@dimen/zero_value"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_8dp"
+                android:textColor="@color/tab_background"
+                android:textSize="@dimen/cardview_text_size"
+                app:layout_constraintBottom_toBottomOf="@id/icon_star"
+                app:layout_constraintStart_toEndOf="@id/icon_star"
+                app:layout_constraintTop_toTopOf="@id/icon_star"
+                tools:text="@string/rating_example" />
 
-        <CheckBox
-            android:id="@+id/checkbox_favorite"
-            android:layout_width="@dimen/checkbox_size_24"
-            android:layout_height="@dimen/checkbox_size_24"
-            android:background="@color/transparent"
-            android:button="@drawable/favorite_checkbox_24"
-            android:buttonTint="@color/tab_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/draw_movie_poster" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:id="@+id/icon_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_star_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/txt_movie_rating"
+                app:layout_constraintStart_toStartOf="@id/draw_movie_poster"
+                app:tint="@color/tab_background" />
+
+            <CheckBox
+                android:id="@+id/checkbox_favorite"
+                android:layout_width="@dimen/checkbox_size_24"
+                android:layout_height="@dimen/checkbox_size_24"
+                android:background="@color/transparent"
+                android:button="@drawable/favorite_checkbox_24"
+                android:buttonTint="@color/action_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/draw_movie_poster" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</FrameLayout>

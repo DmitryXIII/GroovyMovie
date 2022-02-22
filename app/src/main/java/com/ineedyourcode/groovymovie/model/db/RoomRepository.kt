@@ -1,12 +1,15 @@
 package com.ineedyourcode.groovymovie.model.db
 
 import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
 import com.ineedyourcode.groovymovie.model.db.entities.HistoryEntity
 import com.ineedyourcode.groovymovie.model.db.entities.NotesEntity
+import com.ineedyourcode.groovymovie.utils.convertMovieToFavoriteEntity
 import com.ineedyourcode.groovymovie.utils.convertMovieToHistoryEntity
 import com.ineedyourcode.groovymovie.utils.convertMovieToNoteEntity
 
 class RoomRepository(private val roomDataSource: MovieDao) : IRoomRepository {
+    // HISTORY
     override fun getAllHistory(): List<HistoryEntity> = roomDataSource.getAllHistory()
 
     override fun saveHistoryEntity(movie: Movie) {
@@ -17,6 +20,22 @@ class RoomRepository(private val roomDataSource: MovieDao) : IRoomRepository {
         roomDataSource.clearAllHistory()
     }
 
+    // FAVORITE
+    override fun getAllFavorite(): List<FavoriteEntity> = roomDataSource.getAllFavorite()
+
+    override fun saveFavoriteEntity(entity: FavoriteEntity) {
+        roomDataSource.insertFavoriteEntity(entity)
+    }
+
+    override fun clearAllFavorite() {
+        roomDataSource.clearAllFavorite()
+    }
+
+    override fun deleteFavorite(movieId: Int) {
+        roomDataSource.deleteFavorite(movieId)
+    }
+
+    // NOTE
     override fun saveNote(movie: Movie, noteContent: String) {
         roomDataSource.insertNote(convertMovieToNoteEntity(movie, noteContent))
     }

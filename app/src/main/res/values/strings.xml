@@ -26,6 +26,7 @@
     <string name="msg_no_connection">NO INTERNET CONNECTION</string>
     <string name="connection_icon">connection icon</string>
     <string name="note_content_title">\"%1$s\"</string>
+    <string name="movie_title_release_date">\"%1$s %1$d\"</string>
     <string name="note_content_hint" tools:ignore="TypographyEllipsis">Оставьте здесь заметку о фильме...</string>
     <string name="settings">Настройки</string>
     <string name="menu_title_about_app">О приложении</string>
@@ -37,4 +38,6 @@
     <string name="alert_dialog_contacts_permission_positive">Предоставить</string>
     <string name="alert_dialog_contacts_permission_negative">Нет</string>
     <string name="title_movies_list">Фильмы</string>
+    <string name="title_maps">Карты</string>
+    <string name="actors_header">Актерcкий состав:</string>
 </resources>

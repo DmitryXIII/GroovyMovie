@@ -6,6 +6,3 @@ const val MOVIES_LIST_POPULAR = "popular"
 const val MOVIES_LIST_UPCOMING = "upcoming"
 
 const val PREFERENCES_ADULT = "FILTER ADULT"
-const val FRAGMENT_RESULT_KEY = "Settings fragment"
-
-var favoriteMap: MutableMap<Int, Boolean> = mutableMapOf()

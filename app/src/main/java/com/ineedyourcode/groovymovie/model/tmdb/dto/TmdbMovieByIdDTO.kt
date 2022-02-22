@@ -1,4 +1,4 @@
-package com.ineedyourcode.groovymovie.model.tmdb
+package com.ineedyourcode.groovymovie.model.tmdb.dto
 
 import com.google.gson.annotations.SerializedName
 
@@ -20,5 +20,6 @@ data class TmdbMovieByIdDTO (
         @SerializedName("title") val title:  String,
         @SerializedName("video") val video: Boolean,
         @SerializedName("vote_average") val voteAverage: Double,
-        @SerializedName("vote_count") val voteCount: Int
+        @SerializedName("vote_count") val voteCount: Int,
+        @SerializedName("credits") val credit: TmdbCreditDto
     )
