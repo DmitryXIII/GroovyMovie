@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.MainFragment"
+    tools:openDrawer="start">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator_layout"
+            android:layout_width="@dimen/zero_value"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/navigation_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/tab_background"
+                    app:elevation="16dp" />
+            </com.google.android.material.appbar.AppBarLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/navigation_container"
+            android:layout_width="@dimen/zero_value"
+            android:layout_height="@dimen/zero_value"
+            app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/coordinator_layout" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_nav_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/tab_background"
+            app:elevation="16dp"
+            app:itemIconTint="@color/tab_color"
+            app:itemTextColor="@color/tab_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_navigation_menu" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/menu_nav_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:backgroundTint="@color/main_background"
+        app:itemIconTint="@color/secondary_background"
+        app:itemTextAppearance="@style/TextAppearance.AppCompat.Menu"
+        app:itemTextColor="@color/neutral_white"
+        app:menu="@menu/menu_nav_drawer" />
+</androidx.drawerlayout.widget.DrawerLayout>

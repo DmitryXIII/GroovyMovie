@@ -13,3 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+/apikey.properties
+/mapsApiKey.properties
+/app/google-services.json
+/app/keystore/
+/app/key_groovymovie.jks
