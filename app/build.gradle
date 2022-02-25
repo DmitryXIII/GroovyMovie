@@ -7,7 +7,29 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+
 android {
+    signingConfigs {
+        beta {
+        }
+        release {
+            if (project.hasProperty("keyRepo")) {
+                def projectPropsFile = file(project.property("keyRepo") + "/groovy_movie.properties")
+                if (projectPropsFile.exists()) {
+                    Properties props = new Properties()
+                    props.load(new FileInputStream(projectPropsFile))
+                    storeFile file(file(project.property("keyRepo") + props['RELEASE_STORE_FILE']))
+                    storePassword props['RELEASE_STORE_PASS']
+                    keyAlias props['RELEASE_ALIAS']
+                    keyPassword props['RELEASE_KEY_PASS']
+                }
+            } else {
+                println "==================================="
+                println "[ERROR] - Check your signing config"
+                println "==================================="
+            }
+        }
+    }
     compileSdk 31
 
     defaultConfig {
@@ -20,18 +42,26 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            versionNameSuffix '-debug'
+        }
+        beta {
+            initWith debug
+            versionNameSuffix '-beta'
+        }
+    }
+
     buildTypes.each {
         Properties properties = new Properties()
         properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
         def apiKey = properties.getProperty("tmdb_api_key", "")
         it.buildConfigField "String", "TMDB_API_KEY", apiKey
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
 
     buildFeatures {
@@ -43,6 +73,18 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    flavorDimensions 'version'
+    productFlavors {
+        free {
+            dimension 'version'
+            versionNameSuffix '-FREE'
+        }
+        pro {
+            dimension 'version'
+            versionNameSuffix '-PRO'
+        }
     }
 }
 

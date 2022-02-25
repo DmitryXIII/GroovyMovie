@@ -1,40 +1,34 @@
 package com.ineedyourcode.groovymovie.view.movieslist
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.ineedyourcode.groovymovie.R
-import com.ineedyourcode.groovymovie.model.Movie
-import com.ineedyourcode.groovymovie.model.db.entities.FavoriteEntity
-import com.ineedyourcode.groovymovie.utils.showSnackWithoutAction
-import com.ineedyourcode.groovymovie.viewmodel.FavoriteViewModel
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
+import com.ineedyourcode.groovymovie.utils.setBackgroundColorByRating
 import com.squareup.picasso.Picasso
+
+private const val MAIN_POSTER_PATH = "https://image.tmdb.org/t/p/"
+private const val POSTER_SIZE = "w342/"
 
 class MoviesListAdapter :
     RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder>() {
 
-    private lateinit var moviesList: List<Movie>
+    private lateinit var moviesList: List<TmdbMovieByIdDto>
     private lateinit var mListener: OnItemClickListener
-    private val favoriteViewModel = FavoriteViewModel()
-    private val favoriteList = mutableSetOf<Int>()
-    private val mainPosterPath = "https://image.tmdb.org/t/p/"
-    private val posterSize = "w342/"
 
-    fun setAdapterData(moviesMap: Map<Int, Movie>) {
-        favoriteViewModel.getAllFavorite().forEach { favoriteEntity ->
-            favoriteList.add(favoriteEntity.movieId)
-        }
-
-        moviesList = moviesMap.values.toList()
+    fun setAdapterData(moviesListFromFragment: List<TmdbMovieByIdDto>) {
+        moviesList = moviesListFromFragment
         notifyItemRangeChanged(0, moviesList.size)
     }
 
     interface OnItemClickListener {
-        fun onItemClickListener(position: Int, moviesList: List<Movie>)
+        fun onItemClickListener(position: Int, moviesList: List<TmdbMovieByIdDto>)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -47,42 +41,19 @@ class MoviesListAdapter :
         return MoviesListViewHolder(itemView, mListener, moviesList)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MoviesListViewHolder, position: Int) {
         with(holder) {
-            movieTitle.text = "\"${moviesList[position].title}\" (${moviesList[position].releaseDate?.substring(0, 4)})"
-            movieRating.text = moviesList[position].rating
+            movieTitle.text = "\"${moviesList[position].title}\" (${
+                moviesList[position].releaseDate.substring(0, 4)
+            })"
 
-            // если фильм есть в списке избранных - установить флажок "избранное"
-            isFavorite.isChecked = favoriteList.contains(moviesList[position].id)
-
-            isFavorite.setOnClickListener(View.OnClickListener {
-                if (isFavorite.isChecked) {
-                    isFavorite.showSnackWithoutAction("${movieTitle.text} добавлен в ИЗБРАННЫЕ")
-                    favoriteViewModel.saveFavorite(
-                        FavoriteEntity(
-                            movieId = moviesList[position].id,
-                            movieTitle = moviesList[position].title,
-                            rating = moviesList[position].rating,
-                            posterPath = moviesList[position].posterPath,
-                            releaseDate = moviesList[position].releaseDate
-                        )
-                    )
-                } else {
-                    favoriteViewModel.deleteFavorite(
-                        FavoriteEntity(
-                            movieId = moviesList[position].id,
-                            movieTitle = moviesList[position].title,
-                            rating = moviesList[position].rating,
-                            posterPath = moviesList[position].posterPath,
-                            releaseDate = moviesList[position].releaseDate
-                        )
-                    )
-                    isFavorite.showSnackWithoutAction("${movieTitle.text} удален из ИЗБРАННЫХ")
-                }
-            })
+            ratingBackground.setBackgroundColorByRating(moviesList[position].voteAverage)
+            movieRating.text = moviesList[position].voteAverage.toString()
 
             Picasso.get()
-                .load("${mainPosterPath}${posterSize}${moviesList[position].posterPath}")
+                .load("${MAIN_POSTER_PATH}${POSTER_SIZE}${moviesList[position].posterPath}")
+                .error(R.drawable.no_backdrop)
                 .into(moviePoster)
         }
     }
@@ -92,7 +63,7 @@ class MoviesListAdapter :
     class MoviesListViewHolder(
         itemView: View,
         listener: OnItemClickListener,
-        moviesList: List<Movie>
+        moviesList: List<TmdbMovieByIdDto>
     ) : RecyclerView.ViewHolder(itemView) {
 
         init {
@@ -107,6 +78,6 @@ class MoviesListAdapter :
         val movieTitle: TextView = itemView.findViewById(R.id.txt_movie_title)
         val movieRating: TextView = itemView.findViewById(R.id.txt_movie_rating)
         val moviePoster: ImageView = itemView.findViewById(R.id.draw_movie_poster)
-        val isFavorite: CheckBox = itemView.findViewById(R.id.checkbox_favorite)
+        val ratingBackground: CardView = itemView.findViewById(R.id.rating_background)
     }
 }

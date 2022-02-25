@@ -3,41 +3,38 @@ package com.ineedyourcode.groovymovie.view.movieslist
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.ybq.android.spinkit.style.ThreeBounce
 import com.ineedyourcode.groovymovie.R
 import com.ineedyourcode.groovymovie.databinding.FragmentMoviesListBinding
-import com.ineedyourcode.groovymovie.model.Movie
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import com.ineedyourcode.groovymovie.utils.PREFERENCES_ADULT
 import com.ineedyourcode.groovymovie.utils.showSnackWithAction
+import com.ineedyourcode.groovymovie.utils.GridDecorator
+import com.ineedyourcode.groovymovie.utils.convertDpToPixels
+import com.ineedyourcode.groovymovie.view.BaseBindingFragment
 import com.ineedyourcode.groovymovie.view.details.MovieDetailsFragment
 import com.ineedyourcode.groovymovie.viewmodel.AppState
-import com.ineedyourcode.groovymovie.viewmodel.RetrofitViewModel
+import com.ineedyourcode.groovymovie.viewmodel.MoviesListViewModel
 
 @RequiresApi(Build.VERSION_CODES.N)
-class MoviesListFragment : Fragment() {
+class MoviesListFragment :
+    BaseBindingFragment<FragmentMoviesListBinding>(FragmentMoviesListBinding::inflate) {
 
     private lateinit var mainRecyclerView: RecyclerView
     private lateinit var mainAdapter: MoviesListAdapter
     private lateinit var moviesListType: String
     private lateinit var progressBar: ProgressBar // кастомный прогрессбар
 
-    private var _binding: FragmentMoviesListBinding? = null
-    private val binding get() = _binding!!
-
-    private val viewModel: RetrofitViewModel by lazy {
-        ViewModelProvider(this)[RetrofitViewModel::class.java]
+    private val viewModel: MoviesListViewModel by lazy {
+        ViewModelProvider(this)[MoviesListViewModel::class.java]
     }
 
     companion object {
@@ -51,15 +48,6 @@ class MoviesListFragment : Fragment() {
             }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMoviesListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,9 +56,11 @@ class MoviesListFragment : Fragment() {
             moviesListType = it.getString(ARG_MOVIE_TYPE)!!
         }
 
-        viewModel.getMoviesList(moviesListType).observe(viewLifecycleOwner, Observer<Any> {
+        mainAdapter = MoviesListAdapter()
+
+        viewModel.getMoviesList(moviesListType).observe(viewLifecycleOwner) {
             renderData(it as AppState)
-        })
+        }
 
         with(binding) {
             progressBar = spinKit
@@ -85,15 +75,13 @@ class MoviesListFragment : Fragment() {
         when (appState) {
             is AppState.MoviesListSuccess -> {
                 progressBar.isVisible = false
-                mainRecyclerView.visibility = View.VISIBLE
-
-                mainAdapter = MoviesListAdapter()
+                mainRecyclerView.isVisible = true
 
                 activity?.let {
                     if (it.getPreferences(Context.MODE_PRIVATE)
                             .getBoolean(PREFERENCES_ADULT, false)
                     ) {
-                        mainAdapter.setAdapterData(appState.moviesData.filter { (_, movie) -> !movie.isAdult })
+                        mainAdapter.setAdapterData(appState.moviesData.filter { movie -> !movie.adult })
                     } else {
                         mainAdapter.setAdapterData(appState.moviesData)
                     }
@@ -103,7 +91,7 @@ class MoviesListFragment : Fragment() {
                     MoviesListAdapter.OnItemClickListener {
                     override fun onItemClickListener(
                         position: Int,
-                        moviesList: List<Movie>
+                        moviesList: List<TmdbMovieByIdDto>
                     ) {
                         parentFragmentManager.beginTransaction()
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -121,17 +109,23 @@ class MoviesListFragment : Fragment() {
                 mainRecyclerView.apply {
                     layoutManager = GridLayoutManager(requireContext(), 2)
                     adapter = mainAdapter
+                    addItemDecoration(
+                        GridDecorator(
+                            2,
+                            convertDpToPixels(resources, R.dimen.movie_item_width).toFloat()
+                        )
+                    )
                 }
             }
 
             is AppState.Loading -> {
                 progressBar.isVisible = true
-                mainRecyclerView.visibility = View.INVISIBLE
+                mainRecyclerView.isVisible = false
             }
 
             is AppState.Error -> {
                 progressBar.isVisible = false
-                mainRecyclerView.visibility = View.INVISIBLE
+                mainRecyclerView.isVisible = false
 
                 view?.showSnackWithAction(
                     appState.e,
@@ -140,11 +134,7 @@ class MoviesListFragment : Fragment() {
                     viewModel.getMoviesList(moviesListType)
                 }
             }
+            else -> {}
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/margin_16dp"
+        app:borderWidth="@dimen/zero_value"
         android:backgroundTint="@color/secondary_background"
         android:src="@drawable/outline_save_black_24dp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,15 +1,25 @@
 package com.ineedyourcode.groovymovie.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ineedyourcode.groovymovie.App
 import com.ineedyourcode.groovymovie.model.db.IRoomRepository
 import com.ineedyourcode.groovymovie.model.db.RoomRepository
-import com.ineedyourcode.groovymovie.model.db.entities.HistoryEntity
 
-class HistoryViewModel: ViewModel() {
+class HistoryViewModel(
+    private val liveData: MutableLiveData<AppState> = MutableLiveData(),
     private val roomHistoryRepository: IRoomRepository = RoomRepository(App.getMovieDao())
+) : ViewModel() {
 
-    fun getHistory(): List<HistoryEntity> = roomHistoryRepository.getAllHistory()
+    fun getHistory(): MutableLiveData<AppState> {
+        getHistoryResponse()
+        return liveData
+    }
+
+    private fun getHistoryResponse() {
+        val history = roomHistoryRepository.getAllHistory()
+        liveData.postValue(AppState.HistorySuccess(history))
+    }
 
     fun clearHistory() = roomHistoryRepository.clearAllHistory()
 }

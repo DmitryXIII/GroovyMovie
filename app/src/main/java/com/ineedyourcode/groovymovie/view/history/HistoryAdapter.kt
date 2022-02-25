@@ -18,13 +18,13 @@ class HistoryAdapter :
     private val posterSize = "w185/"
 
     fun setAdapterData(historyList: List<HistoryEntity>) {
-        this.historyList = historyList
         notifyItemRangeChanged(0, historyList.size)
+        this.historyList = historyList
     }
 
     fun clearData(){
         notifyItemRangeRemoved(0, historyList.size)
-        this.historyList = listOf()
+        historyList = listOf()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryListViewHolder {

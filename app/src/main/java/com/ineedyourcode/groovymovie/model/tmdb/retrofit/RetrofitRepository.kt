@@ -1,7 +1,7 @@
 package com.ineedyourcode.groovymovie.model.tmdb.retrofit
 
 import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbActorDto
-import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDTO
+import com.ineedyourcode.groovymovie.model.tmdb.dto.TmdbMovieByIdDto
 import retrofit2.Callback
 
 class RetrofitRepository(private val remoteDataSource: RemoteDataSource) : IRetrofitRepository {
@@ -14,7 +14,7 @@ class RetrofitRepository(private val remoteDataSource: RemoteDataSource) : IRetr
         remoteDataSource.getGenresList(callback)
     }
 
-    override fun getMovieByIdWithCredits(movieId: Int, callback: Callback<TmdbMovieByIdDTO>) {
+    override fun getMovieByIdWithCredits(movieId: Int, callback: Callback<TmdbMovieByIdDto>) {
         remoteDataSource.getMovieByIdWithCredits(movieId, callback)
     }
 
